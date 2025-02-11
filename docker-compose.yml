@@ -15,14 +15,14 @@ services:
   frontend:
     container_name: frontend
     build:
-      context: ./apps/frontend
+      context: ./apps/front
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=development
     volumes:
-      - ./apps/frontend:/app
+      - ./apps/front:/app
       - /app/node_modules
       - /app/.next
     restart: unless-stopped
