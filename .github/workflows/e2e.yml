@@ -1,69 +1,30 @@
-name: End-to-End & Integration Tests
+name: E2E Tests
 
 on:
   push:
     branches: [ main, develop ]
     paths:
-      - 'apps/**'
+      - 'apps/front/**'
   pull_request:
     branches: [ main, develop ]
     paths:
-      - 'apps/**'
+      - 'apps/front/**'
 
 jobs:
   frontend-e2e:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: strapi
-          POSTGRES_PASSWORD: strapi
-          POSTGRES_DB: strapi
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - uses: actions/checkout@v4
 
-      # Setup Backend
-      - name: Setup Backend
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: apps/back/package-lock.json
-
-      - name: Install Backend Dependencies
-        working-directory: apps/back
-        run: npm ci
-
-      - name: Start Strapi
-        working-directory: apps/back
-        run: npm run develop &
-        env:
-          DATABASE_CLIENT: postgres
-          DATABASE_HOST: localhost
-          DATABASE_PORT: 5432
-          DATABASE_NAME: strapi
-          DATABASE_USERNAME: strapi
-          DATABASE_PASSWORD: strapi
-
-      # Setup Frontend
-      - name: Setup Frontend
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
           cache-dependency-path: apps/front/package-lock.json
 
-      - name: Install Frontend Dependencies
+      - name: Install Dependencies
         working-directory: apps/front
         run: npm ci
 
@@ -74,8 +35,6 @@ jobs:
       - name: Run E2E Tests
         working-directory: apps/front
         run: npm run e2e:headless
-        env:
-          STRAPI_API_URL: http://localhost:1337
 
       - name: Upload E2E Test Results
         if: always()
