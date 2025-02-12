@@ -2,11 +2,16 @@
 
 import Link from "next/link";
 
-type HomePageProps = {
-  data: any; // Vous pouvez typer ceci plus précisément selon la structure de vos données
+interface HomePageProps {
+  data: {
+    data: {
+      id: number;
+    }[];
+  };
 }
 
 export default function HomePage({ data }: HomePageProps) {
+  console.log(data);
   return (
     <div>
       <h1>Home</h1>
