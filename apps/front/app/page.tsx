@@ -1,11 +1,10 @@
+import { getAccueil } from "@/data/loaders";
+
 async function loader() {
-  const path = "/api/accueil";
-  const BASE_URL = "http://localhost:1337";
+  const data = await getAccueil();
 
-  const response = await fetch(`${BASE_URL}${path}`);
-  const data = await response.json();
-
-  return { ...data };
+  console.log(data);
+  return { data };
 }
 
 export default async function Home() {
@@ -14,8 +13,8 @@ export default async function Home() {
   console.log(data);
   return (
     <div>
-      <h1>{data.title}</h1>
-      <p>{data.description}</p>
+      {/* <h1>{data.title}</h1>
+      <p>{data.description}</p> */}
     </div>
   );
 }
