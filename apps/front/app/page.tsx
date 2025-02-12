@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 async function loader() {
   const path = "/api/accueil";
   const BASE_URL = "http://localhost:1337";
