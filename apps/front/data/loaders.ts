@@ -147,7 +147,6 @@ export async function getPageBySlug(slug: string) {
     return fetchAPI(url.href, { method: "GET" });
   }
 
-
   const blogPopulate = {
     blocks: {
       on: {
