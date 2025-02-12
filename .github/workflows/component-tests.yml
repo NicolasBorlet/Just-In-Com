@@ -1,0 +1,41 @@
+name: Component Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: apps/front/package-lock.json
+
+      - name: Install dependencies
+        working-directory: apps/front
+        run: npm ci
+
+      - name: Install Cypress
+        working-directory: apps/front
+        run: npx cypress install
+
+      - name: Run Component Tests
+        working-directory: apps/front
+        run: npm run component:headless
+
+      - name: Upload Component Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-component-results
+          path: apps/front/cypress/videos/
+          retention-days: 30
