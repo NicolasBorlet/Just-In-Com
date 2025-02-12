@@ -1,0 +1,88 @@
+name: Unit & Component Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'apps/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'apps/**'
+
+jobs:
+  frontend-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: apps/front/package-lock.json
+
+      - name: Install Dependencies
+        working-directory: apps/front
+        run: npm ci
+
+      - name: Install Cypress
+        working-directory: apps/front
+        run: npx cypress install
+
+      - name: Run Component Tests
+        working-directory: apps/front
+        run: npm run component:headless
+
+      - name: Upload Component Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-component-results
+          path: apps/front/cypress/videos/
+          retention-days: 30
+
+  backend-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: strapi
+          POSTGRES_PASSWORD: strapi
+          POSTGRES_DB: strapi
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: apps/back/package-lock.json
+
+      - name: Install Dependencies
+        working-directory: apps/back
+        run: npm ci
+
+      - name: Run Tests
+        working-directory: apps/back
+        run: npm run test
+        env:
+          DATABASE_CLIENT: postgres
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+          DATABASE_NAME: strapi
+          DATABASE_USERNAME: strapi
+          DATABASE_PASSWORD: strapi
