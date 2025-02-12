@@ -1,4 +1,5 @@
 import { getAccueil } from "@/data/loaders";
+import Link from "next/link";
 
 async function loader() {
   const data = await getAccueil();
@@ -13,8 +14,7 @@ export default async function Home() {
   console.log(data);
   return (
     <div>
-      {/* <h1>{data.title}</h1>
-      <p>{data.description}</p> */}
+      <Link href="/about">About</Link>
     </div>
   );
 }
