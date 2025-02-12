@@ -1,9 +1,9 @@
-import Page from '../../app/page'
+import HomePage from '../../components/HomePage'
 
-describe('<Page />', () => {
+describe('<HomePage />', () => {
   it('should render and display expected content', () => {
     // Mount the React component for the Home page
-    cy.mount(<Page />)
+    cy.mount(<HomePage data={{}} />)
 
     // The new page should contain an h1 with "Home"
     cy.get('h1').contains('Home')
