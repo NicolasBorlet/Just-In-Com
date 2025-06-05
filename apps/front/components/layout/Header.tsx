@@ -11,19 +11,17 @@ export default function Header({ block }: { block: HeaderBlock }) {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
 
-  if (!isHomePage) return null;
-
   return (
     <header className={`left-0 right-0 z-50 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-10' : 'top-4'}`}>
       <div className="container mx-auto px-4 py-4">
-        <div className="flex flex-col items-center gap-8">
-          <Link href={pathname} className="flex items-center mb-4">
+        <div className={`flex items-center gap-8 ${isHomePage ? 'flex-col' : 'flex-row'} ${isHomePage ? 'justify-center' : 'justify-between'}`}>
+          <Link href="/" className="flex items-center mb-4">
             <Image
-              src={`${strapiUrl}${block.detailled_logo.image.url}`}
-              alt={block.detailled_logo.image.alternativeText || block.detailled_logo.logoText}
-              width={300}
-              height={300}
-              className="h-60 w-auto"
+              src={`${strapiUrl}${isHomePage ? block.detailled_logo.image.url : block.logo.image.url}`}
+              alt={isHomePage ? block.detailled_logo.image.alternativeText || block.detailled_logo.logoText : block.logo.image.alternativeText || block.logo.logoText}
+              width={isHomePage ? 300 : 100}
+              height={isHomePage ? 300 : 100}
+              className={isHomePage ? "h-60 w-auto" : "h-12 w-auto"}
             />
           </Link>
 
