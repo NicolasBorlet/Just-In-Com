@@ -3,6 +3,19 @@ export interface Media {
   alternativeText?: string;
 }
 
+export interface Link {
+  id: number;
+  text: string;
+  href: string;
+  isExternal: boolean;
+}
+
+export interface Logo {
+  id: number;
+  logoText: string;
+  image: Media;
+}
+
 export interface HeroSectionBlock {
   __component: "blocks.hero-section";
   id: number;
@@ -49,4 +62,30 @@ export interface HomePageData {
     blocks: HeroSectionBlock[] | InfoBlockBlock[];
   };
   meta: Record<string, unknown>;
+}
+
+export interface HeaderBlock {
+  __component: "layout.header";
+  id: number;
+  logo: Logo;
+  detailled_logo: Logo;
+  navigation: Link[];
+}
+
+export interface FooterBlock {
+  __component: "layout.footer";
+  id: number;
+  logo: Media;
+  detailled_logo: Media;
+  navigation: Link[];
+  secondary_navigation: Link[];
+  cta: Link;
+}
+
+export interface GlobalSettings {
+  title: string;
+  description: string;
+  header: HeaderBlock;
+  footer: FooterBlock;
+  social_links: Link[];
 }

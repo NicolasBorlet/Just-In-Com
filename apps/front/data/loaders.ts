@@ -85,8 +85,14 @@ export async function getPageBySlug(slug: string) {
               },
             },
           },
+          detailled_logo: {
+            populate: {
+              image: {
+                fields: ["url", "alternativeText"],
+              },
+            },
+          },
           navigation: true,
-          cta: true,
         },
       },
       footer: {
@@ -98,8 +104,15 @@ export async function getPageBySlug(slug: string) {
               },
             },
           },
+          detailled_logo: {
+            populate: {
+              image: {
+                fields: ["url", "alternativeText"],
+              },
+            },
+          },
+          secondary_navigation: true,
           navigation: true,
-          policies: true,
         },
       },
     },

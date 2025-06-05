@@ -1,7 +1,7 @@
 import { InfoBlockProps } from "@/types";
 import { getStrapiURL } from "@/utils/get-strapi-url";
 import Image from "next/image";
-import Link from "next/link";
+import Button, { ButtonWidth } from "../globals/Button";
 import RichText from "../globals/RichText";
 
 export default function InfoBlock({ block }: InfoBlockProps) {
@@ -12,14 +12,12 @@ export default function InfoBlock({ block }: InfoBlockProps) {
         <h2 className="text-2xl font-bold">{block.headline}</h2>
         <RichText content={block.content} />
         {block.cta && (
-          <Link href={block.cta.href} target={block.cta.isExternal ? "_blank" : "_self"}>
+          <Button href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT}>
             {block.cta.text}
-          </Link>
+          </Button>
         )}
       </div>
-      <div className="flex flex-col gap-4 w-2/5 rounded-4xl overflow-hidden h-[500px]">
-        <Image src={`${strapiUrl}${block.image.url}`} alt={block.image.alternativeText || ""} width={500} height={500} className="object-cover" />
-      </div>
+        <Image src={`${strapiUrl}${block.image.url}`} alt={block.image.alternativeText || ""} width={340} height={500} className="object-cover w-2/5 rounded-4xl h-[500px]"/>
     </div>
   );
 }

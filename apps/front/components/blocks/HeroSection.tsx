@@ -18,6 +18,7 @@ export default function HeroSection({ block }: HeroSectionProps) {
           <h1 className="text-4xl font-bold text-white">{block.heading}</h1>
         </div>
       )}
+      <div className="absolute inset-0 bg-black/20" />
     </div>
   );
 }
