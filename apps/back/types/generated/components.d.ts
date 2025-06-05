@@ -1,14 +1,27 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
-export interface BlocksHero extends Struct.ComponentSchema {
-  collectionName: 'components_blocks_heroes';
+export interface BlocksHeroSection extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_hero_sections';
   info: {
-    description: '';
     displayName: 'Hero Section';
   };
   attributes: {
-    image: Schema.Attribute.Media<'images' | 'files'>;
-    titre: Schema.Attribute.String;
+    heading: Schema.Attribute.String;
+    video: Schema.Attribute.Media<'files' | 'videos'>;
+  };
+}
+
+export interface BlocksInfoBlock extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_info_blocks';
+  info: {
+    displayName: 'Info Block';
+  };
+  attributes: {
+    content: Schema.Attribute.RichText;
+    cta: Schema.Attribute.Component<'elements.link', false>;
+    headline: Schema.Attribute.String;
+    image: Schema.Attribute.Media<'files' | 'images'>;
+    reversed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
   };
 }
 
@@ -38,7 +51,8 @@ export interface ElementsLogo extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
-      'blocks.hero': BlocksHero;
+      'blocks.hero-section': BlocksHeroSection;
+      'blocks.info-block': BlocksInfoBlock;
       'elements.link': ElementsLink;
       'elements.logo': ElementsLogo;
     }

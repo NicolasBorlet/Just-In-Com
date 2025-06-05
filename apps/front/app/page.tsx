@@ -1,5 +1,5 @@
 import { getAccueil } from "@/data/loaders";
-import HomePage from "@/components/HomePage";
+import HomePage from "@/pages/HomePage";
 
 async function loader() {
   const data = await getAccueil();
