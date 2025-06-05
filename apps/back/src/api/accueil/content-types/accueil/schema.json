@@ -10,19 +10,18 @@
   "options": {
     "draftAndPublish": true
   },
-  "pluginOptions": {},
   "attributes": {
     "title": {
-      "type": "string",
-      "required": true
-    },
-    "description": {
       "type": "string"
     },
-    "blocs": {
+    "description": {
+      "type": "text"
+    },
+    "blocks": {
       "type": "dynamiczone",
       "components": [
-        "blocks.hero"
+        "blocks.info-block",
+        "blocks.hero-section"
       ]
     }
   }

@@ -1,19 +1,27 @@
-import qs from "qs";
 import { fetchAPI } from "@/utils/fetch-api";
 import { getStrapiURL } from "@/utils/get-strapi-url";
+import qs from "qs";
 
 const BASE_URL = getStrapiURL();
 const BLOG_PAGE_SIZE = 3;
 
 const accueilQuery = qs.stringify({
     populate: {
-      blocs: {
+      blocks: {
         on: {
-          "blocks.hero": {
+          "blocks.hero-section": {
+            populate: {
+              video: {
+                fields: ["url"],
+              },
+            },
+          },
+          "blocks.info-block": {
             populate: {
               image: {
                 fields: ["url", "alternativeText"],
               },
+              cta: true,
             },
           },
         },
@@ -53,19 +61,7 @@ const pageBySlugQuery = (slug: string) =>
             },
             cta: true,
             },
-        },
-
-        "blocks.featured-article": {
-            populate: {
-            image: {
-                fields: ["url", "alternativeText"],
-            },
-            link: true,
-            },
-        },
-        "blocks.subscribe": {
-            populate: true,
-        },
+        }
     }
     },
     }
