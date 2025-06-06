@@ -120,6 +120,37 @@ export interface AboutPageData {
       meta: Record<string, unknown>;
 }
 
+export interface BlogPageData {
+    data: {
+        id: number;
+        title: string;
+        description: string;
+        documentId: string;
+        createdAt: string;
+        updatedAt: string;
+        publishedAt: string;
+        blocks: (HeroSectionBlock)[];
+        cover: Media;
+        category: {
+            id: number;
+            name: string;
+        };
+    };
+}
+
+export interface Article {
+    cover: Media;
+    id: number;
+    title: string;
+    description: string;
+    content: string;
+    slug: string;
+    category: {
+        id: number;
+        name: string;
+    };
+}
+
 export interface TextBlock {
   __component: "elements.text-box";
   id: number;

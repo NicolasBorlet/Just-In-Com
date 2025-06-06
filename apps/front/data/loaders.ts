@@ -91,6 +91,50 @@ const aboutQuery = (locale: string = 'fr') => qs.stringify({
     },
 });
 
+const blogQuery = (locale: string = 'fr') => qs.stringify({
+    locale,
+    populate: {
+        blocks: {
+            on: {
+                "blocks.hero-section": {
+                    populate: {
+                        video: {
+                            fields: ["url"],
+                        },
+                    },
+                },
+            },
+        },
+    },
+});
+
+const articlesQuery = (locale: string = 'fr') => qs.stringify({
+    locale,
+    populate: {
+        cover: {
+            fields: ["url", "alternativeText"],
+        },
+        category: {
+            fields: ["name"],
+        },
+    },
+    fields: ["title", "description", "content", "slug"],
+});
+
+export async function getBlog(locale: string = 'fr') {
+    const path = "/api/blog";
+    const url = new URL(path, BASE_URL);
+    url.search = blogQuery(locale);
+    return await fetchAPI(url.href, { method: "GET" });
+}
+
+export async function getArticles(locale: string = 'fr') {
+    const path = "/api/articles";
+    const url = new URL(path, BASE_URL);
+    url.search = articlesQuery(locale);
+    return await fetchAPI(url.href, { method: "GET" });
+}
+
 const contactQuery = (locale: string = 'fr') => qs.stringify({
     locale,
     populate: {
@@ -258,75 +302,15 @@ const globalSettingQuery = (locale: string) => qs.stringify({
         page: parseInt(page || "1"),
       },
       populate: {
-        image: {
-          fields: ["url", "alternativeText"],
+        cover: {
+            fields: ["url", "alternativeText"],
         },
+        category: true,
       },
     });
 
     return fetchAPI(url.href, { method: "GET" });
   }
-
-  const blogPopulate = {
-    blocks: {
-      on: {
-        "blocks.hero-section": {
-          populate: {
-            image: {
-              fields: ["url", "alternativeText"],
-            },
-            logo: {
-              populate: {
-                image: {
-                  fields: ["url", "alternativeText"],
-                },
-              },
-            },
-            cta: true,
-          },
-        },
-        "blocks.info-block": {
-          populate: {
-            image: {
-              fields: ["url", "alternativeText"],
-            },
-            cta: true,
-          },
-        },
-        "blocks.featured-article": {
-          populate: {
-            image: {
-              fields: ["url", "alternativeText"],
-            },
-            link: true,
-          },
-        },
-        "blocks.subscribe": {
-          populate: true,
-        },
-        "blocks.heading": {
-          populate: true,
-        },
-        "blocks.paragraph-with-image": {
-          populate: {
-            image: {
-              fields: ["url", "alternativeText"],
-            },
-          },
-        },
-        "blocks.paragraph": {
-          populate: true,
-        },
-        "blocks.full-image": {
-          populate: {
-            image: {
-              fields: ["url", "alternativeText"],
-            },
-          },
-        },
-      },
-    },
-  };
 
   export async function getContentBySlug(slug: string, path: string, locale: string = 'fr') {
     const url = new URL(path, BASE_URL);
@@ -338,10 +322,10 @@ const globalSettingQuery = (locale: string) => qs.stringify({
         },
       },
       populate: {
-        image: {
-          fields: ["url", "alternativeText"],
+        cover: {
+            fields: ["url", "alternativeText"],
         },
-        ...blogPopulate,
+        category: true,
       },
     });
 
