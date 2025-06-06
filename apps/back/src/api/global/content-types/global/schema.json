@@ -10,27 +10,57 @@
   "options": {
     "draftAndPublish": true
   },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "description": {
-      "type": "text"
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "header": {
       "type": "component",
       "repeatable": false,
-      "component": "layout.header"
+      "component": "layout.header",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "footer": {
       "type": "component",
       "repeatable": false,
-      "component": "layout.footer"
+      "component": "layout.footer",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "social_links": {
       "type": "component",
       "repeatable": true,
-      "component": "elements.link"
+      "component": "elements.link",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

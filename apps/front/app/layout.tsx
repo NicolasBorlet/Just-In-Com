@@ -1,17 +1,14 @@
-import Header from "@/components/layout/Header";
-import { getGlobalSettings } from "@/data/loaders";
+import RootLayoutClient from "@/components/layout/RootLayoutClient";
+import { LocaleProvider } from "@/contexts/LocaleContext";
+import { getAvailableLocales, getGlobalSettings } from "@/data/loaders";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Baloo_2 } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const baloo2 = Baloo_2({
+  variable: "--font-baloo",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -24,16 +21,27 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const globalSettings = await getGlobalSettings();
-  console.log('globalSettings', globalSettings);
+  // Get data for all available locales
+  const availableLocales = await getAvailableLocales();
+  const localeCodes = availableLocales.map((locale: { code: string }) => locale.code);
+
+  // Fetch global settings for each locale
+  const globalSettingsByLocale = await Promise.all(
+    localeCodes.map(async (locale: string) => {
+      const settings = await getGlobalSettings(locale);
+      return { locale, settings };
+    })
+  );
+
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+    <LocaleProvider>
+      <RootLayoutClient
+        globalSettingsByLocale={globalSettingsByLocale}
+        availableLocales={localeCodes}
+        fontClassName={baloo2.variable}
       >
-        <Header block={globalSettings.data.header} />
         {children}
-      </body>
-    </html>
+      </RootLayoutClient>
+    </LocaleProvider>
   );
 }

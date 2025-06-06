@@ -5,7 +5,8 @@ import qs from "qs";
 const BASE_URL = getStrapiURL();
 const BLOG_PAGE_SIZE = 3;
 
-const accueilQuery = qs.stringify({
+const accueilQuery = (locale: string) => qs.stringify({
+    locale,
     populate: {
       blocks: {
         on: {
@@ -29,16 +30,17 @@ const accueilQuery = qs.stringify({
     },
 });
 
-export async function getAccueil() {
+export async function getAccueil(locale: string = 'fr') {
     const path = "/api/accueil";
     const url = new URL(path, BASE_URL);
-    url.search = accueilQuery;
-
+    url.search = accueilQuery(locale);
+    console.log("url.href", url.href);
     return await fetchAPI(url.href, { method: "GET" });
 }
 
-const pageBySlugQuery = (slug: string) =>
+const pageBySlugQuery = (slug: string, locale: string) =>
     qs.stringify({
+    locale,
     filters: {
     slug: {
         $eq: slug,
@@ -67,14 +69,15 @@ const pageBySlugQuery = (slug: string) =>
     }
 });
 
-export async function getPageBySlug(slug: string) {
+export async function getPageBySlug(slug: string, locale: string = 'fr') {
     const path = "/api/pages";
     const url = new URL(path, BASE_URL);
-    url.search = pageBySlugQuery(slug);
+    url.search = pageBySlugQuery(slug, locale);
     return await fetchAPI(url.href, { method: "GET" });
 }
 
-  const globalSettingQuery = qs.stringify({
+const globalSettingQuery = (locale: string) => qs.stringify({
+    locale,
     populate: {
       header: {
         populate: {
@@ -118,15 +121,16 @@ export async function getPageBySlug(slug: string) {
     },
   });
 
-  export async function getGlobalSettings() {
+  export async function getGlobalSettings(locale: string = 'fr') {
     const path = "/api/global";
     const url = new URL(path, BASE_URL);
-    url.search = globalSettingQuery;
+    url.search = globalSettingQuery(locale);
     return fetchAPI(url.href, { method: "GET" });
   }
 
   export async function getContent(
     path: string,
+    locale: string = 'fr',
     featured?: boolean,
     query?: string,
     page?: string
@@ -134,6 +138,7 @@ export async function getPageBySlug(slug: string) {
     const url = new URL(path, BASE_URL);
 
     url.search = qs.stringify({
+      locale,
       sort: ["createdAt:desc"],
       filters: {
         $or: [
@@ -217,9 +222,10 @@ export async function getPageBySlug(slug: string) {
     },
   };
 
-  export async function getContentBySlug(slug: string, path: string) {
+  export async function getContentBySlug(slug: string, path: string, locale: string = 'fr') {
     const url = new URL(path, BASE_URL);
     url.search = qs.stringify({
+      locale,
       filters: {
         slug: {
           $eq: slug,
@@ -233,5 +239,11 @@ export async function getPageBySlug(slug: string) {
       },
     });
 
+    return fetchAPI(url.href, { method: "GET" });
+  }
+
+  export async function getAvailableLocales() {
+    const path = "/api/i18n/locales";
+    const url = new URL(path, BASE_URL);
     return fetchAPI(url.href, { method: "GET" });
   }

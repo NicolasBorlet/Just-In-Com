@@ -11,7 +11,6 @@ interface HomePageProps {
 }
 
 export default function HomePage({ data }: HomePageProps) {
-    console.log(data);
   return (
     <div className="flex flex-col gap-24">
         {data.data.blocks.map((block) => {
