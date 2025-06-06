@@ -14,8 +14,8 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        primary: "#F97477",
-        secondary: "#FEC7C8",
+        primary: "#772D44",
+        secondary: "#431927",
       },
       borderRadius: {
         '4xl': '277px',

@@ -2,6 +2,7 @@
 
 import { useLocale } from "@/contexts/LocaleContext";
 import { GlobalSettings } from "@/types";
+import Footer from "./Footer";
 import Header from "./Header";
 
 interface RootLayoutClientProps {
@@ -17,7 +18,7 @@ export default function RootLayoutClient({
   availableLocales,
   fontClassName
 }: RootLayoutClientProps) {
-  const { locale } = useLocale();
+  const { locale, isLoading } = useLocale();
 
   // Get the settings for the current locale
   const currentSettings = globalSettingsByLocale.find(
@@ -27,11 +28,16 @@ export default function RootLayoutClient({
   return (
     <html lang={locale} className={fontClassName}>
       <body className="antialiased">
-        <Header
-          block={currentSettings.data.header}
-          availableLocales={availableLocales}
-        />
-        {children}
+        {!isLoading && (
+          <>
+            <Header
+              block={currentSettings.data.header}
+              availableLocales={availableLocales}
+            />
+            {children}
+            <Footer block={currentSettings.data.footer} />
+          </>
+        )}
       </body>
     </html>
   );

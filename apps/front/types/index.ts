@@ -64,6 +64,20 @@ export interface HomePageData {
   meta: Record<string, unknown>;
 }
 
+export interface EntreprisePageData {
+  data: {
+    id: number;
+    title: string;
+    description: string;
+    documentId: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    blocks: HeroSectionBlock[];
+  };
+  meta: Record<string, unknown>;
+}
+
 export interface HeaderBlock {
   __component: "layout.header";
   id: number;
@@ -75,8 +89,8 @@ export interface HeaderBlock {
 export interface FooterBlock {
   __component: "layout.footer";
   id: number;
-  logo: Media;
-  detailled_logo: Media;
+  logo: Logo;
+  detailled_logo: Logo;
   navigation: Link[];
   secondary_navigation: Link[];
   cta: Link;

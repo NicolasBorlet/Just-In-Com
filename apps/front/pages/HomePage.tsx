@@ -4,7 +4,6 @@ import HeroSection from "@/components/blocks/HeroSection";
 import InfoBlock from "@/components/blocks/InfoBlock";
 import PageContent from "@/components/globals/PageContent";
 import { HomePageData } from "@/types";
-import Link from "next/link";
 
 interface HomePageProps {
   data: HomePageData;
@@ -26,7 +25,6 @@ export default function HomePage({ data }: HomePageProps) {
         }
         return null;
       })}
-      <Link href="/about">About</Link>
     </PageContent>
     </div>
   );

@@ -49,7 +49,7 @@ export default function Header({ block, availableLocales }: { block: HeaderBlock
           {/* Hamburger button for mobile */}
           <button
             onClick={toggleMenu}
-            className="lg:hidden fixed top-6 right-6 z-50 p-2"
+            className="md:hidden fixed top-6 right-6 z-50 p-2"
             aria-label="Toggle menu"
           >
             <div className="w-6 h-5 relative flex flex-col justify-between">

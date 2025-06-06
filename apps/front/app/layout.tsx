@@ -33,8 +33,11 @@ export default async function RootLayout({
     })
   );
 
+  // Get the initial locale from the first available locale
+  const initialLocale = localeCodes[0];
+
   return (
-    <LocaleProvider>
+    <LocaleProvider initialLocale={initialLocale}>
       <RootLayoutClient
         globalSettingsByLocale={globalSettingsByLocale}
         availableLocales={localeCodes}

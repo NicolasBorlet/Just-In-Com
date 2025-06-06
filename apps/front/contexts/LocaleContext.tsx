@@ -5,23 +5,19 @@ import { createContext, useContext, useEffect, useState } from 'react';
 type LocaleContextType = {
   locale: string;
   setLocale: (locale: string) => void;
+  isLoading: boolean;
 };
 
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
-export function LocaleProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocale] = useState(() => {
-    // Try to get the locale from localStorage first
-    if (typeof window !== 'undefined') {
-      const savedLocale = localStorage.getItem('locale');
-      if (savedLocale) return savedLocale;
+interface LocaleProviderProps {
+  children: React.ReactNode;
+  initialLocale: string;
+}
 
-      // If no saved locale, use browser language
-      const browserLocale = navigator.language.split('-')[0];
-      return browserLocale === 'fr' ? 'fr' : 'en';
-    }
-    return 'fr'; // Default fallback
-  });
+export function LocaleProvider({ children, initialLocale }: LocaleProviderProps) {
+  const [locale, setLocale] = useState(initialLocale);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Listen for locale changes from the Header component
@@ -33,13 +29,16 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
 
     window.addEventListener('localeChange', handleLocaleChange as EventListener);
 
+    // Set loading to false after initial mount
+    setIsLoading(false);
+
     return () => {
       window.removeEventListener('localeChange', handleLocaleChange as EventListener);
     };
   }, []);
 
   return (
-    <LocaleContext.Provider value={{ locale, setLocale }}>
+    <LocaleContext.Provider value={{ locale, setLocale, isLoading }}>
       {children}
     </LocaleContext.Provider>
   );

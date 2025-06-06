@@ -30,11 +30,35 @@ const accueilQuery = (locale: string) => qs.stringify({
     },
 });
 
+const entrepriseQuery = (locale: string = 'fr') => qs.stringify({
+    locale,
+    populate: {
+        blocks: {
+            on: {
+              "blocks.hero-section": {
+                populate: {
+                  video: {
+                    fields: ["url"],
+                  },
+                },
+              },
+            },
+          },
+    },
+});
+
 export async function getAccueil(locale: string = 'fr') {
     const path = "/api/accueil";
     const url = new URL(path, BASE_URL);
     url.search = accueilQuery(locale);
     console.log("url.href", url.href);
+    return await fetchAPI(url.href, { method: "GET" });
+}
+
+export async function getEntreprise(locale: string = 'fr') {
+    const path = "/api/entreprise";
+    const url = new URL(path, BASE_URL);
+    url.search = entrepriseQuery(locale);
     return await fetchAPI(url.href, { method: "GET" });
 }
 
