@@ -1,5 +1,16 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface BlocksCitation extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_citations';
+  info: {
+    description: '';
+    displayName: 'Quote';
+  };
+  attributes: {
+    content: Schema.Attribute.Text;
+  };
+}
+
 export interface BlocksHeroSection extends Struct.ComponentSchema {
   collectionName: 'components_blocks_hero_sections';
   info: {
@@ -99,6 +110,7 @@ export interface LayoutHeader extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'blocks.citation': BlocksCitation;
       'blocks.hero-section': BlocksHeroSection;
       'blocks.info-block': BlocksInfoBlock;
       'elements.image': ElementsImage;

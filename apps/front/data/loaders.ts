@@ -57,6 +57,40 @@ const entrepriseQuery = (locale: string = 'fr') => qs.stringify({
     },
 });
 
+const mariageQuery = (locale: string = 'fr') => qs.stringify({
+    locale,
+    populate: {
+        blocks: {
+            on: {
+                "blocks.hero-section": {
+                    populate: {
+                        video: {
+                            fields: ["url"],
+                        },
+                    },
+                },
+            },
+        },
+    },
+});
+
+const aboutQuery = (locale: string = 'fr') => qs.stringify({
+    locale,
+    populate: {
+        blocks: {
+            on: {
+                "blocks.hero-section": {
+                    populate: {
+                        video: {
+                            fields: ["url"],
+                        },
+                    },
+                },
+            },
+        },
+    },
+});
+
 const contactQuery = (locale: string = 'fr') => qs.stringify({
     locale,
     populate: {
@@ -93,6 +127,20 @@ export async function getContact(locale: string = 'fr') {
     const path = "/api/contact";
     const url = new URL(path, BASE_URL);
     url.search = contactQuery(locale);
+    return await fetchAPI(url.href, { method: "GET" });
+}
+
+export async function getMariage(locale: string = 'fr') {
+    const path = "/api/mariage";
+    const url = new URL(path, BASE_URL);
+    url.search = mariageQuery(locale);
+    return await fetchAPI(url.href, { method: "GET" });
+}
+
+export async function getAbout(locale: string = 'fr') {
+    const path = "/api/about";
+    const url = new URL(path, BASE_URL);
+    url.search = aboutQuery(locale);
     return await fetchAPI(url.href, { method: "GET" });
 }
 

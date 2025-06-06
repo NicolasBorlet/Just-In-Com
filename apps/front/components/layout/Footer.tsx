@@ -17,12 +17,12 @@ export default function Footer({ block }: { block: FooterBlock }) {
                     <div className="flex flex-col gap-4">
                         <ul className="flex flex-col md:flex-row gap-8 items-center justify-center">
                             {block.navigation.map((item) => (
-                                <Link href={item.href} key={item.id} className="text-white text-xl uppercase">{item.text}</Link>
+                                <Link href={item.href.toLowerCase()} key={item.id} className="text-white text-xl uppercase">{item.text}</Link>
                             ))}
                         </ul>
                         <ul className="flex flex-col md:flex-row gap-2 items-center justify-center">
                             {block.secondary_navigation.map((item) => (
-                                <Link href={item.href} key={item.id} className="text-white text-xl">{item.text}</Link>
+                                <Link href={item.href.toLowerCase()} key={item.id} className="text-white text-xl">{item.text}</Link>
                             ))}
                         </ul>
                     </div>

@@ -92,6 +92,34 @@ export interface ContactPageData {
   meta: Record<string, unknown>;
 }
 
+export interface MariagePageData {
+    data: {
+        id: number;
+        title: string;
+        description: string;
+        documentId: string;
+        createdAt: string;
+        updatedAt: string;
+        publishedAt: string;
+        blocks: (HeroSectionBlock)[];
+      };
+      meta: Record<string, unknown>;
+}
+
+export interface AboutPageData {
+    data: {
+        id: number;
+        title: string;
+        description: string;
+        documentId: string;
+        createdAt: string;
+        updatedAt: string;
+        publishedAt: string;
+        blocks: (HeroSectionBlock)[];
+      };
+      meta: Record<string, unknown>;
+}
+
 export interface TextBlock {
   __component: "elements.text-box";
   id: number;
