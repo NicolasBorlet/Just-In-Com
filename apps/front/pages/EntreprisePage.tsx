@@ -1,4 +1,6 @@
 import HeroSection from "@/components/blocks/HeroSection";
+import ImageBlock from "@/components/elements/Image";
+import TextBlock from "@/components/elements/TextBlock";
 import PageContent from "@/components/globals/PageContent";
 import { EntreprisePageData } from "@/types";
 
@@ -7,16 +9,28 @@ interface EntreprisePageProps {
 }
 
 export default function EntreprisePage({ data }: EntreprisePageProps) {
-    return     <div className="flex flex-col gap-24">
-    {data.data.blocks.map((block) => {
-    if (block.__component === "blocks.hero-section") {
-      return <HeroSection key={block.id} block={block} />;
-    }
-    return null;
-  })}
+    // Trouver le hero section
+    const heroSection = data.data.blocks.find(block => block.__component === "blocks.hero-section");
+
+    // Filtrer les autres blocs
+    const otherBlocks = data.data.blocks.filter(block => block.__component !== "blocks.hero-section");
+
+    return (
+        <div className="flex flex-col gap-24">
+        {heroSection && <HeroSection key={heroSection.id} block={heroSection} />}
         <PageContent>
-            <h1 className="text-4xl font-bold">{data.data.title}</h1>
-            <p className="text-lg">{data.data.description}</p>
+            <div className="flex flex-col gap-24">
+                {otherBlocks.map((block) => {
+                    if (block.__component === "elements.text-box") {
+                        return <TextBlock key={block.id} block={block} />;
+                    }
+                    if (block.__component === "elements.image") {
+                        return <ImageBlock key={block.id + 23} block={block} />;
+                    }
+                    return null;
+                })}
+            </div>
         </PageContent>
-    </div>;
+        </div>
+    );
 }

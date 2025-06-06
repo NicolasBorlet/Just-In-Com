@@ -25,6 +25,17 @@ export interface BlocksInfoBlock extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsImage extends Struct.ComponentSchema {
+  collectionName: 'components_elements_images';
+  info: {
+    displayName: 'image';
+  };
+  attributes: {
+    alt: Schema.Attribute.String;
+    image: Schema.Attribute.Media<'images' | 'files'>;
+  };
+}
+
 export interface ElementsLink extends Struct.ComponentSchema {
   collectionName: 'components_elements_links';
   info: {
@@ -45,6 +56,17 @@ export interface ElementsLogo extends Struct.ComponentSchema {
   attributes: {
     image: Schema.Attribute.Media<'images' | 'files'>;
     logoText: Schema.Attribute.String;
+  };
+}
+
+export interface ElementsTextBox extends Struct.ComponentSchema {
+  collectionName: 'components_elements_text_boxes';
+  info: {
+    displayName: 'text-box';
+  };
+  attributes: {
+    content: Schema.Attribute.RichText;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -79,8 +101,10 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'blocks.hero-section': BlocksHeroSection;
       'blocks.info-block': BlocksInfoBlock;
+      'elements.image': ElementsImage;
       'elements.link': ElementsLink;
       'elements.logo': ElementsLogo;
+      'elements.text-box': ElementsTextBox;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
     }

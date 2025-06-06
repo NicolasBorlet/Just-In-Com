@@ -7,7 +7,7 @@ import PageContent from "../globals/PageContent";
 export default function Footer({ block }: { block: FooterBlock }) {
     const strapiUrl = getStrapiURL();
   return <footer>
-    <div className="py-24 bg-primary text-white">
+    <div className="py-24 bg-primary text-white mt-48">
         <PageContent>
                 <div className="flex flex-col gap-12 items-center">
                     <Link href="/" className="flex items-center gap-4">

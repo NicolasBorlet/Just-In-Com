@@ -20,7 +20,9 @@
       "type": "dynamiczone",
       "components": [
         "blocks.info-block",
-        "blocks.hero-section"
+        "blocks.hero-section",
+        "elements.image",
+        "elements.text-box"
       ],
       "pluginOptions": {
         "i18n": {

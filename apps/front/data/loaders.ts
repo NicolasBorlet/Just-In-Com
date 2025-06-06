@@ -42,6 +42,33 @@ const entrepriseQuery = (locale: string = 'fr') => qs.stringify({
                   },
                 },
               },
+              "elements.text-box": {
+                populate: true,
+              },
+              "elements.image": {
+                populate: {
+                    image: {
+                        fields: ["url", "alternativeText"],
+                    },
+                },
+              },
+            },
+          },
+    },
+});
+
+const contactQuery = (locale: string = 'fr') => qs.stringify({
+    locale,
+    populate: {
+        blocks: {
+            on: {
+              "blocks.hero-section": {
+                populate: {
+                  video: {
+                    fields: ["url"],
+                  },
+                },
+              },
             },
           },
     },
@@ -59,6 +86,13 @@ export async function getEntreprise(locale: string = 'fr') {
     const path = "/api/entreprise";
     const url = new URL(path, BASE_URL);
     url.search = entrepriseQuery(locale);
+    return await fetchAPI(url.href, { method: "GET" });
+}
+
+export async function getContact(locale: string = 'fr') {
+    const path = "/api/contact";
+    const url = new URL(path, BASE_URL);
+    url.search = contactQuery(locale);
     return await fetchAPI(url.href, { method: "GET" });
 }
 

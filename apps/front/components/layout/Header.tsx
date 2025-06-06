@@ -13,12 +13,22 @@ export default function Header({ block, availableLocales }: { block: HeaderBlock
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const { locale: currentLocale, setLocale } = useLocale();
 
   useEffect(() => {
     // Get browser locale on component mount
     const browserLocale = navigator.language.split('-')[0];
     setLocale(browserLocale === 'fr' ? 'fr' : 'en');
+
+    // Add scroll event listener
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setHasScrolled(scrollPosition >= window.innerHeight);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const toggleMenu = () => {
@@ -33,7 +43,7 @@ export default function Header({ block, availableLocales }: { block: HeaderBlock
   };
 
   return (
-    <header className={`left-0 right-0 z-50 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-20 md:top-10' : 'top-4'}`}>
+    <header className={`left-0 right-0 z-50 transition-colors duration-300 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-20 md:top-10' : 'top-0'} ${hasScrolled ? 'bg-white shadow-lg' : ''}`}>
       <div className="container mx-auto px-4 py-4 relative">
         <div className={`flex items-center gap-8 ${isHomePage ? 'flex-col' : 'flex-row'} ${isHomePage ? 'justify-center' : 'justify-between'}`}>
           <Link href="/" className="flex items-center">
@@ -53,9 +63,9 @@ export default function Header({ block, availableLocales }: { block: HeaderBlock
             aria-label="Toggle menu"
           >
             <div className="w-6 h-5 relative flex flex-col justify-between">
-              <span className={`w-full h-0.5 bg-white transform transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`w-full h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
-              <span className={`w-full h-0.5 bg-white transform transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              <span className={`w-full h-0.5 ${hasScrolled ? 'bg-black' : 'bg-white'} transform transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`w-full h-0.5 ${hasScrolled ? 'bg-black' : 'bg-white'} transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-full h-0.5 ${hasScrolled ? 'bg-black' : 'bg-white'} transform transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
             </div>
           </button>
 
@@ -65,7 +75,7 @@ export default function Header({ block, availableLocales }: { block: HeaderBlock
               <Link
                 key={item.id}
                 href={item.href}
-                className="text-white text-xl uppercase"
+                className={`text-xl uppercase transition-colors duration-300 ${hasScrolled ? 'text-black' : 'text-white'}`}
               >
                 {item.text}
               </Link>
@@ -78,7 +88,7 @@ export default function Header({ block, availableLocales }: { block: HeaderBlock
               <button
                 key={locale}
                 onClick={() => handleLanguageChange(locale)}
-                className={`px-3 py-1 rounded ${currentLocale === locale ? 'bg-white text-black' : 'text-white'}`}
+                className={`px-3 py-1 rounded transition-colors duration-300 ${currentLocale === locale ? 'bg-black text-white' : hasScrolled ? 'text-black' : 'text-white'}`}
               >
                 {locale.toUpperCase()}
               </button>

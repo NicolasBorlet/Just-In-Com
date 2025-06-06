@@ -425,6 +425,36 @@ export interface ApiAccueilAccueil extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiContactContact extends Struct.SingleTypeSchema {
+  collectionName: 'contacts';
+  info: {
+    displayName: 'Contact';
+    pluralName: 'contacts';
+    singularName: 'contact';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    blocks: Schema.Attribute.DynamicZone<['blocks.hero-section']>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact.contact'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiEntrepriseEntreprise extends Struct.SingleTypeSchema {
   collectionName: 'entreprises';
   info: {
@@ -443,7 +473,12 @@ export interface ApiEntrepriseEntreprise extends Struct.SingleTypeSchema {
   };
   attributes: {
     blocks: Schema.Attribute.DynamicZone<
-      ['blocks.info-block', 'blocks.hero-section']
+      [
+        'blocks.info-block',
+        'blocks.hero-section',
+        'elements.image',
+        'elements.text-box',
+      ]
     > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -1036,6 +1071,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::accueil.accueil': ApiAccueilAccueil;
+      'api::contact.contact': ApiContactContact;
       'api::entreprise.entreprise': ApiEntrepriseEntreprise;
       'api::global.global': ApiGlobalGlobal;
       'plugin::content-releases.release': PluginContentReleasesRelease;

@@ -73,9 +73,44 @@ export interface EntreprisePageData {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
-    blocks: HeroSectionBlock[];
+    blocks: (HeroSectionBlock | TextBlock | ImageBlock)[];
   };
   meta: Record<string, unknown>;
+}
+
+export interface ContactPageData {
+  data: {
+    id: number;
+    title: string;
+    description: string;
+    documentId: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    blocks: (HeroSectionBlock)[];
+  };
+  meta: Record<string, unknown>;
+}
+
+export interface TextBlock {
+  __component: "elements.text-box";
+  id: number;
+  title?: string;
+  content?: string;
+}
+
+export interface TextBlockProps {
+  block: TextBlock;
+}
+
+export interface ImageBlock {
+  __component: "elements.image";
+  id: number;
+  image: Media;
+}
+
+export interface ImageBlockProps {
+  block: ImageBlock;
 }
 
 export interface HeaderBlock {
