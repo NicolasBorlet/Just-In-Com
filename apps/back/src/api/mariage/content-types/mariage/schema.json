@@ -1,0 +1,47 @@
+{
+  "kind": "singleType",
+  "collectionName": "mariages",
+  "info": {
+    "singularName": "mariage",
+    "pluralName": "mariages",
+    "displayName": "Mariage",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "description": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "blocks": {
+      "type": "dynamiczone",
+      "components": [
+        "blocks.hero-section"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

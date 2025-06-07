@@ -8,9 +8,16 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-baloo)'],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: "#772D44",
+        secondary: "#431927",
+        tertiary: "#FEC7C8",
+        quaternary: "#7E3A3D",
       },
       borderRadius: {
         '4xl': '277px',

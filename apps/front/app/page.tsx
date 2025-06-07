@@ -1,12 +1,28 @@
+'use client'
+
+import { useLocale } from "@/contexts/LocaleContext";
 import { getAccueil } from "@/data/loaders";
 import HomePage from "@/pages/HomePage";
+import { useEffect, useState } from "react";
 
-async function loader() {
-  const data = await getAccueil();
-  return { data };
-}
+export default function Home() {
+  const { locale } = useLocale();
+  const [data, setData] = useState<any>(null);
 
-export default async function Page() {
-  const { data } = await loader();
-  return <HomePage data={data} />;
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getAccueil(locale);
+      setData(result);
+    };
+
+    fetchData();
+  }, [locale]);
+
+  if (!data) return null;
+
+  return (
+    <main>
+      <HomePage data={data} />
+    </main>
+  );
 }

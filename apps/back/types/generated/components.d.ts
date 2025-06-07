@@ -1,5 +1,16 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface BlocksCitation extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_citations';
+  info: {
+    description: '';
+    displayName: 'Quote';
+  };
+  attributes: {
+    content: Schema.Attribute.Text;
+  };
+}
+
 export interface BlocksHeroSection extends Struct.ComponentSchema {
   collectionName: 'components_blocks_hero_sections';
   info: {
@@ -22,6 +33,17 @@ export interface BlocksInfoBlock extends Struct.ComponentSchema {
     headline: Schema.Attribute.String;
     image: Schema.Attribute.Media<'files' | 'images'>;
     reversed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+  };
+}
+
+export interface ElementsImage extends Struct.ComponentSchema {
+  collectionName: 'components_elements_images';
+  info: {
+    displayName: 'image';
+  };
+  attributes: {
+    alt: Schema.Attribute.String;
+    image: Schema.Attribute.Media<'images' | 'files'>;
   };
 }
 
@@ -48,13 +70,55 @@ export interface ElementsLogo extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsTextBox extends Struct.ComponentSchema {
+  collectionName: 'components_elements_text_boxes';
+  info: {
+    displayName: 'text-box';
+  };
+  attributes: {
+    content: Schema.Attribute.RichText;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface LayoutFooter extends Struct.ComponentSchema {
+  collectionName: 'components_layout_footers';
+  info: {
+    displayName: 'Footer';
+  };
+  attributes: {
+    detailled_logo: Schema.Attribute.Component<'elements.logo', false>;
+    logo: Schema.Attribute.Component<'elements.logo', false>;
+    navigation: Schema.Attribute.Component<'elements.link', true>;
+    secondary_navigation: Schema.Attribute.Component<'elements.link', true>;
+  };
+}
+
+export interface LayoutHeader extends Struct.ComponentSchema {
+  collectionName: 'components_layout_headers';
+  info: {
+    description: '';
+    displayName: 'Header';
+  };
+  attributes: {
+    detailled_logo: Schema.Attribute.Component<'elements.logo', false>;
+    logo: Schema.Attribute.Component<'elements.logo', false>;
+    navigation: Schema.Attribute.Component<'elements.link', true>;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'blocks.citation': BlocksCitation;
       'blocks.hero-section': BlocksHeroSection;
       'blocks.info-block': BlocksInfoBlock;
+      'elements.image': ElementsImage;
       'elements.link': ElementsLink;
       'elements.logo': ElementsLogo;
+      'elements.text-box': ElementsTextBox;
+      'layout.footer': LayoutFooter;
+      'layout.header': LayoutHeader;
     }
   }
 }
