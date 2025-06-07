@@ -10,6 +10,12 @@ export interface Link {
   isExternal: boolean;
 }
 
+export interface Menu {
+  id: number;
+  name: string;
+  item: Link[];
+}
+
 export interface Logo {
   id: number;
   logoText: string;
@@ -172,28 +178,11 @@ export interface ImageBlockProps {
   block: ImageBlock;
 }
 
-export interface HeaderBlock {
-  __component: "layout.header";
-  id: number;
-  logo: Logo;
-  detailled_logo: Logo;
-  navigation: Link[];
-}
-
-export interface FooterBlock {
-  __component: "layout.footer";
-  id: number;
-  logo: Logo;
-  detailled_logo: Logo;
-  navigation: Link[];
-  secondary_navigation: Link[];
-  cta: Link;
-}
-
 export interface GlobalSettings {
   title: string;
   description: string;
-  header: HeaderBlock;
-  footer: FooterBlock;
+  logo: Logo;
+  logo_extensed: Logo;
+  menu: Menu[];
   social_links: Link[];
 }

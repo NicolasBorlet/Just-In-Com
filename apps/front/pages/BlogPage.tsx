@@ -4,7 +4,17 @@ import { Article, BlogPageData } from "@/types";
 
 interface BlogPageProps {
     data: BlogPageData;
-    articles: Article[];
+    articles: {
+        data: Article[];
+        meta: {
+            pagination: {
+                page: number;
+                pageSize: number;
+                pageCount: number;
+                total: number;
+            };
+        };
+    };
 }
 
 export default function BlogPage({ data, articles }: BlogPageProps) {
@@ -18,7 +28,7 @@ export default function BlogPage({ data, articles }: BlogPageProps) {
         {heroSection && <HeroSection key={heroSection.id} block={heroSection} />}
         <PageContent>
             <div className="flex flex-col gap-24">
-                {articles.data.map((article) => (
+                {articles?.data?.map((article) => (
                     <div key={article.id}>
                         <h2>{article.title}</h2>
                         <p>{article.description}</p>

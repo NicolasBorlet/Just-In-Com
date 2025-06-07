@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_blocks_navigations",
+  "info": {
+    "displayName": "navigation",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "item": {
+      "type": "component",
+      "repeatable": true,
+      "component": "elements.link"
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}

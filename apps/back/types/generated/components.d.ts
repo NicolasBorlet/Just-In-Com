@@ -36,6 +36,18 @@ export interface BlocksInfoBlock extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksNavigation extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_navigations';
+  info: {
+    description: '';
+    displayName: 'navigation';
+  };
+  attributes: {
+    item: Schema.Attribute.Component<'elements.link', true>;
+    name: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsImage extends Struct.ComponentSchema {
   collectionName: 'components_elements_images';
   info: {
@@ -113,6 +125,7 @@ declare module '@strapi/strapi' {
       'blocks.citation': BlocksCitation;
       'blocks.hero-section': BlocksHeroSection;
       'blocks.info-block': BlocksInfoBlock;
+      'blocks.navigation': BlocksNavigation;
       'elements.image': ElementsImage;
       'elements.link': ElementsLink;
       'elements.logo': ElementsLogo;

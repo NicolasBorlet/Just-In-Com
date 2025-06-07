@@ -228,46 +228,28 @@ export async function getPageBySlug(slug: string, locale: string = 'fr') {
 
 const globalSettingQuery = (locale: string) => qs.stringify({
     locale,
-    populate: {
-      header: {
-        populate: {
-          logo: {
+    populate:
+    {
+        logo: {
             populate: {
-              image: {
+                image: {
                 fields: ["url", "alternativeText"],
-              },
+                },
             },
-          },
-          detailled_logo: {
-            populate: {
-              image: {
-                fields: ["url", "alternativeText"],
-              },
-            },
-          },
-          navigation: true,
         },
-      },
-      footer: {
+        logo_extensed: {
         populate: {
-          logo: {
-            populate: {
-              image: {
-                fields: ["url", "alternativeText"],
-              },
+            image: {
+            fields: ["url", "alternativeText"],
             },
-          },
-          detailled_logo: {
-            populate: {
-              image: {
-                fields: ["url", "alternativeText"],
-              },
-            },
-          },
-          secondary_navigation: true,
-          navigation: true,
         },
-      },
+        },
+        menu: {
+            populate: {
+                item: true,
+            },
+        },
+        social_links: true,
     },
   });
 
