@@ -1,6 +1,7 @@
 import HeroSection from "@/components/blocks/HeroSection";
 import PageContent from "@/components/globals/PageContent";
 import { Article, BlogPageData } from "@/types";
+import Link from "next/link";
 
 interface BlogPageProps {
     data: BlogPageData;
@@ -29,10 +30,10 @@ export default function BlogPage({ data, articles }: BlogPageProps) {
         <PageContent>
             <div className="flex flex-col gap-24">
                 {articles?.data?.map((article) => (
-                    <div key={article.id}>
+                    <Link key={article.id} href={`/blog/${article.slug}`}>
                         <h2>{article.title}</h2>
                         <p>{article.description}</p>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </PageContent>

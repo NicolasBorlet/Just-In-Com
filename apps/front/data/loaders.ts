@@ -121,6 +121,23 @@ const articlesQuery = (locale: string = 'fr') => qs.stringify({
     fields: ["title", "description", "content", "slug"],
 });
 
+const articleQuery = (slug: string, locale: string = 'fr') => qs.stringify({
+    locale,
+    filters: {
+        slug: {
+            $eq: slug,
+        },
+    },
+    populate: {
+        cover: {
+            fields: ["url", "alternativeText"],
+        },
+        category: {
+            fields: ["name"],
+        },
+    },
+});
+
 export async function getBlog(locale: string = 'fr') {
     const path = "/api/blog";
     const url = new URL(path, BASE_URL);
@@ -132,6 +149,13 @@ export async function getArticles(locale: string = 'fr') {
     const path = "/api/articles";
     const url = new URL(path, BASE_URL);
     url.search = articlesQuery(locale);
+    return await fetchAPI(url.href, { method: "GET" });
+}
+
+export async function getArticle(slug: string, locale: string = 'fr') {
+    const path = "/api/articles";
+    const url = new URL(path, BASE_URL);
+    url.search = articleQuery(slug, locale);
     return await fetchAPI(url.href, { method: "GET" });
 }
 
