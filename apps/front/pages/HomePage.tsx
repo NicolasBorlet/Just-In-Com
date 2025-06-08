@@ -2,6 +2,7 @@
 
 import HeroSection from "@/components/blocks/HeroSection";
 import InfoBlock from "@/components/blocks/InfoBlock";
+import QuoteBlock from "@/components/blocks/QuoteBlock";
 import PageContent from "@/components/globals/PageContent";
 import { HomePageData } from "@/types";
 
@@ -19,12 +20,17 @@ export default function HomePage({ data }: HomePageProps) {
         return null;
       })}
     <PageContent>
-        {data.data.blocks.map((block) => {
-        if (block.__component === "blocks.info-block") {
-          return <InfoBlock key={block.id} block={block} />;
-        }
-        return null;
-      })}
+        <div className="flex flex-col gap-24">
+            {data.data.blocks.map((block) => {
+            if (block.__component === "blocks.info-block") {
+            return <InfoBlock key={block.id} block={block} />;
+            }
+            if (block.__component === "blocks.citation") {
+            return <QuoteBlock key={block.id} block={block} />;
+            }
+            return null;
+        })}
+      </div>
     </PageContent>
     </div>
   );

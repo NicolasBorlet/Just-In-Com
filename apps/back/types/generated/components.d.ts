@@ -7,7 +7,7 @@ export interface BlocksCitation extends Struct.ComponentSchema {
     displayName: 'Quote';
   };
   attributes: {
-    content: Schema.Attribute.Text;
+    content: Schema.Attribute.RichText;
   };
 }
 

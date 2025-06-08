@@ -65,7 +65,7 @@ export interface HomePageData {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
-    blocks: HeroSectionBlock[] | InfoBlockBlock[];
+    blocks: HeroSectionBlock[] | InfoBlockBlock[] | QuoteBlock[];
   };
   meta: Record<string, unknown>;
 }
@@ -155,6 +155,12 @@ export interface Article {
         id: number;
         name: string;
     };
+}
+
+export interface QuoteBlock {
+  __component: "blocks.citation";
+  id: number;
+  content: string;
 }
 
 export interface TextBlock {
