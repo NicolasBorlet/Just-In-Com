@@ -11,6 +11,21 @@ export interface BlocksCitation extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksContentSection extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_content_sections';
+  info: {
+    description: '';
+    displayName: 'Content Section';
+  };
+  attributes: {
+    cta: Schema.Attribute.Component<'elements.link', false>;
+    description: Schema.Attribute.Text;
+    gallerie: Schema.Attribute.Media<'images' | 'files', true>;
+    horizontal: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface BlocksHeroSection extends Struct.ComponentSchema {
   collectionName: 'components_blocks_hero_sections';
   info: {
@@ -123,6 +138,7 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'blocks.citation': BlocksCitation;
+      'blocks.content-section': BlocksContentSection;
       'blocks.hero-section': BlocksHeroSection;
       'blocks.info-block': BlocksInfoBlock;
       'blocks.navigation': BlocksNavigation;

@@ -438,7 +438,12 @@ export interface ApiAccueilAccueil extends Struct.SingleTypeSchema {
   };
   attributes: {
     blocks: Schema.Attribute.DynamicZone<
-      ['blocks.info-block', 'blocks.hero-section', 'blocks.citation']
+      [
+        'blocks.info-block',
+        'blocks.hero-section',
+        'blocks.citation',
+        'blocks.content-section',
+      ]
     > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

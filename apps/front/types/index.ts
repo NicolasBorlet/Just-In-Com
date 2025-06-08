@@ -1,6 +1,8 @@
 export interface Media {
   url: string;
   alternativeText?: string;
+  documentId: string;
+  id: number;
 }
 
 export interface Link {
@@ -65,7 +67,7 @@ export interface HomePageData {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
-    blocks: HeroSectionBlock[] | InfoBlockBlock[] | QuoteBlock[];
+    blocks: (HeroSectionBlock | InfoBlockBlock | QuoteBlock | ContentSection)[];
   };
   meta: Record<string, unknown>;
 }
@@ -191,4 +193,19 @@ export interface GlobalSettings {
   logo_extensed: Logo;
   menu: Menu[];
   social_links: Link[];
+}
+
+export interface ContentSection {
+    __component: "blocks.content-section";
+    id: number;
+    title: string;
+    description: string;
+    gallerie: Media[];
+    cta: {
+        id: number;
+        href: string;
+        text: string;
+        isExternal: boolean;
+    };
+    horizontal: boolean;
 }

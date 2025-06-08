@@ -28,6 +28,14 @@ const accueilQuery = (locale: string) => qs.stringify({
           "blocks.citation": {
             populate: '*',
           },
+          "blocks.content-section": {
+            populate: {
+              gallerie: {
+                fields: ["url", "alternativeText"],
+              },
+              cta: true,
+            },
+          },
         },
       },
     },
@@ -183,7 +191,6 @@ export async function getAccueil(locale: string = 'fr') {
     const path = "/api/accueil";
     const url = new URL(path, BASE_URL);
     url.search = accueilQuery(locale);
-    console.log("url.href", url.href);
     return await fetchAPI(url.href, { method: "GET" });
 }
 

@@ -1,0 +1,34 @@
+{
+  "collectionName": "components_blocks_content_sections",
+  "info": {
+    "displayName": "Content Section",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "gallerie": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "elements.link"
+    },
+    "horizontal": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

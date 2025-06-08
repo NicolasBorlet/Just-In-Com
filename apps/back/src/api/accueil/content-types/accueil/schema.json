@@ -37,7 +37,8 @@
       "components": [
         "blocks.info-block",
         "blocks.hero-section",
-        "blocks.citation"
+        "blocks.citation",
+        "blocks.content-section"
       ],
       "pluginOptions": {
         "i18n": {

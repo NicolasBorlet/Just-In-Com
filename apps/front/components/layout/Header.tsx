@@ -17,7 +17,6 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
   const { locale: currentLocale, setLocale } = useLocale();
 
   useEffect(() => {
-    console.log("block", block);
     // Get browser locale on component mount
     const browserLocale = navigator.language.split('-')[0];
     setLocale(browserLocale === 'fr' ? 'fr' : 'en');
