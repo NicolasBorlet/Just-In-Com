@@ -1,0 +1,16 @@
+version: '3.9'
+services:
+  backend:
+    image: nicolasborlet2/strapi-backend:latest
+    ports:
+      - "1337:1337"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_CLIENT=sqlite
+      - DATABASE_FILENAME=.tmp/data.db
+    volumes:
+      - strapi-data:/app/.tmp
+    restart: unless-stopped
+
+volumes:
+  strapi-data:

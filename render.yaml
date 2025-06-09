@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: strapi-staging
+    env: docker
+    dockerfilePath: ./apps/back/Dockerfile
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_CLIENT
+        value: sqlite
+      - key: DATABASE_FILENAME
+        value: .tmp/data.db
+      - key: APP_KEYS
+        value: "myKeyA,myKeyB,myKeyC,myKeyD"
+      - key: API_TOKEN_SALT
+        generateValue: true
+      - key: ADMIN_JWT_SECRET
+        generateValue: true
+      - key: JWT_SECRET
+        generateValue: true
+    healthCheckPath: /_health
+    autoDeploy: true

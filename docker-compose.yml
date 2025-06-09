@@ -1,17 +1,5 @@
 version: '3.9'
 services:
-  db:
-    container_name: db
-    image: postgres
-    ports:
-      - "5432:5432"
-    env_file:
-      # shared env file with strapi application
-        - ./apps/backend/.env
-    volumes:
-      - ./db-data/:/var/lib/postgresql/data
-    restart: unless-stopped
-
   frontend:
     container_name: frontend
     build:
@@ -25,6 +13,25 @@ services:
       - ./apps/front:/app
       - /app/node_modules
       - /app/.next
+    restart: unless-stopped
+    networks:
+      - turbo-network
+
+  backend:
+    container_name: backend
+    build:
+      context: ./apps/back
+      dockerfile: Dockerfile
+    ports:
+      - "1337:1337"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_CLIENT=sqlite
+      - DATABASE_FILENAME=.tmp/data.db
+    volumes:
+      - ./apps/back:/app
+      - /app/node_modules
+      - /app/.tmp
     restart: unless-stopped
     networks:
       - turbo-network
