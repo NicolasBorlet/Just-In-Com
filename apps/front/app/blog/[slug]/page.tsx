@@ -1,31 +1,12 @@
-'use client'
-
-import { useLocale } from "@/contexts/LocaleContext";
 import { getArticle } from "@/data/loaders";
-import ArticlePage from "@/pages/ArticlePage";
-import type { Article } from "@/types";
-import { useEffect, useState } from "react";
+import ArticleClient from "./ArticleClient";
 
-export default function Article({
+export default async function Article({
   params,
 }: {
   params: { slug: string };
 }) {
-    const { locale } = useLocale();
-    const [data, setData] = useState<Article | null>(null);
+  const data = await getArticle(params.slug, "fr");
 
-    useEffect(() => {
-      const fetchData = async () => {
-        const result = await getArticle(params.slug, locale);
-
-        console.log("result", result);
-        setData(result);
-      };
-
-      fetchData();
-    }, [locale, params.slug]);
-
-    if (!data) return null;
-
-    return <ArticlePage data={data} />;
+  return <ArticleClient initialData={data} slug={params.slug} />;
 }
