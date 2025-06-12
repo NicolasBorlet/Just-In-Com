@@ -25,9 +25,9 @@ const accueilQuery = (locale: string) => qs.stringify({
               cta: true,
             },
           },
-          "blocks.citation": {
-            populate: '*',
-          },
+        //   "blocks.citation": {
+        //     populate: '*',
+        //   },
           "blocks.content-section": {
             populate: {
               gallerie: {

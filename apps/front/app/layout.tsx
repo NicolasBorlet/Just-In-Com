@@ -38,7 +38,7 @@ export default async function RootLayout({
 
   // Fetch global settings for both locales
   const globalSettingsByLocale = await Promise.all(
-    ['fr', 'en', 'de', 'it'].map(async (locale: string) => {
+    ['fr', 'en'].map(async (locale: string) => {
       const settings = await getGlobalSettings(locale);
       return { locale, settings };
     })

@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["localhost"],
+    domains: ["localhost", "srv863657.hstgr.cloud"],
   },
 };
 

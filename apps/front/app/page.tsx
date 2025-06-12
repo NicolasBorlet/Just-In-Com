@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const { locale } = useLocale();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {

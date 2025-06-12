@@ -41,7 +41,7 @@ export default function ContactForm() {
       reset();
       alert("Message envoyé avec succès !");
     } catch (error) {
-      alert("Une erreur est survenue lors de l'envoi du message");
+      alert(`Une erreur est survenue lors de l'envoi du message: ${error}`);
     }
   };
 
