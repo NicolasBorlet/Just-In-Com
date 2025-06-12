@@ -5,8 +5,8 @@ import Button, { ButtonAlignment, ButtonWidth } from "../globals/Button";
 export default function ContentSection({ block }: { block: ContentSectionType }) {
   return <div className="flex flex-col gap-12" key={block.id}>
     <div className="flex flex-col gap-4">
-    <h2 className="text-8xl text-center font-special">{block.title}</h2>
-    {block.description && <p className="text-2xl text-center max-w-3xl mx-auto">{block.description}</p>}
+    <h2 className="text-6xl md:text-8xl text-center font-special">{block.title}</h2>
+    {block.description && <p className="text-lg md:text-2xl text-center max-w-3xl mx-auto">{block.description}</p>}
     </div>
     <div className={`grid-cols-1 gap-10 ${block.horizontal ? "flex" : "grid"}`}>
       {block.gallerie.map((image) => (

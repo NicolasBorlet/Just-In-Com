@@ -1,7 +1,7 @@
 function parseMarkdown(markdown: string): string {
   // Replace headers
   let html = markdown
-    .replace(/^### (.*$)/gm, '<h3 class="text-2xl mb-4">$1</h3>')
+    .replace(/^### (.*$)/gm, '<h3 class="text-2xl mb-2 mt-4">$1</h3>')
     .replace(/^## (.*$)/gm, '<h2>$1</h2>')
     .replace(/^# (.*$)/gm, '<h1>$1</h1>');
 
@@ -19,7 +19,7 @@ function parseMarkdown(markdown: string): string {
     .replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>');
 
   // Replace paragraphs
-  html = html.replace(/^(?!<[h|u|li])(.*$)/gm, '<p class="text-xl">$1</p>');
+  html = html.replace(/^(?!<[h|u|li])(.*$)/gm, '<p class="text-lg md:text-xl">$1</p>');
 
   // Clean up empty paragraphs and fix nested lists
   html = html
