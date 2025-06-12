@@ -10,10 +10,12 @@ interface EntreprisePageProps {
 
 export default function EntreprisePage({ data }: EntreprisePageProps) {
     // Trouver le hero section
-    const heroSection = data.data.blocks.find(block => block.__component === "blocks.hero-section");
+    const heroSection = data?.data?.blocks?.find(block => block.__component === "blocks.hero-section");
 
     // Filtrer les autres blocs
-    const otherBlocks = data.data.blocks.filter(block => block.__component !== "blocks.hero-section");
+    const otherBlocks = data?.data?.blocks?.filter(block => block.__component !== "blocks.hero-section");
+
+    if (!heroSection || !otherBlocks) return null;
 
     return (
         <div className="flex flex-col gap-24">
@@ -25,7 +27,7 @@ export default function EntreprisePage({ data }: EntreprisePageProps) {
                         return <TextBlock key={block.id} block={block} />;
                     }
                     if (block.__component === "elements.image") {
-                        return <ImageBlock key={block.id + 23} block={block} />;
+                        return <ImageBlock key={block.id + 23} block={block} alt={block.image.alternativeText || "Image"} />;
                     }
                     return null;
                 })}

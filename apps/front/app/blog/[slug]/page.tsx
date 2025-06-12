@@ -11,7 +11,7 @@ import { useEffect, useState } from "react"
 export default function Page() {
   const { slug } = useParams()!
   const { locale } = useLocale()
-  const [data, setData] = useState<Article|null>(null)
+  const [data, setData] = useState<(Article & { data: Article[] }) | null>(null)
 
   useEffect(() => {
     getArticle(slug as string, locale).then(setData)

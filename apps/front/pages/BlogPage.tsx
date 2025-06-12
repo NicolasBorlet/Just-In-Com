@@ -20,7 +20,7 @@ interface BlogPageProps {
 
 export default function BlogPage({ data, articles }: BlogPageProps) {
     // Trouver le hero section
-    const heroSection = data.data.blocks.find(block => block.__component === "blocks.hero-section");
+    const heroSection = data?.data?.blocks?.find(block => block.__component === "blocks.hero-section");
 
     console.log("articles", articles);
 

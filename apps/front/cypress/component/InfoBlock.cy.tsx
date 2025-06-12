@@ -8,7 +8,9 @@ describe('InfoBlock Component', () => {
     content: 'Test content with **bold** text',
     image: {
       url: '/test-image.jpg',
-      alternativeText: 'Test image'
+      alternativeText: 'Test image',
+      documentId: 'test-document-id',
+      id: 1
     },
     reversed: false,
     cta: {

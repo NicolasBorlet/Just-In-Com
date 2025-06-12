@@ -9,7 +9,17 @@ import { useEffect, useState } from "react";
 export default function Blog() {
     const { locale } = useLocale();
     const [data, setData] = useState<BlogPageData | null>(null);
-    const [articles, setArticles] = useState<Article[]>([]);
+    const [articles, setArticles] = useState<{
+        data: Article[];
+        meta: {
+            pagination: {
+                page: number;
+                pageSize: number;
+                pageCount: number;
+                total: number;
+            };
+        };
+    } | null>(null);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -17,14 +27,14 @@ export default function Blog() {
 
         console.log("result", result);
         setData(result);
-        const articles = await getArticles(locale);
-        setArticles(articles);
+        const articlesResult = await getArticles(locale);
+        setArticles(articlesResult);
       };
 
       fetchData();
     }, [locale]);
 
-    if (!data) return null;
+    if (!data || !articles) return null;
 
     return <BlogPage data={data} articles={articles} />;
 }
