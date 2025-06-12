@@ -6,20 +6,20 @@ import ArticlePage from "@/pages/ArticlePage";
 import type { Article } from "@/types";
 import { useEffect, useState } from "react";
 
-export default function Article({ slug }: { slug: string }) {
+export default function Page({ params }: { params: { slug: string } }) {
     const { locale } = useLocale();
     const [data, setData] = useState<Article | null>(null);
 
     useEffect(() => {
       const fetchData = async () => {
-        const result = await getArticle(slug, locale);
+        const result = await getArticle(params.slug, locale);
 
         console.log("result", result);
         setData(result);
       };
 
       fetchData();
-    }, [locale, slug]);
+    }, [locale, params.slug]);
 
     if (!data) return null;
 
