@@ -1,27 +1,22 @@
-'use client'
+// app/blog/[slug]/page.tsx
+"use client"
 
-import { useLocale } from "@/contexts/LocaleContext";
-import { getArticle } from "@/data/loaders";
-import ArticlePage from "@/pages/ArticlePage";
-import type { Article } from "@/types";
-import { useEffect, useState } from "react";
+import { useLocale } from "@/contexts/LocaleContext"
+import { getArticle } from "@/data/loaders"
+import ArticlePage from "@/pages/ArticlePage"
+import type { Article } from "@/types"
+import { useParams } from "next/navigation"
+import { useEffect, useState } from "react"
 
-export default function Page({ params }: { params: { slug: string } }) {
-    const { locale } = useLocale();
-    const [data, setData] = useState<Article | null>(null);
+export default function Page() {
+  const { slug } = useParams()!
+  const { locale } = useLocale()
+  const [data, setData] = useState<Article|null>(null)
 
-    useEffect(() => {
-      const fetchData = async () => {
-        const result = await getArticle(params.slug, locale);
+  useEffect(() => {
+    getArticle(slug as string, locale).then(setData)
+  }, [slug, locale])
 
-        console.log("result", result);
-        setData(result);
-      };
-
-      fetchData();
-    }, [locale, params.slug]);
-
-    if (!data) return null;
-
-    return <ArticlePage data={data} />;
+  if (!data) return null
+  return <ArticlePage data={data}/>
 }
