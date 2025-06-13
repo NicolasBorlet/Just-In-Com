@@ -12,37 +12,77 @@ describe('HeroSection Component', () => {
     }
   };
 
-  it('renders video with correct attributes', () => {
+  beforeEach(() => {
     cy.mount(<HeroSection block={mockBlock} />);
-    cy.get('video')
-      .should('have.attr', 'src')
-      .and('include', '/test-video.mp4');
-    cy.get('video')
-      .should('have.attr', 'autoPlay')
-      .and('have.attr', 'muted')
-      .and('have.attr', 'loop');
+    // Attendre que les styles soient chargés
+    cy.wait(1000);
+  });
+
+  it('renders video with correct attributes', () => {
+    // Attendre que la vidéo soit présente et visible
+    cy.get('video').should('exist').and('be.visible');
+
+    // Vérifier la source de la vidéo
+    cy.get('video').should('have.attr', 'src').and('include', '/test-video.mp4');
+
+    // Vérifier les attributs booléens
+    cy.get('video').should('have.prop', 'autoplay', true);
+    cy.get('video').should('have.prop', 'muted', true);
+    cy.get('video').should('have.prop', 'loop', true);
+    cy.get('video').should('have.prop', 'playsInline', true);
+    cy.get('video').should('have.prop', 'disablePictureInPicture', true);
+
+    // Vérifier controlsList en utilisant la propriété value
+    cy.get('video').should('have.prop', 'controlsList')
+      .and('have.property', 'value', 'nodownload nofullscreen noremoteplayback');
+
+    cy.get('video').should('have.class', 'pointer-events-none');
   });
 
   it('renders heading when provided', () => {
-    cy.mount(<HeroSection block={mockBlock} />);
     cy.get('h1')
-      .should('contain', 'Test Heading')
-      .and('have.class', 'text-4xl')
+      .should('exist')
+      .and('be.visible')
+      .and('contain', 'Test Heading')
+      .and('have.class', 'text-7xl')
+      .and('have.class', 'md:text-9xl')
       .and('have.class', 'font-bold')
-      .and('have.class', 'text-white');
+      .and('have.class', 'text-white')
+      .and('have.class', 'font-special');
   });
 
   it('renders without heading when not provided', () => {
-    const blockWithoutHeading = { ...mockBlock, heading: '' };
-    cy.mount(<HeroSection block={blockWithoutHeading} />);
+    cy.mount(<HeroSection block={{ ...mockBlock, heading: '' }} />);
     cy.get('h1').should('not.exist');
   });
 
   it('applies correct layout classes', () => {
-    cy.mount(<HeroSection block={mockBlock} />);
-    cy.get('div').first().should('have.class', 'relative').and('have.class', 'h-screen').and('have.class', 'w-full');
-    cy.get('video').should('have.class', 'absolute').and('have.class', 'inset-0').and('have.class', 'h-full').and('have.class', 'w-full').and('have.class', 'object-cover');
-    cy.get('div').eq(1).should('have.class', 'absolute').and('have.class', 'inset-0').and('have.class', 'flex').and('have.class', 'items-center').and('have.class', 'justify-center');
-    cy.get('div').last().should('have.class', 'absolute').and('have.class', 'inset-0').and('have.class', 'bg-black/20');
+    // Attendre que le conteneur principal soit présent et visible
+    cy.get('div.relative').should('exist').and('be.visible', { timeout: 10000 });
+
+    // Vérifier les classes du conteneur principal
+    cy.get('div.relative')
+      .should('have.class', 'h-screen')
+      .and('have.class', 'w-full');
+
+    // Vérifier les classes de la vidéo
+    cy.get('video')
+      .should('have.class', 'absolute')
+      .and('have.class', 'inset-0')
+      .and('have.class', 'h-full')
+      .and('have.class', 'w-full')
+      .and('have.class', 'object-cover');
+
+    // Vérifier les classes du conteneur du titre
+    cy.get('div.flex')
+      .should('have.class', 'absolute')
+      .and('have.class', 'inset-0')
+      .and('have.class', 'items-center')
+      .and('have.class', 'justify-center');
+
+    // Vérifier les classes de l'overlay
+    cy.get('div.bg-black\\/20')
+      .should('have.class', 'absolute')
+      .and('have.class', 'inset-0');
   });
 });

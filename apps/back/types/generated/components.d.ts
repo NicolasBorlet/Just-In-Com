@@ -7,7 +7,22 @@ export interface BlocksCitation extends Struct.ComponentSchema {
     displayName: 'Quote';
   };
   attributes: {
-    content: Schema.Attribute.Text;
+    content: Schema.Attribute.RichText;
+  };
+}
+
+export interface BlocksContentSection extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_content_sections';
+  info: {
+    description: '';
+    displayName: 'Content Section';
+  };
+  attributes: {
+    cta: Schema.Attribute.Component<'elements.link', false>;
+    description: Schema.Attribute.Text;
+    gallerie: Schema.Attribute.Media<'images' | 'files', true>;
+    horizontal: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -33,6 +48,18 @@ export interface BlocksInfoBlock extends Struct.ComponentSchema {
     headline: Schema.Attribute.String;
     image: Schema.Attribute.Media<'files' | 'images'>;
     reversed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+  };
+}
+
+export interface BlocksNavigation extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_navigations';
+  info: {
+    description: '';
+    displayName: 'navigation';
+  };
+  attributes: {
+    item: Schema.Attribute.Component<'elements.link', true>;
+    name: Schema.Attribute.String;
   };
 }
 
@@ -111,8 +138,10 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'blocks.citation': BlocksCitation;
+      'blocks.content-section': BlocksContentSection;
       'blocks.hero-section': BlocksHeroSection;
       'blocks.info-block': BlocksInfoBlock;
+      'blocks.navigation': BlocksNavigation;
       'elements.image': ElementsImage;
       'elements.link': ElementsLink;
       'elements.logo': ElementsLogo;

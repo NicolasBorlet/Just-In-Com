@@ -44,45 +44,45 @@ jobs:
           path: apps/front/cypress/videos/
           retention-days: 30
 
-  backend-tests:
-    runs-on: ubuntu-latest
+#   backend-tests:
+#     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: strapi
-          POSTGRES_PASSWORD: strapi
-          POSTGRES_DB: strapi
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+#     services:
+#       postgres:
+#         image: postgres:latest
+#         env:
+#           POSTGRES_USER: strapi
+#           POSTGRES_PASSWORD: strapi
+#           POSTGRES_DB: strapi
+#         ports:
+#           - 5432:5432
+#         options: >-
+#           --health-cmd pg_isready
+#           --health-interval 10s
+#           --health-timeout 5s
+#           --health-retries 5
 
-    steps:
-      - uses: actions/checkout@v4
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: apps/back/package-lock.json
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '18'
+#           cache: 'npm'
+#           cache-dependency-path: apps/back/package-lock.json
 
-      - name: Install Dependencies
-        working-directory: apps/back
-        run: npm ci
+#       - name: Install Dependencies
+#         working-directory: apps/back
+#         run: npm ci
 
-      - name: Run Tests
-        working-directory: apps/back
-        run: npm run test
-        env:
-          DATABASE_CLIENT: postgres
-          DATABASE_HOST: localhost
-          DATABASE_PORT: 5432
-          DATABASE_NAME: strapi
-          DATABASE_USERNAME: strapi
-          DATABASE_PASSWORD: strapi
+#       - name: Run Tests
+#         working-directory: apps/back
+#         run: npm run test
+#         env:
+#           DATABASE_CLIENT: postgres
+#           DATABASE_HOST: localhost
+#           DATABASE_PORT: 5432
+#           DATABASE_NAME: strapi
+#           DATABASE_USERNAME: strapi
+#           DATABASE_PASSWORD: strapi

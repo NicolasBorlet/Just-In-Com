@@ -8,7 +8,9 @@ interface ContactPageProps {
 }
 
 export default function ContactPage({ data }: ContactPageProps) {
-    const heroSection = data.data.blocks.find(block => block.__component === "blocks.hero-section");
+    const heroSection = data?.data?.blocks?.find(block => block.__component === "blocks.hero-section");
+
+    if (!heroSection) return null;
 
     return (
         <div className="flex flex-col gap-24">

@@ -25,6 +25,17 @@ const accueilQuery = (locale: string) => qs.stringify({
               cta: true,
             },
           },
+        //   "blocks.citation": {
+        //     populate: '*',
+        //   },
+          "blocks.content-section": {
+            populate: {
+              gallerie: {
+                fields: ["url", "alternativeText"],
+              },
+              cta: true,
+            },
+          },
         },
       },
     },
@@ -121,6 +132,23 @@ const articlesQuery = (locale: string = 'fr') => qs.stringify({
     fields: ["title", "description", "content", "slug"],
 });
 
+const articleQuery = (slug: string, locale: string = 'fr') => qs.stringify({
+    locale,
+    filters: {
+        slug: {
+            $eq: slug,
+        },
+    },
+    populate: {
+        cover: {
+            fields: ["url", "alternativeText"],
+        },
+        category: {
+            fields: ["name"],
+        },
+    },
+});
+
 export async function getBlog(locale: string = 'fr') {
     const path = "/api/blog";
     const url = new URL(path, BASE_URL);
@@ -132,6 +160,13 @@ export async function getArticles(locale: string = 'fr') {
     const path = "/api/articles";
     const url = new URL(path, BASE_URL);
     url.search = articlesQuery(locale);
+    return await fetchAPI(url.href, { method: "GET" });
+}
+
+export async function getArticle(slug: string, locale: string = 'fr') {
+    const path = "/api/articles";
+    const url = new URL(path, BASE_URL);
+    url.search = articleQuery(slug, locale);
     return await fetchAPI(url.href, { method: "GET" });
 }
 
@@ -156,7 +191,6 @@ export async function getAccueil(locale: string = 'fr') {
     const path = "/api/accueil";
     const url = new URL(path, BASE_URL);
     url.search = accueilQuery(locale);
-    console.log("url.href", url.href);
     return await fetchAPI(url.href, { method: "GET" });
 }
 
@@ -228,46 +262,28 @@ export async function getPageBySlug(slug: string, locale: string = 'fr') {
 
 const globalSettingQuery = (locale: string) => qs.stringify({
     locale,
-    populate: {
-      header: {
-        populate: {
-          logo: {
+    populate:
+    {
+        logo: {
             populate: {
-              image: {
+                image: {
                 fields: ["url", "alternativeText"],
-              },
+                },
             },
-          },
-          detailled_logo: {
-            populate: {
-              image: {
-                fields: ["url", "alternativeText"],
-              },
-            },
-          },
-          navigation: true,
         },
-      },
-      footer: {
+        logo_extensed: {
         populate: {
-          logo: {
-            populate: {
-              image: {
-                fields: ["url", "alternativeText"],
-              },
+            image: {
+            fields: ["url", "alternativeText"],
             },
-          },
-          detailled_logo: {
-            populate: {
-              image: {
-                fields: ["url", "alternativeText"],
-              },
-            },
-          },
-          secondary_navigation: true,
-          navigation: true,
         },
-      },
+        },
+        menu: {
+            populate: {
+                item: true,
+            },
+        },
+        social_links: true,
     },
   });
 

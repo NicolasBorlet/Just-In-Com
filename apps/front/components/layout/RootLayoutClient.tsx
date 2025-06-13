@@ -31,11 +31,11 @@ export default function RootLayoutClient({
         {!isLoading && (
           <>
             <Header
-              block={currentSettings.data.header}
+              block={currentSettings.data}
               availableLocales={availableLocales}
             />
             {children}
-            <Footer block={currentSettings.data.footer} />
+            <Footer block={currentSettings.data} />
           </>
         )}
       </body>

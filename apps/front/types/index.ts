@@ -1,6 +1,8 @@
 export interface Media {
   url: string;
   alternativeText?: string;
+  documentId: string;
+  id: number;
 }
 
 export interface Link {
@@ -8,6 +10,12 @@ export interface Link {
   text: string;
   href: string;
   isExternal: boolean;
+}
+
+export interface Menu {
+  id: number;
+  name: string;
+  item: Link[];
 }
 
 export interface Logo {
@@ -59,7 +67,7 @@ export interface HomePageData {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
-    blocks: HeroSectionBlock[] | InfoBlockBlock[];
+    blocks: (HeroSectionBlock | InfoBlockBlock | QuoteBlock | ContentSection)[];
   };
   meta: Record<string, unknown>;
 }
@@ -151,6 +159,12 @@ export interface Article {
     };
 }
 
+export interface QuoteBlock {
+  __component: "blocks.citation";
+  id: number;
+  content: string;
+}
+
 export interface TextBlock {
   __component: "elements.text-box";
   id: number;
@@ -172,28 +186,26 @@ export interface ImageBlockProps {
   block: ImageBlock;
 }
 
-export interface HeaderBlock {
-  __component: "layout.header";
-  id: number;
-  logo: Logo;
-  detailled_logo: Logo;
-  navigation: Link[];
-}
-
-export interface FooterBlock {
-  __component: "layout.footer";
-  id: number;
-  logo: Logo;
-  detailled_logo: Logo;
-  navigation: Link[];
-  secondary_navigation: Link[];
-  cta: Link;
-}
-
 export interface GlobalSettings {
   title: string;
   description: string;
-  header: HeaderBlock;
-  footer: FooterBlock;
+  logo: Logo;
+  logo_extensed: Logo;
+  menu: Menu[];
   social_links: Link[];
+}
+
+export interface ContentSection {
+    __component: "blocks.content-section";
+    id: number;
+    title: string;
+    description: string;
+    gallerie: Media[];
+    cta: {
+        id: number;
+        href: string;
+        text: string;
+        isExternal: boolean;
+    };
+    horizontal: boolean;
 }

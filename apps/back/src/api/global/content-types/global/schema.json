@@ -32,30 +32,40 @@
         }
       }
     },
-    "header": {
-      "type": "component",
-      "repeatable": false,
-      "component": "layout.header",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "footer": {
-      "type": "component",
-      "repeatable": false,
-      "component": "layout.footer",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "social_links": {
       "type": "component",
       "repeatable": true,
       "component": "elements.link",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "menu": {
+      "type": "component",
+      "repeatable": true,
+      "component": "blocks.navigation",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "logo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "elements.logo",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "logo_extensed": {
+      "type": "component",
+      "repeatable": false,
+      "component": "elements.logo",
       "pluginOptions": {
         "i18n": {
           "localized": true

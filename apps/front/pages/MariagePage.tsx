@@ -8,7 +8,7 @@ interface MariagePageProps {
 
 export default function MariagePage({ data }: MariagePageProps) {
     // Trouver le hero section
-    const heroSection = data.data.blocks.find(block => block.__component === "blocks.hero-section");
+    const heroSection = data?.data?.blocks?.find(block => block.__component === "blocks.hero-section");
 
     return (
         <div className="flex flex-col gap-24">

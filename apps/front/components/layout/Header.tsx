@@ -1,14 +1,14 @@
 'use client'
 
 import { useLocale } from "@/contexts/LocaleContext";
-import { HeaderBlock } from "@/types";
+import { GlobalSettings } from "@/types";
 import { getStrapiURL } from "@/utils/get-strapi-url";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Header({ block, availableLocales }: { block: HeaderBlock, availableLocales: string[] }) {
+export default function Header({ block, availableLocales }: { block: GlobalSettings, availableLocales: string[] }) {
   const strapiUrl = getStrapiURL();
   const pathname = usePathname();
   const isHomePage = pathname === '/';
@@ -48,15 +48,14 @@ export default function Header({ block, availableLocales }: { block: HeaderBlock
         <div className={`flex items-center gap-8 ${isHomePage ? 'flex-col' : 'flex-row'} ${isHomePage ? 'justify-center' : 'justify-between'}`}>
           <Link href="/" className="flex items-center">
             <Image
-              src={`${strapiUrl}${isHomePage ? block.detailled_logo.image.url : block.logo.image.url}`}
-              alt={isHomePage ? block.detailled_logo.image.alternativeText || block.detailled_logo.logoText : block.logo.image.alternativeText || block.logo.logoText}
+              src={`${strapiUrl}${isHomePage ? block.logo_extensed.image.url : block.logo.image.url}`}
+              alt={isHomePage ? block.logo_extensed.image.alternativeText || block.logo_extensed.logoText : block.logo.image.alternativeText || block.logo.logoText}
               width={isHomePage ? 300 : 100}
               height={isHomePage ? 300 : 100}
               className={isHomePage ? "h-60 w-auto" : "h-12 w-auto"}
             />
           </Link>
 
-          {/* Hamburger button for mobile */}
           <button
             onClick={toggleMenu}
             className="md:hidden fixed top-6 right-6 z-50 p-2"
@@ -69,9 +68,8 @@ export default function Header({ block, availableLocales }: { block: HeaderBlock
             </div>
           </button>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            {block.navigation.map((item) => (
+            {block.menu.find(menu => menu.name === "main")?.item.map((item) => (
               <Link
                 key={item.id}
                 href={item.href}
@@ -82,7 +80,6 @@ export default function Header({ block, availableLocales }: { block: HeaderBlock
             ))}
           </nav>
 
-          {/* Language Selector */}
           <div className={`hidden md:flex items-center space-x-2 ${isHomePage ? 'absolute right-0 top-0' : ''}`}>
             {availableLocales.map((locale) => (
               <button
@@ -95,14 +92,13 @@ export default function Header({ block, availableLocales }: { block: HeaderBlock
             ))}
           </div>
 
-          {/* Mobile Navigation */}
           <div
             className={`fixed inset-0 bg-black bg-opacity-95 z-40 transition-transform duration-300 lg:hidden ${
               isMenuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
           >
             <nav className="flex flex-col items-center justify-center h-full space-y-8">
-              {block.navigation.map((item) => (
+              {block.menu.find(menu => menu.name === "main")?.item.map((item) => (
                 <Link
                   key={item.id}
                   href={item.href}
