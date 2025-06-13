@@ -14,7 +14,15 @@ export default function ImageBlock({ block, alt }: { block: ImageBlock, alt: str
 
     // Validate URL
     try {
-        new URL(imageUrl);
+        const url = new URL(imageUrl);
+        // Check if the URL has a valid image extension or is a data URL
+        const validImageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+        const hasValidExtension = validImageExtensions.some(ext => url.pathname.toLowerCase().endsWith(ext));
+        const isDataUrl = url.protocol === 'data:';
+
+        if (!hasValidExtension && !isDataUrl) {
+            throw new Error('Invalid image URL format');
+        }
     } catch (e) {
         console.error('Invalid image URL:', imageUrl, e);
         return null;

@@ -1,15 +1,19 @@
 describe('Navigation', () => {
     it('should navigate to the about page', () => {
       // Start from the index page
-      cy.visit('http://localhost:3000/')
+      cy.visit('https://just-in-com.vercel.app/')
 
-      // Find a link with an href attribute containing "about" and click it
-      cy.get('a[href*="about"]').click()
+      // Wait for the element to be visible and scroll it into view
+      cy.get('a[href*="a-propos"]')
+        .first()
+        .should('be.visible')
+        .scrollIntoView()
+        .click()
 
       // The new url should include "/about"
-      cy.url().should('include', '/about')
+      cy.url().should('include', '/a-propos')
 
       // The new page should contain an h1 with "About"
-      cy.get('h1').contains('About')
+      cy.get('h1').contains('À propos')
     })
   })

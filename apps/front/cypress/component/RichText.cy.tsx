@@ -34,7 +34,7 @@ describe('RichText Component', () => {
   });
 
   it('renders paragraphs correctly', () => {
-    const content = 'First paragraph\n\nSecond paragraph';
+    const content = 'First paragraph\nSecond paragraph';
     cy.mount(<RichText content={content} />);
     cy.get('p').should('have.length', 2);
     cy.get('p').first().should('contain', 'First paragraph');

@@ -7,7 +7,9 @@ const contactFormSchema = z.object({
   lastName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
   firstName: z.string().min(2, "Le prénom doit contenir au moins 2 caractères"),
   email: z.string().email("Veuillez entrer une adresse email valide"),
-  phone: z.number().min(10, "Le numéro de téléphone doit contenir au moins 10 caractères"),
+  phone: z.string()
+    .min(10, "Le numéro de téléphone doit contenir au moins 10 caractères")
+    .regex(/^[0-9]+$/, "Le numéro de téléphone doit contenir uniquement des chiffres"),
   prestation: z.enum(["prestation1", "prestation2", "prestation3"]),
   message: z.string().min(10, "Le message doit contenir au moins 10 caractères"),
 });
