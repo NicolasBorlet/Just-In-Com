@@ -3,6 +3,7 @@
 import { useLocale } from "@/contexts/LocaleContext";
 import { GlobalSettings } from "@/types";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Footer from "./Footer";
 import Header from "./Header";
 
@@ -39,6 +40,7 @@ export default function RootLayoutClient({
             <Footer block={currentSettings.data} />
           </>
         )}
+        <SpeedInsights />
         <Analytics />
       </body>
     </html>
