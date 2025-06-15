@@ -285,71 +285,71 @@ const globalSettingQuery = (locale: string) => qs.stringify({
         },
         social_links: true,
     },
-  });
+});
 
-  export async function getGlobalSettings(locale: string = 'fr') {
-    const path = "/api/global";
-    const url = new URL(path, BASE_URL);
-    url.search = globalSettingQuery(locale);
-    return fetchAPI(url.href, { method: "GET" });
-  }
+export async function getGlobalSettings(locale: string = 'fr') {
+const path = "/api/global";
+const url = new URL(path, BASE_URL);
+url.search = globalSettingQuery(locale);
+return fetchAPI(url.href, { method: "GET" });
+}
 
-  export async function getContent(
-    path: string,
-    locale: string = 'fr',
-    featured?: boolean,
-    query?: string,
-    page?: string
-  ) {
-    const url = new URL(path, BASE_URL);
+export async function getContent(
+path: string,
+locale: string = 'fr',
+featured?: boolean,
+query?: string,
+page?: string
+) {
+const url = new URL(path, BASE_URL);
 
-    url.search = qs.stringify({
-      locale,
-      sort: ["createdAt:desc"],
-      filters: {
-        $or: [
-          { title: { $containsi: query } },
-          { description: { $containsi: query } },
-        ],
-        ...(featured && { featured: { $eq: featured } }),
-      },
-      pagination: {
-        pageSize: BLOG_PAGE_SIZE,
-        page: parseInt(page || "1"),
-      },
-      populate: {
-        cover: {
-            fields: ["url", "alternativeText"],
-        },
-        category: true,
-      },
-    });
+url.search = qs.stringify({
+    locale,
+    sort: ["createdAt:desc"],
+    filters: {
+    $or: [
+        { title: { $containsi: query } },
+        { description: { $containsi: query } },
+    ],
+    ...(featured && { featured: { $eq: featured } }),
+    },
+    pagination: {
+    pageSize: BLOG_PAGE_SIZE,
+    page: parseInt(page || "1"),
+    },
+    populate: {
+    cover: {
+        fields: ["url", "alternativeText"],
+    },
+    category: true,
+    },
+});
 
-    return fetchAPI(url.href, { method: "GET" });
-  }
+return fetchAPI(url.href, { method: "GET" });
+}
 
-  export async function getContentBySlug(slug: string, path: string, locale: string = 'fr') {
-    const url = new URL(path, BASE_URL);
-    url.search = qs.stringify({
-      locale,
-      filters: {
-        slug: {
-          $eq: slug,
-        },
-      },
-      populate: {
-        cover: {
-            fields: ["url", "alternativeText"],
-        },
-        category: true,
-      },
-    });
+export async function getContentBySlug(slug: string, path: string, locale: string = 'fr') {
+const url = new URL(path, BASE_URL);
+url.search = qs.stringify({
+    locale,
+    filters: {
+    slug: {
+        $eq: slug,
+    },
+    },
+    populate: {
+    cover: {
+        fields: ["url", "alternativeText"],
+    },
+    category: true,
+    },
+});
 
-    return fetchAPI(url.href, { method: "GET" });
-  }
+return fetchAPI(url.href, { method: "GET" });
+}
 
-  export async function getAvailableLocales() {
-    const path = "/api/i18n/locales";
-    const url = new URL(path, BASE_URL);
-    return fetchAPI(url.href, { method: "GET" });
-  }
+export async function getAvailableLocales() {
+const path = "/api/i18n/locales";
+const url = new URL(path, BASE_URL);
+return fetchAPI(url.href, { method: "GET" });
+}

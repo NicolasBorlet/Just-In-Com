@@ -2,6 +2,14 @@ import ContactForm from '../../components/elements/ContactForm';
 
 describe('ContactForm Component', () => {
   beforeEach(() => {
+    // Mock reCAPTCHA
+    cy.window().then((win) => {
+      win.grecaptcha = {
+        ready: (callback: () => void) => callback(),
+        execute: () => Promise.resolve('mocked-recaptcha-token'),
+      };
+    });
+
     cy.mount(<ContactForm />);
     cy.wait(1000);
   });
@@ -83,11 +91,12 @@ describe('ContactForm Component', () => {
       .and('have.class', 'self-end');
   });
 
-  it('handles form submission', () => {
+  it('handles form submission with reCAPTCHA', () => {
     cy.intercept('POST', '/api/contact', {
       statusCode: 200,
       body: { message: 'Success' }
     }).as('submitForm');
+
     cy.get('select#reason').select('contact');
     cy.get('input#lastName').type('Doe');
     cy.get('input#firstName').type('John');
@@ -96,6 +105,7 @@ describe('ContactForm Component', () => {
     cy.get('select#prestation').select('prestation1');
     cy.get('textarea#message').type('This is a test message that is long enough to be valid.');
     cy.get('button[type="submit"]').click();
+
     const expected = {
       reason: 'contact',
       lastName: 'Doe',
@@ -103,14 +113,41 @@ describe('ContactForm Component', () => {
       phone: "0123456789",
       email: 'john.doe@example.com',
       prestation: 'prestation1',
-      message: 'This is a test message that is long enough to be valid.'
+      message: 'This is a test message that is long enough to be valid.',
+      recaptchaToken: 'mocked-recaptcha-token'
     };
+
     cy.wait('@submitForm').then((interception) => {
       let body = interception.request.body;
       if (typeof body === 'string') {
         body = JSON.parse(body);
       }
       expect(body).to.deep.equal(expected);
+    });
+  });
+
+  it('handles reCAPTCHA error', () => {
+    // Mock reCAPTCHA error
+    cy.window().then((win) => {
+      win.grecaptcha = {
+        ready: (callback: () => void) => callback(),
+        execute: () => Promise.reject(new Error('reCAPTCHA error')),
+      };
+    });
+
+    cy.get('select#reason').select('contact');
+    cy.get('input#lastName').type('Doe');
+    cy.get('input#firstName').type('John');
+    cy.get('input#phone').type('0123456789');
+    cy.get('input#email').type('john.doe@example.com');
+    cy.get('select#prestation').select('prestation1');
+    cy.get('textarea#message').type('This is a test message that is long enough to be valid.');
+
+    cy.get('button[type="submit"]').click();
+
+    // Vérifier que l'alerte d'erreur est affichée
+    cy.on('window:alert', (str) => {
+      expect(str).to.include('Une erreur est survenue lors de l\'envoi du message');
     });
   });
 });
