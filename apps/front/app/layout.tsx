@@ -4,6 +4,7 @@ import { getAvailableLocales, getGlobalSettings } from "@/data/loaders";
 import type { Metadata } from "next";
 import { Baloo_2 } from "next/font/google";
 import { headers } from "next/headers";
+
 import "./globals.css";
 
 const baloo2 = Baloo_2({
