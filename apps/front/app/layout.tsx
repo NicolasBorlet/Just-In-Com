@@ -16,7 +16,10 @@ const baloo2 = Baloo_2({
 export async function generateMetadata(): Promise<Metadata> {
   const metadata = await getGlobalSettings();
   return {
-    title: metadata.data.title,
+    title: {
+      default: metadata.data.title,
+      template: '%s | ' + metadata.data.title
+    },
     description: metadata.data.description,
   };
 }
