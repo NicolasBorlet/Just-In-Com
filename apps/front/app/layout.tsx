@@ -4,6 +4,7 @@ import { getAvailableLocales, getGlobalSettings } from "@/data/loaders";
 import type { Metadata } from "next";
 import { Baloo_2 } from "next/font/google";
 import { headers } from "next/headers";
+import { cache } from 'react';
 
 import "./globals.css";
 
@@ -11,10 +12,15 @@ const baloo2 = Baloo_2({
   variable: "--font-baloo",
   subsets: ["latin"],
   display: "swap",
+  preload: true,
 });
 
+// Cache the data fetching functions
+const cachedGetGlobalSettings = cache(getGlobalSettings);
+const cachedGetAvailableLocales = cache(getAvailableLocales);
+
 export async function generateMetadata(): Promise<Metadata> {
-  const metadata = await getGlobalSettings();
+  const metadata = await cachedGetGlobalSettings();
   return {
     title: {
       default: metadata.data.title,
@@ -29,27 +35,32 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Get the Accept-Language header from the request
   const headersList = await headers();
   const acceptLanguage = headersList.get("accept-language") || "";
-  const availableLocales = await getAvailableLocales();
+  const availableLocales = await cachedGetAvailableLocales();
 
-  // Parse the Accept-Language header to get the preferred language
   const preferredLanguage = acceptLanguage
     .split(",")[0]
     .split("-")[0]
     .toLowerCase();
 
-  // Set initial locale based on browser language, defaulting to 'fr' if not supported
   const initialLocale = preferredLanguage === 'fr' ? 'fr' : 'en';
 
-  // Fetch global settings for both locales
-  const globalSettingsByLocale = await Promise.all(
-    ['fr', 'en'].map(async (locale: string) => {
-      const settings = await getGlobalSettings(locale);
-      return { locale, settings };
-    })
-  );
+  // Load settings only for the initial locale first
+  const initialSettings = await cachedGetGlobalSettings(initialLocale);
+  const globalSettingsByLocale = [
+    { locale: initialLocale, settings: initialSettings }
+  ];
+
+  // Load other locale settings in parallel if needed
+  if (initialLocale !== 'fr') {
+    const frSettings = await cachedGetGlobalSettings('fr');
+    globalSettingsByLocale.push({ locale: 'fr', settings: frSettings });
+  }
+  if (initialLocale !== 'en') {
+    const enSettings = await cachedGetGlobalSettings('en');
+    globalSettingsByLocale.push({ locale: 'en', settings: enSettings });
+  }
 
   return (
     <LocaleProvider initialLocale={initialLocale}>
