@@ -37,11 +37,4 @@ disableLogger: true,
 // https://docs.sentry.io/product/crons/
 // https://vercel.com/docs/cron-jobs
 automaticVercelMonitors: true,
-
-// Source maps configuration
-sourcemaps: {
-  include: ['.'],
-  ignore: ['node_modules'],
-  urlPrefix: '~/_next',
-},
 });
