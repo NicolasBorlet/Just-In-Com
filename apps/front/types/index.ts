@@ -81,7 +81,7 @@ export interface EntreprisePageData {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
-    blocks: (HeroSectionBlock | TextBlock | MediaBlock)[];
+    blocks: (HeroSectionBlock | TextBlock | ImageBlock)[];
   };
   meta: Record<string, unknown>;
 }
@@ -109,7 +109,7 @@ export interface MariagePageData {
         createdAt: string;
         updatedAt: string;
         publishedAt: string;
-        blocks: (HeroSectionBlock)[];
+        blocks: (HeroSectionBlock | TextBlock | MediaBlock | ContentSection | GallerieSection)[];
       };
       meta: Record<string, unknown>;
 }
@@ -179,7 +179,11 @@ export interface TextBlockProps {
 export interface ImageBlock {
   __component: "elements.image";
   id: number;
-  image: Media;
+  media: {
+    url: string;
+    alternativeText?: string;
+    mime?: string;
+  };
 }
 
 export interface ImageBlockProps {

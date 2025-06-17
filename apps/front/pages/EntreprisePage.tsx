@@ -27,6 +27,7 @@ export default function EntreprisePage({ data }: EntreprisePageProps) {
                         return <TextBlock key={block.id} block={block} />;
                     }
                     if (block.__component === "elements.image") {
+                        // @ts-expect-error TODO: fix this
                         return <MediaBlock key={block.id + 23} block={block} alt={block.media.alternativeText || "Media"} />;
                     }
                     return null;

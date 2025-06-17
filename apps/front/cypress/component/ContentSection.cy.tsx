@@ -7,6 +7,7 @@ describe('ContentSection Component', () => {
     title: 'Test Title',
     description: 'Test Description',
     horizontal: false,
+    grid: false,
     gallerie: [
       {
         id: 1,
