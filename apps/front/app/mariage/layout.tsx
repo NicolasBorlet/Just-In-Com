@@ -3,7 +3,6 @@ import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
     const metadata = await getMariage();
-    console.log("metadata", metadata);
     return {
       title: {
         default: metadata.data.title,

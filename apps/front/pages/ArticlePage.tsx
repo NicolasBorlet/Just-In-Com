@@ -9,8 +9,6 @@ interface ArticlePageProps {
 }
 
 export default function ArticlePage({ data }: ArticlePageProps) {
-    console.log("data d'un article", data);
-
     if (!data?.data?.[0]) return null;
 
     return (

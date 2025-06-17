@@ -3,7 +3,6 @@ import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
     const metadata = await getContact();
-    console.log("metadata", metadata);
     return {
       title: {
         default: metadata.data.title,

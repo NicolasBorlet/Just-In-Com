@@ -58,8 +58,8 @@ const entrepriseQuery = (locale: string = 'fr') => qs.stringify({
               },
               "elements.image": {
                 populate: {
-                    image: {
-                        fields: ["url", "alternativeText"],
+                    media: {
+                        fields: ["url", "alternativeText", "mime"],
                     },
                 },
               },
@@ -78,6 +78,18 @@ const mariageQuery = (locale: string = 'fr') => qs.stringify({
                         video: {
                             fields: ["url"],
                         },
+                    },
+                },
+                "blocks.gallerie-section": {
+                    populate: {
+                        galery: {
+                            populate: {
+                                media: {
+                                    fields: ["url", "alternativeText", "mime"],
+                                },
+                            },
+                        },
+                        cta: true,
                     },
                 },
             },

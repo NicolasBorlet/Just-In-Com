@@ -1,4 +1,4 @@
-import ImageBlock from '../../components/elements/Image';
+import ImageBlock from '../../components/elements/Media';
 
 describe('Image Component', () => {
   const mockBlock = {

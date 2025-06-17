@@ -15,9 +15,6 @@ export default function HomePage({ data }: HomePageProps) {
   const heroSection = data?.data?.blocks?.find(block => block.__component === "blocks.hero-section");
   const otherBlocks = data?.data?.blocks?.filter(block => block.__component !== "blocks.hero-section") || [];
 
-  console.log('otherBlocks', otherBlocks);
-  console.log('heroSection', heroSection);
-
   return (
     <div className="flex flex-col gap-24">
       {heroSection && <HeroSection key={heroSection.id} block={heroSection} />}
