@@ -1,16 +1,13 @@
-import ImageBlock from '../../components/elements/Image';
+import ImageBlock from '../../components/elements/Media';
 
 describe('Image Component', () => {
   const mockBlock = {
-    __component: "elements.image" as const,
+    __component: "elements.media" as const,
     id: 1,
-    image: {
-      id: 1,
-      documentId: 'test-image',
+    media: {
       url: '/test-image.jpg',
       alternativeText: 'Test Image',
-      width: 800,
-      height: 600
+      mime: 'image/jpeg'
     }
   };
 
@@ -36,16 +33,19 @@ describe('Image Component', () => {
       .and('have.class', 'rounded-lg');
   });
 
-  it('returns null when image is not provided', () => {
-    const blockWithoutImage = { ...mockBlock, image: null };
-    cy.mount(<ImageBlock block={blockWithoutImage} alt="Test Alt Text" />);
+  it('returns null when media is invalid', () => {
+    const blockWithInvalidMedia = {
+      ...mockBlock,
+      media: { url: '' } // Empty URL should trigger the validation error
+    };
+    cy.mount(<ImageBlock block={blockWithInvalidMedia} alt="Test Alt Text" />);
     cy.get('img').should('not.exist');
   });
 
-  it('returns null when image URL is invalid', () => {
+  it('returns null when media URL is invalid', () => {
     const blockWithInvalidUrl = {
       ...mockBlock,
-      image: { ...mockBlock.image, url: '/invalid.txt' }
+      media: { ...mockBlock.media, url: '/invalid.txt' }
     };
     cy.mount(<ImageBlock block={blockWithInvalidUrl} alt="Test Alt Text" />);
     cy.get('img').should('not.exist');

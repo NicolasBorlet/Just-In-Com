@@ -4,6 +4,7 @@ import { useLocale } from "@/contexts/LocaleContext";
 import { getArticles, getBlog } from "@/data/loaders";
 import BlogPage from "@/pages/BlogPage";
 import { Article, BlogPageData } from "@/types";
+import * as Sentry from "@sentry/nextjs";
 import { useEffect, useState } from "react";
 
 export default function Blog() {
@@ -20,15 +21,31 @@ export default function Blog() {
             };
         };
     } | null>(null);
+    const [isConnected, setIsConnected] = useState(true);
+
+    useEffect(() => {
+      async function checkConnectivity() {
+        const result = await Sentry.diagnoseSdkConnectivity();
+        setIsConnected(result !== 'sentry-unreachable');
+      }
+      checkConnectivity();
+    }, []);
 
     useEffect(() => {
       const fetchData = async () => {
-        const result = await getBlog(locale);
-
-        console.log("result", result);
-        setData(result);
-        const articlesResult = await getArticles(locale);
-        setArticles(articlesResult);
+        try {
+          await Sentry.startSpan({
+            name: 'Blog Page Data Fetch',
+            op: 'data.fetch'
+          }, async () => {
+            const result = await getBlog(locale);
+            setData(result);
+            const articlesResult = await getArticles(locale);
+            setArticles(articlesResult);
+          });
+        } catch (error) {
+          Sentry.captureException(error);
+        }
       };
 
       fetchData();

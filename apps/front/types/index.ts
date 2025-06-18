@@ -109,7 +109,7 @@ export interface MariagePageData {
         createdAt: string;
         updatedAt: string;
         publishedAt: string;
-        blocks: (HeroSectionBlock)[];
+        blocks: (HeroSectionBlock | TextBlock | MediaBlock | ContentSection | GallerieSection)[];
       };
       meta: Record<string, unknown>;
 }
@@ -179,11 +179,25 @@ export interface TextBlockProps {
 export interface ImageBlock {
   __component: "elements.image";
   id: number;
-  image: Media;
+  media: {
+    url: string;
+    alternativeText?: string;
+    mime?: string;
+  };
 }
 
 export interface ImageBlockProps {
   block: ImageBlock;
+}
+
+export interface MediaBlock {
+  id: number;
+  __component: "elements.media";
+  media: {
+    url: string;
+    alternativeText?: string;
+    mime?: string;
+  };
 }
 
 export interface GlobalSettings {
@@ -208,4 +222,19 @@ export interface ContentSection {
         isExternal: boolean;
     };
     horizontal: boolean;
+    grid: boolean;
+}
+
+export interface GallerieSection {
+    __component: "blocks.gallerie-section";
+    id: number;
+    title: string;
+    description: string;
+    galery: Media[];
+    cta: {
+        id: number;
+        href: string;
+        text: string;
+        isExternal: boolean;
+    };
 }

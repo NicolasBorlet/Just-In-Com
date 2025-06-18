@@ -5,6 +5,25 @@ import qs from "qs";
 const BASE_URL = getStrapiURL();
 const BLOG_PAGE_SIZE = 3;
 
+// Cache pour les données fréquemment utilisées
+const cache = new Map();
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+function getCachedData(key: string) {
+  const cached = cache.get(key);
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.data;
+  }
+  return null;
+}
+
+function setCachedData(key: string, data: any) {
+  cache.set(key, {
+    data,
+    timestamp: Date.now(),
+  });
+}
+
 const accueilQuery = (locale: string) => qs.stringify({
     locale,
     populate: {
@@ -58,8 +77,8 @@ const entrepriseQuery = (locale: string = 'fr') => qs.stringify({
               },
               "elements.image": {
                 populate: {
-                    image: {
-                        fields: ["url", "alternativeText"],
+                    media: {
+                        fields: ["url", "alternativeText", "mime"],
                     },
                 },
               },
@@ -78,6 +97,18 @@ const mariageQuery = (locale: string = 'fr') => qs.stringify({
                         video: {
                             fields: ["url"],
                         },
+                    },
+                },
+                "blocks.gallerie-section": {
+                    populate: {
+                        galery: {
+                            populate: {
+                                media: {
+                                    fields: ["url", "alternativeText", "mime"],
+                                },
+                            },
+                        },
+                        cta: true,
                     },
                 },
             },
@@ -188,10 +219,16 @@ const contactQuery = (locale: string = 'fr') => qs.stringify({
 });
 
 export async function getAccueil(locale: string = 'fr') {
+    const cacheKey = `accueil-${locale}`;
+    const cached = getCachedData(cacheKey);
+    if (cached) return cached;
+
     const path = "/api/accueil";
     const url = new URL(path, BASE_URL);
     url.search = accueilQuery(locale);
-    return await fetchAPI(url.href, { method: "GET" });
+    const data = await fetchAPI(url.href, { method: "GET" });
+    setCachedData(cacheKey, data);
+    return data;
 }
 
 export async function getEntreprise(locale: string = 'fr') {
@@ -285,71 +322,77 @@ const globalSettingQuery = (locale: string) => qs.stringify({
         },
         social_links: true,
     },
-  });
+});
 
-  export async function getGlobalSettings(locale: string = 'fr') {
+export async function getGlobalSettings(locale: string = 'fr') {
+    const cacheKey = `global-${locale}`;
+    const cached = getCachedData(cacheKey);
+    if (cached) return cached;
+
     const path = "/api/global";
     const url = new URL(path, BASE_URL);
     url.search = globalSettingQuery(locale);
-    return fetchAPI(url.href, { method: "GET" });
-  }
+    const data = await fetchAPI(url.href, { method: "GET" });
+    setCachedData(cacheKey, data);
+    return data;
+}
 
-  export async function getContent(
-    path: string,
-    locale: string = 'fr',
-    featured?: boolean,
-    query?: string,
-    page?: string
-  ) {
-    const url = new URL(path, BASE_URL);
+export async function getContent(
+path: string,
+locale: string = 'fr',
+featured?: boolean,
+query?: string,
+page?: string
+) {
+const url = new URL(path, BASE_URL);
 
-    url.search = qs.stringify({
-      locale,
-      sort: ["createdAt:desc"],
-      filters: {
-        $or: [
-          { title: { $containsi: query } },
-          { description: { $containsi: query } },
-        ],
-        ...(featured && { featured: { $eq: featured } }),
-      },
-      pagination: {
-        pageSize: BLOG_PAGE_SIZE,
-        page: parseInt(page || "1"),
-      },
-      populate: {
-        cover: {
-            fields: ["url", "alternativeText"],
-        },
-        category: true,
-      },
-    });
+url.search = qs.stringify({
+    locale,
+    sort: ["createdAt:desc"],
+    filters: {
+    $or: [
+        { title: { $containsi: query } },
+        { description: { $containsi: query } },
+    ],
+    ...(featured && { featured: { $eq: featured } }),
+    },
+    pagination: {
+    pageSize: BLOG_PAGE_SIZE,
+    page: parseInt(page || "1"),
+    },
+    populate: {
+    cover: {
+        fields: ["url", "alternativeText"],
+    },
+    category: true,
+    },
+});
 
-    return fetchAPI(url.href, { method: "GET" });
-  }
+return fetchAPI(url.href, { method: "GET" });
+}
 
-  export async function getContentBySlug(slug: string, path: string, locale: string = 'fr') {
-    const url = new URL(path, BASE_URL);
-    url.search = qs.stringify({
-      locale,
-      filters: {
-        slug: {
-          $eq: slug,
-        },
-      },
-      populate: {
-        cover: {
-            fields: ["url", "alternativeText"],
-        },
-        category: true,
-      },
-    });
+export async function getContentBySlug(slug: string, path: string, locale: string = 'fr') {
+const url = new URL(path, BASE_URL);
+url.search = qs.stringify({
+    locale,
+    filters: {
+    slug: {
+        $eq: slug,
+    },
+    },
+    populate: {
+    cover: {
+        fields: ["url", "alternativeText"],
+    },
+    category: true,
+    },
+});
 
-    return fetchAPI(url.href, { method: "GET" });
-  }
+return fetchAPI(url.href, { method: "GET" });
+}
 
-  export async function getAvailableLocales() {
-    const path = "/api/i18n/locales";
-    const url = new URL(path, BASE_URL);
-    return fetchAPI(url.href, { method: "GET" });
-  }
+export async function getAvailableLocales() {
+const path = "/api/i18n/locales";
+const url = new URL(path, BASE_URL);
+return fetchAPI(url.href, { method: "GET" });
+}
