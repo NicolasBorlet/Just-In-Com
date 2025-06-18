@@ -5,6 +5,25 @@ import qs from "qs";
 const BASE_URL = getStrapiURL();
 const BLOG_PAGE_SIZE = 3;
 
+// Cache pour les données fréquemment utilisées
+const cache = new Map();
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+function getCachedData(key: string) {
+  const cached = cache.get(key);
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.data;
+  }
+  return null;
+}
+
+function setCachedData(key: string, data: any) {
+  cache.set(key, {
+    data,
+    timestamp: Date.now(),
+  });
+}
+
 const accueilQuery = (locale: string) => qs.stringify({
     locale,
     populate: {
@@ -200,10 +219,16 @@ const contactQuery = (locale: string = 'fr') => qs.stringify({
 });
 
 export async function getAccueil(locale: string = 'fr') {
+    const cacheKey = `accueil-${locale}`;
+    const cached = getCachedData(cacheKey);
+    if (cached) return cached;
+
     const path = "/api/accueil";
     const url = new URL(path, BASE_URL);
     url.search = accueilQuery(locale);
-    return await fetchAPI(url.href, { method: "GET" });
+    const data = await fetchAPI(url.href, { method: "GET" });
+    setCachedData(cacheKey, data);
+    return data;
 }
 
 export async function getEntreprise(locale: string = 'fr') {
@@ -300,10 +325,16 @@ const globalSettingQuery = (locale: string) => qs.stringify({
 });
 
 export async function getGlobalSettings(locale: string = 'fr') {
-const path = "/api/global";
-const url = new URL(path, BASE_URL);
-url.search = globalSettingQuery(locale);
-return fetchAPI(url.href, { method: "GET" });
+    const cacheKey = `global-${locale}`;
+    const cached = getCachedData(cacheKey);
+    if (cached) return cached;
+
+    const path = "/api/global";
+    const url = new URL(path, BASE_URL);
+    url.search = globalSettingQuery(locale);
+    const data = await fetchAPI(url.href, { method: "GET" });
+    setCachedData(cacheKey, data);
+    return data;
 }
 
 export async function getContent(

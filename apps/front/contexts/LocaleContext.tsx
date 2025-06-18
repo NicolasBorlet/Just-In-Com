@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 type LocaleContextType = {
   locale: string;
@@ -16,15 +16,30 @@ interface LocaleProviderProps {
 }
 
 export function LocaleProvider({ children, initialLocale }: LocaleProviderProps) {
-  const [locale, setLocale] = useState(initialLocale);
+  const [locale, setLocaleState] = useState(initialLocale);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Optimiser la fonction setLocale avec useCallback
+  const setLocale = useCallback((newLocale: string) => {
+    setLocaleState(newLocale);
+    // Sauvegarder dans localStorage de manière asynchrone
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('locale', newLocale);
+    }
+  }, []);
+
   useEffect(() => {
+    // Récupérer la langue depuis localStorage au montage
+    if (typeof window !== 'undefined') {
+      const savedLocale = localStorage.getItem('locale');
+      if (savedLocale && savedLocale !== locale) {
+        setLocaleState(savedLocale);
+      }
+    }
+
     // Listen for locale changes from the Header component
     const handleLocaleChange = (event: CustomEvent<{ locale: string }>) => {
       setLocale(event.detail.locale);
-      // Save the locale to localStorage
-      localStorage.setItem('locale', event.detail.locale);
     };
 
     window.addEventListener('localeChange', handleLocaleChange as EventListener);
@@ -35,10 +50,17 @@ export function LocaleProvider({ children, initialLocale }: LocaleProviderProps)
     return () => {
       window.removeEventListener('localeChange', handleLocaleChange as EventListener);
     };
-  }, []);
+  }, [setLocale, locale]);
+
+  // Mémoriser la valeur du contexte pour éviter les re-renders inutiles
+  const contextValue = useMemo(() => ({
+    locale,
+    setLocale,
+    isLoading
+  }), [locale, setLocale, isLoading]);
 
   return (
-    <LocaleContext.Provider value={{ locale, setLocale, isLoading }}>
+    <LocaleContext.Provider value={contextValue}>
       {children}
     </LocaleContext.Provider>
   );

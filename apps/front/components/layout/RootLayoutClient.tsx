@@ -4,8 +4,14 @@ import { useLocale } from "@/contexts/LocaleContext";
 import { GlobalSettings } from "@/types";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Footer from "./Footer";
+import dynamic from "next/dynamic";
 import Header from "./Header";
+
+// Dynamically import non-critical components
+const DynamicFooter = dynamic(() => import("./Footer"), {
+  loading: () => <div className="h-32 bg-gray-100" />,
+  ssr: true,
+});
 
 interface RootLayoutClientProps {
   children: React.ReactNode;
@@ -29,6 +35,12 @@ export default function RootLayoutClient({
 
   return (
     <html lang={locale} className={fontClassName}>
+      <head>
+        {/* Preload critical resources */}
+        <link rel="preload" href="/api/accueil" as="fetch" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="//srv863657.hstgr.cloud" />
+        <link rel="preconnect" href="//srv863657.hstgr.cloud" />
+      </head>
       <body className="antialiased">
         {!isLoading && (
           <>
@@ -37,7 +49,7 @@ export default function RootLayoutClient({
               availableLocales={availableLocales}
             />
             {children}
-            <Footer block={currentSettings.data} />
+            <DynamicFooter block={currentSettings.data} />
           </>
         )}
         <SpeedInsights />

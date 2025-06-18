@@ -2,7 +2,7 @@ import RootLayoutClient from "@/components/layout/RootLayoutClient";
 import { LocaleProvider } from "@/contexts/LocaleContext";
 import { getAvailableLocales, getGlobalSettings } from "@/data/loaders";
 import type { Metadata } from "next";
-import { Baloo_2 } from "next/font/google";
+import { Baloo_2, Italiana } from "next/font/google";
 import { headers } from "next/headers";
 import { cache } from 'react';
 
@@ -13,6 +13,16 @@ const baloo2 = Baloo_2({
   subsets: ["latin"],
   display: "swap",
   preload: true,
+  fallback: ['system-ui', 'arial'],
+});
+
+const italiana = Italiana({
+  variable: "--font-italiana",
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+  weight: "400",
+  fallback: ['serif'],
 });
 
 // Cache the data fetching functions
@@ -27,6 +37,23 @@ export async function generateMetadata(): Promise<Metadata> {
       template: '%s | ' + metadata.data.title
     },
     description: metadata.data.description,
+    metadataBase: new URL('https://just-in-com.vercel.app'),
+    alternates: {
+      canonical: '/',
+    },
+    openGraph: {
+      title: metadata.data.title,
+      description: metadata.data.description,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: metadata.data.title,
+      description: metadata.data.description,
+    },
+    other: {
+      'theme-color': '#ffffff',
+    },
   };
 }
 
@@ -67,7 +94,7 @@ export default async function RootLayout({
       <RootLayoutClient
         globalSettingsByLocale={globalSettingsByLocale}
         availableLocales={availableLocales.map((locale: { code: string }) => locale.code)}
-        fontClassName={baloo2.variable}
+        fontClassName={`${baloo2.variable} ${italiana.variable}`}
       >
         {children}
       </RootLayoutClient>

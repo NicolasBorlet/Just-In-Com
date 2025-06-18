@@ -7,9 +7,10 @@ interface MediaBlockProps {
     alt: string;
     width?: number;
     height?: number;
+    priority?: boolean;
 }
 
-export default function MediaBlock({ block, alt, width = 600, height = 600 }: MediaBlockProps) {
+export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false }: MediaBlockProps) {
     const strapiUrl = getStrapiURL();
 
     // Handle both direct media blocks and gallery media items
@@ -27,7 +28,6 @@ export default function MediaBlock({ block, alt, width = 600, height = 600 }: Me
     }
 
     const mediaUrl = `${strapiUrl}${media.url}`;
-    console.log('Media URL:', mediaUrl);
 
     // Validate URL
     try {
@@ -50,12 +50,13 @@ export default function MediaBlock({ block, alt, width = 600, height = 600 }: Me
                    ['.mp4', '.webm', '.ogg'].some(ext => mediaUrl.toLowerCase().endsWith(ext));
 
     return (
-        <div className="w-full h-[600px]">
+        <div className="w-full h-[600px] relative">
             {isVideo ? (
                 <video
                     src={mediaUrl}
                     controls
                     className="w-full h-full object-cover object-center rounded-lg"
+                    preload="metadata"
                 />
             ) : (
                 <Image
@@ -64,6 +65,10 @@ export default function MediaBlock({ block, alt, width = 600, height = 600 }: Me
                     width={width}
                     height={height}
                     className="w-full h-full object-cover object-center rounded-lg"
+                    priority={priority}
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
             )}
         </div>
