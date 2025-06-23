@@ -1,71 +1,31 @@
-'use client'
-
-import { useLocale } from "@/contexts/LocaleContext";
+import ClientHomePage from "@/components/ClientHomePage";
 import { getAccueil } from "@/data/loaders";
-import HomePage from "@/pages/HomePage";
-import * as Sentry from "@sentry/nextjs";
-import { useEffect, useMemo, useState } from "react";
+import { headers } from "next/headers";
 
-export default function Home() {
-  const { locale } = useLocale();
-  const [data, setData] = useState(null);
-  const [isConnected, setIsConnected] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+export default async function Home() {
+  const headersList = await headers();
+  const acceptLanguage = headersList.get("accept-language") || "";
+  
+  const preferredLanguage = acceptLanguage
+    .split(",")[0]
+    .split("-")[0]
+    .toLowerCase();
 
-  // Cache pour éviter les re-fetch inutiles
-  const dataCache = useMemo(() => new Map(), []);
-
-  useEffect(() => {
-    async function checkConnectivity() {
-      const result = await Sentry.diagnoseSdkConnectivity();
-      setIsConnected(result !== 'sentry-unreachable');
-    }
-    checkConnectivity();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      // Vérifier le cache d'abord
-      if (dataCache.has(locale)) {
-        setData(dataCache.get(locale));
-        setIsLoading(false);
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        await Sentry.startSpan({
-          name: 'Home Page Data Fetch',
-          op: 'data.fetch'
-        }, async () => {
-          const result = await getAccueil(locale);
-          // Mettre en cache le résultat
-          dataCache.set(locale, result);
-          setData(result);
-        });
-      } catch (error) {
-        Sentry.captureException(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [locale, dataCache]);
-
-  if (isLoading) {
+  const locale = preferredLanguage === 'fr' ? 'fr' : 'en';
+  
+  try {
+    const data = await getAccueil(locale);
+    
+    return <ClientHomePage initialData={data} initialLocale={locale} />;
+  } catch (error) {
+    console.error('Failed to load homepage data:', error);
     return (
       <main className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Unable to load content</h1>
+          <p>Please try refreshing the page.</p>
+        </div>
       </main>
     );
   }
-
-  if (!data) return null;
-
-  return (
-    <main>
-      <HomePage data={data} />
-    </main>
-  );
 }

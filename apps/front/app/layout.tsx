@@ -13,16 +13,16 @@ const baloo2 = Baloo_2({
   subsets: ["latin"],
   display: "swap",
   preload: true,
-  fallback: ['system-ui', 'arial'],
+  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
 });
 
 const italiana = Italiana({
   variable: "--font-italiana",
-  subsets: ["latin"],
+  subsets: ["latin"],  
   display: "swap",
   preload: true,
   weight: "400",
-  fallback: ['serif'],
+  fallback: ['Georgia', 'Times New Roman', 'serif'],
 });
 
 // Cache the data fetching functions
@@ -53,6 +53,8 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     other: {
       'theme-color': '#ffffff',
+      'dns-prefetch': 'srv863657.hstgr.cloud',
+      'preconnect': 'https://srv863657.hstgr.cloud',
     },
   };
 }

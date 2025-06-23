@@ -4,7 +4,17 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     domains: ["localhost", "srv863657.hstgr.cloud"],
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 31536000,
   },
+  experimental: {
+    optimizePackageImports: ['@sentry/nextjs'],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  poweredByHeader: false,
+  reactStrictMode: true,
 };
 
 export default withSentryConfig(nextConfig, {

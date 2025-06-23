@@ -15,7 +15,7 @@ export default function HeroSection({ block }: HeroSectionProps) {
         disablePictureInPicture
         controlsList="nodownload nofullscreen noremoteplayback"
         className="absolute inset-0 h-full w-full object-cover pointer-events-none"
-        preload="metadata"
+        preload="none"
       >
         {/* Fallback pour les navigateurs qui ne supportent pas la vidéo */}
         <source src={`${strapiUrl}${block.video.url}`} type="video/mp4" />
