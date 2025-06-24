@@ -1,5 +1,5 @@
-import { getArticle } from "@/data/loaders"
 import ArticlePageWrapper from "@/components/wrappers/ArticlePageWrapper"
+import { getArticle } from "@/data/loaders"
 import { headers } from "next/headers"
 
 interface PageProps {
@@ -10,17 +10,18 @@ export default async function Page({ params }: PageProps) {
   const { slug } = await params
   const headersList = await headers()
   const acceptLanguage = headersList.get("accept-language") || ""
-  
+
   const preferredLanguage = acceptLanguage
     .split(",")[0]
     .split("-")[0]
+
     .toLowerCase()
 
   const locale = preferredLanguage === 'fr' ? 'fr' : 'en'
 
   try {
     const data = await getArticle(slug, locale)
-    
+
     return (
       <ArticlePageWrapper
         initialData={data}
@@ -34,7 +35,7 @@ export default async function Page({ params }: PageProps) {
       <main className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Article not found</h1>
-          <p>The article you're looking for doesn't exist.</p>
+          <p>The article you&apos;re looking for doesn&apos;t exist.</p>
         </div>
       </main>
     )
