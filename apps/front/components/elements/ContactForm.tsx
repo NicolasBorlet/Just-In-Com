@@ -87,7 +87,7 @@ export default function ContactForm() {
           )}
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 md:flex-row flex-col">
           <div className="flex flex-col gap-2 flex-1">
             <input
               {...register("lastName")}

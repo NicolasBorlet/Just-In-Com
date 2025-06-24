@@ -26,7 +26,7 @@ export default function BlogPage({ data, articles }: BlogPageProps) {
         <div className="flex flex-col gap-24">
         {heroSection && <HeroSection key={heroSection.id} block={heroSection} />}
         <PageContent>
-            <div className="flex flex-col gap-24">
+            <div className="flex flex-col gap-12 md:gap-24">
                 {articles?.data?.map((article) => (
                     <Link key={article.id} href={`/blog/${article.slug}`}>
                         <h2>{article.title}</h2>

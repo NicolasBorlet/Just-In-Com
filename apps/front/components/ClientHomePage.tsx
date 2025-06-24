@@ -15,17 +15,19 @@ export default function ClientHomePage({ initialData, initialLocale }: ClientHom
   const { locale } = useLocale();
   const [data, setData] = useState(initialData);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentLocale, setCurrentLocale] = useState(initialLocale);
 
   useEffect(() => {
-    // Only fetch new data if locale changed from initial
-    if (locale !== initialLocale) {
+    // Fetch new data if locale changed from current locale
+    if (locale !== currentLocale) {
       setIsLoading(true);
       getAccueil(locale)
         .then(setData)
         .catch(console.error)
         .finally(() => setIsLoading(false));
+      setCurrentLocale(locale);
     }
-  }, [locale, initialLocale]);
+  }, [locale, currentLocale]);
 
   if (isLoading) {
     return (

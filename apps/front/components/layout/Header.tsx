@@ -72,9 +72,9 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
             aria-label="Toggle menu"
           >
             <div className="w-6 h-5 relative flex flex-col justify-between">
-              <span className={`w-full h-0.5 ${hasScrolled ? 'bg-black' : 'bg-white'} transform transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`w-full h-0.5 ${hasScrolled ? 'bg-black' : 'bg-white'} transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
-              <span className={`w-full h-0.5 ${hasScrolled ? 'bg-black' : 'bg-white'} transform transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? 'rotate-45 translate-y-[9px]' : ''}`} />
+              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen ? 'bg-black' : 'bg-white'} transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? '-rotate-45 -translate-y-[9px]' : ''}`} />
             </div>
           </button>
 
@@ -103,11 +103,14 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
           </div>
 
           <div
-            className={`fixed inset-0 bg-black bg-opacity-95 z-40 transition-transform duration-300 lg:hidden ${
+            className={`fixed inset-0 bg-black bg-opacity-85 z-40 transition-transform duration-300 lg:hidden ${
               isMenuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
           >
             <nav className="flex flex-col items-center justify-center h-full space-y-8">
+                <Link href="/" className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
+                    Accueil
+                </Link>
               {block.menu.find(menu => menu.name === "main")?.item.map((item) => (
                 <Link
                   key={item.id}
@@ -118,6 +121,16 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
                   {item.text}
                 </Link>
               ))}
+                <div className="flex items-center space-x-2">
+                    {availableLocales.map((locale) => (
+                        <button key={locale} onClick={() => {
+                            handleLanguageChange(locale)
+                            toggleMenu()
+                        }} className="px-3 py-1 rounded transition-colors duration-300 text-white">
+                        {locale.toUpperCase()}
+                        </button>
+                    ))}
+                </div>
             </nav>
           </div>
         </div>

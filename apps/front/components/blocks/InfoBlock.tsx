@@ -17,7 +17,7 @@ export default function InfoBlock({ block }: InfoBlockProps) {
           </Button>
         )}
       </div>
-        <Image src={`${strapiUrl}${block.image.url}`} alt={block.image.alternativeText || ""} width={340} height={500} className="object-cover md:w-2/5 self-center rounded-4xl h-[500px]"/>
+        <Image src={`${strapiUrl}${block.image.url}`} alt={block.image.alternativeText || ""} width={340} height={500} className="object-cover w-3/5 md:w-2/5 self-center rounded-4xl h-[300px] md:h-[500px]"/>
     </div>
   );
 }

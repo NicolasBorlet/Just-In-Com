@@ -21,7 +21,7 @@ export default function EntreprisePage({ data }: EntreprisePageProps) {
         <div className="flex flex-col gap-24">
         {heroSection && <HeroSection key={heroSection.id} block={heroSection} />}
         <PageContent>
-            <div className="flex flex-col gap-24">
+            <div className="flex flex-col gap-12 md:gap-24">
                 {otherBlocks.map((block) => {
                     if (block.__component === "elements.text-box") {
                         return <TextBlock key={block.id} block={block} />;

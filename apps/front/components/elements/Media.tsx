@@ -50,7 +50,7 @@ export default function MediaBlock({ block, alt, width = 600, height = 600, prio
                    ['.mp4', '.webm', '.ogg'].some(ext => mediaUrl.toLowerCase().endsWith(ext));
 
     return (
-        <div className="w-full h-[600px] relative">
+        <div className="w-full md:h-[600px] h-[250px] relative">
             {isVideo ? (
                 <video
                     src={mediaUrl}

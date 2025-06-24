@@ -16,7 +16,7 @@ export default function ContactPage({ data }: ContactPageProps) {
         <div className="flex flex-col gap-24">
             {heroSection && <HeroSection key={heroSection.id} block={heroSection} />}
             <PageContent>
-                <div className="flex flex-col gap-24">
+                <div className="flex flex-col gap-12 md:gap-24">
                     <div className="max-w-2xl mx-auto w-full text-quaternary text-lg">
                         <p className="mb-24 text-center">Pour toute demande ou pour une demande de devis, vous pouvez remplir le formulaire ci-dessous. Je vous réponds dans les plus bref délais.  </p>
                         <ContactForm />
