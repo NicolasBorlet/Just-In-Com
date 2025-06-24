@@ -1,44 +1,36 @@
-'use client'
-
-import { useLocale } from "@/contexts/LocaleContext";
 import { getEntreprise } from "@/data/loaders";
-import EntreprisePage from "@/pages/EntreprisePage";
-import { EntreprisePageData } from "@/types";
-import * as Sentry from "@sentry/nextjs";
-import { useEffect, useState } from "react";
+import ClientEntreprisePage from "@/components/wrappers/ClientEntreprisePage";
+import { headers } from "next/headers";
 
-export default function Entreprise() {
-    const { locale } = useLocale();
-    const [data, setData] = useState<EntreprisePageData | null>(null);
-    const [isConnected, setIsConnected] = useState(true);
+export default async function Entreprise() {
+  const headersList = await headers();
+  const acceptLanguage = headersList.get("accept-language") || "";
+  
+  const preferredLanguage = acceptLanguage
+    .split(",")[0]
+    .split("-")[0]
+    .toLowerCase();
 
-    useEffect(() => {
-      async function checkConnectivity() {
-        const result = await Sentry.diagnoseSdkConnectivity();
-        setIsConnected(result !== 'sentry-unreachable');
-      }
-      checkConnectivity();
-    }, []);
-
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          await Sentry.startSpan({
-            name: 'Entreprise Page Data Fetch',
-            op: 'data.fetch'
-          }, async () => {
-            const result = await getEntreprise(locale);
-            setData(result);
-          });
-        } catch (error) {
-          Sentry.captureException(error);
-        }
-      };
-
-      fetchData();
-    }, [locale]);
-
-    if (!data) return null;
-
-    return <EntreprisePage data={data} />;
+  const locale = preferredLanguage === 'fr' ? 'fr' : 'en';
+  
+  try {
+    const data = await getEntreprise(locale);
+    
+    return (
+      <ClientEntreprisePage
+        initialData={data}
+        initialLocale={locale}
+      />
+    );
+  } catch (error) {
+    console.error('Failed to load entreprise data:', error);
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Unable to load content</h1>
+          <p>Please try refreshing the page.</p>
+        </div>
+      </main>
+    );
+  }
 }

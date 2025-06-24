@@ -1,44 +1,36 @@
-'use client'
-
-import { useLocale } from "@/contexts/LocaleContext";
 import { getContact } from "@/data/loaders";
-import ContactPage from "@/pages/ContactPage";
-import { ContactPageData } from "@/types";
-import * as Sentry from "@sentry/nextjs";
-import { useEffect, useState } from "react";
+import ClientContactPage from "@/components/wrappers/ClientContactPage";
+import { headers } from "next/headers";
 
-export default function Contact() {
-    const { locale } = useLocale();
-    const [data, setData] = useState<ContactPageData | null>(null);
-    const [isConnected, setIsConnected] = useState(true);
+export default async function Contact() {
+  const headersList = await headers();
+  const acceptLanguage = headersList.get("accept-language") || "";
+  
+  const preferredLanguage = acceptLanguage
+    .split(",")[0]
+    .split("-")[0]
+    .toLowerCase();
 
-    useEffect(() => {
-      async function checkConnectivity() {
-        const result = await Sentry.diagnoseSdkConnectivity();
-        setIsConnected(result !== 'sentry-unreachable');
-      }
-      checkConnectivity();
-    }, []);
-
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          await Sentry.startSpan({
-            name: 'Contact Page Data Fetch',
-            op: 'data.fetch'
-          }, async () => {
-            const result = await getContact(locale);
-            setData(result);
-          });
-        } catch (error) {
-          Sentry.captureException(error);
-        }
-      };
-
-      fetchData();
-    }, [locale]);
-
-    if (!data) return null;
-
-    return <ContactPage data={data} />;
+  const locale = preferredLanguage === 'fr' ? 'fr' : 'en';
+  
+  try {
+    const data = await getContact(locale);
+    
+    return (
+      <ClientContactPage
+        initialData={data}
+        initialLocale={locale}
+      />
+    );
+  } catch (error) {
+    console.error('Failed to load contact data:', error);
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Unable to load content</h1>
+          <p>Please try refreshing the page.</p>
+        </div>
+      </main>
+    );
+  }
 }

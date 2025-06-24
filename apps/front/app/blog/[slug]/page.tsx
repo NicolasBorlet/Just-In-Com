@@ -1,22 +1,42 @@
-// app/blog/[slug]/page.tsx
-"use client"
-
-import { useLocale } from "@/contexts/LocaleContext"
 import { getArticle } from "@/data/loaders"
-import ArticlePage from "@/pages/ArticlePage"
-import type { Article } from "@/types"
-import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import ArticlePageWrapper from "@/components/wrappers/ArticlePageWrapper"
+import { headers } from "next/headers"
 
-export default function Page() {
-  const { slug } = useParams()!
-  const { locale } = useLocale()
-  const [data, setData] = useState<(Article & { data: Article[] }) | null>(null)
+interface PageProps {
+  params: Promise<{ slug: string }>
+}
 
-  useEffect(() => {
-    getArticle(slug as string, locale).then(setData)
-  }, [slug, locale])
+export default async function Page({ params }: PageProps) {
+  const { slug } = await params
+  const headersList = await headers()
+  const acceptLanguage = headersList.get("accept-language") || ""
+  
+  const preferredLanguage = acceptLanguage
+    .split(",")[0]
+    .split("-")[0]
+    .toLowerCase()
 
-  if (!data) return null
-  return <ArticlePage data={data}/>
+  const locale = preferredLanguage === 'fr' ? 'fr' : 'en'
+
+  try {
+    const data = await getArticle(slug, locale)
+    
+    return (
+      <ArticlePageWrapper
+        initialData={data}
+        initialLocale={locale}
+        slug={slug}
+      />
+    )
+  } catch (error) {
+    console.error('Failed to load article data:', error)
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Article not found</h1>
+          <p>The article you're looking for doesn't exist.</p>
+        </div>
+      </main>
+    )
+  }
 }
