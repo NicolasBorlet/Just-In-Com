@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef, RefObject } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { RefObject, useEffect, useRef } from 'react';
 import { SplitText } from './splitText';
 
 // Register ScrollTrigger plugin
@@ -55,17 +55,17 @@ export const useTextReveal = (
     if (!elementRef.current) return;
 
     const element = elementRef.current;
-    
+
     // Create split text instance
     splitTextRef.current = new SplitText(element, {
       type: splitType,
       className: 'split-text-element'
     });
 
-    const elements = splitType === 'words' 
-      ? splitTextRef.current.words 
-      : splitType === 'chars' 
-        ? splitTextRef.current.chars 
+    const elements = splitType === 'words'
+      ? splitTextRef.current.words
+      : splitType === 'chars'
+        ? splitTextRef.current.chars
         : splitTextRef.current.lines;
 
     if (!elements || elements.length === 0) return;
@@ -98,6 +98,52 @@ export const useTextReveal = (
   }, [elementRef, duration, delay, stagger, ease, trigger, start, end, splitType, animationType]);
 
   return splitTextRef.current;
+};
+
+export const useLineReveal = (
+  elementRef: RefObject<HTMLElement | null>,
+  options: TextRevealOptions = {}
+) => {
+  const {
+    duration = 0.8,
+    delay = 0,
+    stagger = 0.02,
+    ease = 'power2.out',
+    trigger,
+    start = 'top 80%',
+    end = 'bottom 20%',
+    animationType = 'slideUp'
+  } = options;
+    useEffect(() => {
+    if (!elementRef.current) return;
+    const element = elementRef.current;
+    const splitText = new SplitText(element, {
+      type: 'lines',
+      className: 'split-text-element'
+    });
+    const lines = splitText.lines;
+    if (!lines || lines.length === 0) return;
+    // Set initial state based on animation type
+    gsap.set(lines, getInitialState(animationType));
+    // Create scroll trigger animation
+    gsap.to(lines, {
+      ...getFinalState(animationType),
+      duration,
+      delay,
+      stagger,
+      ease,
+      scrollTrigger: {
+        trigger: trigger || element,
+        start,
+        end,
+        toggleActions: 'play none none reverse'
+      }
+    });
+    return () => {
+      ScrollTrigger.getAll().forEach(st => st.kill());
+      splitText.revert();
+    };
+  }, [elementRef, duration, delay, stagger, ease, trigger, start, end, animationType]);
 };
 
 export const useImageReveal = (

@@ -1,7 +1,8 @@
 import { ContentSection as ContentSectionType } from "@/types";
+import { AnimatedButton } from "../animations/AnimatedButton";
 import { AnimatedHeading, AnimatedParagraph } from "../animations/AnimatedText";
 import MediaBlock from "../elements/Media";
-import Button, { ButtonAlignment, ButtonWidth } from "../globals/Button";
+import { ButtonAlignment, ButtonWidth } from "../globals/Button";
 
 export default function ContentSection({ block }: { block: ContentSectionType }) {
   return <div className="flex flex-col gap-12" key={block.id}>
@@ -24,6 +25,6 @@ export default function ContentSection({ block }: { block: ContentSectionType })
         <MediaBlock key={image.id} block={{ media: image, __component: "elements.media", id: 0 }} alt={image.alternativeText || ""} />
       ))}
     </div>
-    <Button href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT} alignment={ButtonAlignment.CENTER} ariaLabel={block.cta.text}>{block.cta.text}</Button>
+    <AnimatedButton href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT} alignment={ButtonAlignment.CENTER} ariaLabel={block.cta.text}>{block.cta.text}</AnimatedButton>
   </div>;
 }

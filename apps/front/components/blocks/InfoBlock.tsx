@@ -1,8 +1,9 @@
 import { InfoBlockProps } from "@/types";
 import { getStrapiURL } from "@/utils/get-strapi-url";
+import { AnimatedButton } from "../animations/AnimatedButton";
 import { AnimatedImage } from "../animations/AnimatedImage";
 import { AnimatedHeading } from "../animations/AnimatedText";
-import Button, { ButtonAlignment, ButtonWidth } from "../globals/Button";
+import { ButtonAlignment, ButtonWidth } from "../globals/Button";
 import RichText from "../globals/RichText";
 
 export default function InfoBlock({ block }: InfoBlockProps) {
@@ -24,9 +25,9 @@ export default function InfoBlock({ block }: InfoBlockProps) {
         </AnimatedHeading>
         <RichText content={block.content} />
         {block.cta && (
-          <Button href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT} alignment={ButtonAlignment.LEFT} ariaLabel={block.cta.text}>
+          <AnimatedButton href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT} alignment={ButtonAlignment.LEFT} ariaLabel={block.cta.text}>
             {block.cta.text}
-          </Button>
+          </AnimatedButton>
         )}
       </div>
         <AnimatedImage src={`${strapiUrl}${block.image.url}`} alt={block.image.alternativeText || ""} width={340} height={500} containerClassName="object-cover w-3/5 md:w-2/5 self-center rounded-4xl h-[300px] md:h-[500px]"/>
