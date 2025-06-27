@@ -24,7 +24,7 @@ export default function InfoBlock({ block }: InfoBlockProps) {
         </AnimatedHeading>
         <RichText content={block.content} />
         {block.cta && (
-          <Button href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT} alignment={ButtonAlignment.LEFT}>
+          <Button href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT} alignment={ButtonAlignment.LEFT} ariaLabel={block.cta.text}>
             {block.cta.text}
           </Button>
         )}

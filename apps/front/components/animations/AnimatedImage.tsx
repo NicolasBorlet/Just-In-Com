@@ -22,10 +22,7 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = ({
   const imageRef = useRef<HTMLDivElement>(null);
   
   useImageReveal(imageRef, options);
-  
-  if (parallax) {
-    useParallax(imageRef, parallaxSpeed);
-  }
+  useParallax(imageRef, parallaxSpeed, parallax);
 
   return (
     <div ref={imageRef} className={`overflow-hidden ${containerClassName}`}>
@@ -59,10 +56,7 @@ export const AnimatedBackgroundImage: React.FC<AnimatedBackgroundImageProps> = (
   const containerRef = useRef<HTMLDivElement>(null);
   
   useImageReveal(containerRef, options);
-  
-  if (parallax) {
-    useParallax(containerRef, parallaxSpeed);
-  }
+  useParallax(containerRef, parallaxSpeed, parallax);
 
   return (
     <div ref={containerRef} className={`relative overflow-hidden ${className}`}>

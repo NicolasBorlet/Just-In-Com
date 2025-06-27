@@ -34,7 +34,7 @@ export interface ImageRevealOptions {
 }
 
 export const useTextReveal = (
-  elementRef: RefObject<HTMLElement>,
+  elementRef: RefObject<HTMLElement | null>,
   options: TextRevealOptions = {}
 ) => {
   const {
@@ -101,7 +101,7 @@ export const useTextReveal = (
 };
 
 export const useImageReveal = (
-  elementRef: RefObject<HTMLElement>,
+  elementRef: RefObject<HTMLElement | null>,
   options: ImageRevealOptions = {}
 ) => {
   const {
@@ -144,11 +144,12 @@ export const useImageReveal = (
 };
 
 export const useParallax = (
-  elementRef: RefObject<HTMLElement>,
-  speed: number = 0.5
+  elementRef: RefObject<HTMLElement | null>,
+  speed: number = 0.5,
+  enabled: boolean = true
 ) => {
   useEffect(() => {
-    if (!elementRef.current) return;
+    if (!elementRef.current || !enabled) return;
 
     const element = elementRef.current;
 
@@ -166,7 +167,7 @@ export const useParallax = (
     return () => {
       ScrollTrigger.getAll().forEach(st => st.kill());
     };
-  }, [elementRef, speed]);
+  }, [elementRef, speed, enabled]);
 };
 
 // Helper functions for animation states

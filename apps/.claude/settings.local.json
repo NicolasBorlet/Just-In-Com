@@ -3,7 +3,10 @@
     "allow": [
       "Bash(npm install:*)",
       "Bash(find:*)",
-      "Bash(sqlite3:*)"
+      "Bash(sqlite3:*)",
+      "Bash(npm run lint)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": []
   }

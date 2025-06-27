@@ -1,12 +1,12 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, ElementType } from 'react';
 import { useTextReveal, TextRevealOptions } from '../../utils/animations/gsapHooks';
 
 interface AnimatedTextProps {
   children: React.ReactNode;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: ElementType;
   options?: TextRevealOptions;
 }
 
@@ -33,7 +33,7 @@ export const AnimatedHeading: React.FC<Omit<AnimatedTextProps, 'as'> & { level?:
   level = 1,
   options = {}
 }) => {
-  const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
+  const HeadingTag = `h${level}` as ElementType;
   
   return (
     <AnimatedText as={HeadingTag} className={className} options={options}>

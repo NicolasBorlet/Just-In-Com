@@ -13,6 +13,6 @@ export default function GalerySection({ block }: { block: GallerieSectionType })
         <MediaBlock key={image.id} block={{ media: image, __component: "elements.media", id: 0 }} alt={image.alternativeText || ""} width={800} height={800} />
       ))}
     </div>
-    <Button href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT} alignment={ButtonAlignment.CENTER}>{block.cta.text}</Button>
+    <Button href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT} alignment={ButtonAlignment.CENTER} ariaLabel={block.cta.text}>{block.cta.text}</Button>
   </div>;
 }
