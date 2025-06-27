@@ -38,3 +38,19 @@ video {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* GSAP Animation Styles */
+.split-text-element {
+  display: inline-block;
+  overflow: hidden;
+}
+
+/* Prevent flash of unstyled content for animated elements */
+.gsap-animated {
+  opacity: 0;
+}
+
+/* Smooth scrolling for better animation experience */
+html {
+  scroll-behavior: smooth;
+}

@@ -1,6 +1,6 @@
 import type { MediaBlock } from "@/types";
 import { getStrapiURL } from "@/utils/get-strapi-url";
-import Image from "next/image";
+import { AnimatedImage } from "../animations/AnimatedImage";
 
 interface MediaBlockProps {
     block: MediaBlock;
@@ -59,12 +59,12 @@ export default function MediaBlock({ block, alt, width = 600, height = 600, prio
                     preload="metadata"
                 />
             ) : (
-                <Image
+                <AnimatedImage
                     src={mediaUrl}
                     alt={alt || media.alternativeText || "Media"}
                     width={width}
                     height={height}
-                    className="w-full h-full object-cover object-center rounded-lg"
+                    containerClassName="w-full h-full object-cover object-center rounded-lg"
                     priority={priority}
                     placeholder="blur"
                     blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="

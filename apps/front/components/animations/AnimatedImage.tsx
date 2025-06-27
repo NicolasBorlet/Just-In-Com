@@ -1,0 +1,82 @@
+'use client';
+
+import { useRef } from 'react';
+import { useImageReveal, useParallax, ImageRevealOptions } from '../../utils/animations/gsapHooks';
+import Image, { ImageProps } from 'next/image';
+
+interface AnimatedImageProps extends Omit<ImageProps, 'ref'> {
+  containerClassName?: string;
+  options?: ImageRevealOptions;
+  parallax?: boolean;
+  parallaxSpeed?: number;
+}
+
+export const AnimatedImage: React.FC<AnimatedImageProps> = ({
+  containerClassName = '',
+  options = {},
+  parallax = false,
+  parallaxSpeed = 0.5,
+  className = '',
+  ...imageProps
+}) => {
+  const imageRef = useRef<HTMLDivElement>(null);
+  
+  useImageReveal(imageRef, options);
+  
+  if (parallax) {
+    useParallax(imageRef, parallaxSpeed);
+  }
+
+  return (
+    <div ref={imageRef} className={`overflow-hidden ${containerClassName}`}>
+      <Image
+        {...imageProps}
+        className={`w-full h-full object-cover ${className}`}
+      />
+    </div>
+  );
+};
+
+interface AnimatedBackgroundImageProps {
+  src: string;
+  alt?: string;
+  children?: React.ReactNode;
+  className?: string;
+  options?: ImageRevealOptions;
+  parallax?: boolean;
+  parallaxSpeed?: number;
+}
+
+export const AnimatedBackgroundImage: React.FC<AnimatedBackgroundImageProps> = ({
+  src,
+  alt = '',
+  children,
+  className = '',
+  options = {},
+  parallax = false,
+  parallaxSpeed = 0.5
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  useImageReveal(containerRef, options);
+  
+  if (parallax) {
+    useParallax(containerRef, parallaxSpeed);
+  }
+
+  return (
+    <div ref={containerRef} className={`relative overflow-hidden ${className}`}>
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${src})` }}
+        role="img"
+        aria-label={alt}
+      />
+      {children && (
+        <div className="relative z-10">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};

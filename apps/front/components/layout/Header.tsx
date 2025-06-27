@@ -82,7 +82,7 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
             {block.menu.find(menu => menu.name === "main")?.item.map((item) => (
               <Link
                 key={item.id}
-                href={item.href}
+                href={item.href.startsWith('/') ? item.href : `/${item.href}`}
                 className={`text-xl uppercase transition-colors duration-300 ${hasScrolled ? 'text-black' : 'text-white'}`}
               >
                 {item.text}
@@ -114,7 +114,7 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
               {block.menu.find(menu => menu.name === "main")?.item.map((item) => (
                 <Link
                   key={item.id}
-                  href={item.href}
+                  href={item.href.startsWith('/') ? item.href : `/${item.href}`}
                   onClick={toggleMenu}
                   className="text-white text-2xl uppercase hover:text-gray-300 transition-colors"
                 >

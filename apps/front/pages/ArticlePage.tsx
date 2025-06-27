@@ -16,7 +16,7 @@ export default function ArticlePage({ data }: ArticlePageProps) {
         <ArticleHeroSection cover={data.data[0].cover} />
         <PageContent>
             <div className="flex flex-col gap-12 md:gap-24">
-                <h1 className="text-6xl md:text-8xl font-special">{data.data[0].title}</h1>
+                <h1 className="text-6xl md:text-8xl/tight font-special">{data.data[0].title}</h1>
                 <p className="text-lg md:text-xl">{data.data[0].description}</p>
             </div>
         </PageContent>
