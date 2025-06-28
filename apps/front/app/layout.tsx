@@ -18,7 +18,7 @@ const baloo2 = Baloo_2({
 
 const italiana = Italiana({
   variable: "--font-italiana",
-  subsets: ["latin"],  
+  subsets: ["latin"],
   display: "swap",
   preload: true,
   weight: "400",
@@ -93,13 +93,13 @@ export default async function RootLayout({
 
   return (
     <LocaleProvider initialLocale={initialLocale}>
-      <RootLayoutClient
-        globalSettingsByLocale={globalSettingsByLocale}
-        availableLocales={availableLocales.map((locale: { code: string }) => locale.code)}
-        fontClassName={`${baloo2.variable} ${italiana.variable}`}
-      >
-        {children}
-      </RootLayoutClient>
+        <RootLayoutClient
+          globalSettingsByLocale={globalSettingsByLocale}
+          availableLocales={availableLocales.map((locale: { code: string }) => locale.code)}
+          fontClassName={`${baloo2.variable} ${italiana.variable}`}
+        >
+          {children}
+        </RootLayoutClient>
     </LocaleProvider>
   );
 }

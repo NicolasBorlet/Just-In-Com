@@ -10,6 +10,12 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Check if we're in a testing environment
+const isTestEnvironment = () => {
+  if (typeof window === 'undefined') return false;
+  return !!(window as any).Cypress || process.env.NODE_ENV === 'test';
+};
+
 export interface TextRevealOptions {
   duration?: number;
   delay?: number;
@@ -55,6 +61,11 @@ export const useTextReveal = (
     if (!elementRef.current) return;
 
     const element = elementRef.current;
+    
+    // Skip animations in test environment
+    if (isTestEnvironment()) {
+      return;
+    }
 
     // Create split text instance
     splitTextRef.current = new SplitText(element, {
@@ -117,6 +128,11 @@ export const useLineReveal = (
     useEffect(() => {
     if (!elementRef.current) return;
     const element = elementRef.current;
+    
+    // Skip animations in test environment
+    if (isTestEnvironment()) {
+      return;
+    }
     const splitText = new SplitText(element, {
       type: 'lines',
       className: 'split-text-element'
@@ -165,6 +181,11 @@ export const useImageReveal = (
     if (!elementRef.current) return;
 
     const element = elementRef.current;
+    
+    // Skip animations in test environment
+    if (isTestEnvironment()) {
+      return;
+    }
 
     // Set initial state
     gsap.set(element, getImageInitialState(animationType, direction));
@@ -198,6 +219,11 @@ export const useParallax = (
     if (!elementRef.current || !enabled) return;
 
     const element = elementRef.current;
+    
+    // Skip animations in test environment
+    if (isTestEnvironment()) {
+      return;
+    }
 
     gsap.to(element, {
       yPercent: -100 * speed,
