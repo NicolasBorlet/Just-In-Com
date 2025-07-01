@@ -7,7 +7,7 @@ const BLOG_PAGE_SIZE = 3;
 
 // Cache pour les données fréquemment utilisées
 const cache = new Map();
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION = 60 * 60 * 1000; // 1 hour for SSG
 
 function getCachedData(key: string) {
   const cached = cache.get(key);

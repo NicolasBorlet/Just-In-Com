@@ -41,18 +41,46 @@ describe('InfoBlock Component', () => {
     cy.get('div.flex.flex-col.md\\:flex-row').should('have.class', 'md:flex-row');
   });
 
-  it('renders image with correct dimensions and classes', () => {
+  it('renders image with correct responsive dimensions and classes', () => {
     cy.mount(<InfoBlock block={mockBlock} />);
     cy.get('img')
       .should('have.attr', 'width', '340')
       .and('have.attr', 'height', '500')
       .and('have.class', 'object-cover')
       .and('have.class', 'rounded-4xl')
-      .and('have.class', 'h-[500px]');
+      .and('have.class', 'h-[300px]')
+      .and('have.class', 'md:h-[500px]')
+      .and('have.class', 'w-3/5')
+      .and('have.class', 'md:w-2/5')
+      .and('have.class', 'self-center');
   });
 
-  it('renders content section with correct width classes', () => {
+  it('renders content section with correct responsive width classes', () => {
     cy.mount(<InfoBlock block={mockBlock} />);
-    cy.get('div.flex.flex-col.gap-4').should('have.class', 'md:w-3/5');
+    cy.get('div.flex.flex-col.gap-4').should('have.class', 'w-full').and('have.class', 'md:w-3/5');
+  });
+
+  it('applies correct padding classes', () => {
+    cy.mount(<InfoBlock block={mockBlock} />);
+    cy.get('div.flex.flex-col.md\\:flex-row')
+      .should('have.class', 'px-2')
+      .and('have.class', 'md:px-4')
+      .and('have.class', 'lg:px-5')
+      .and('have.class', 'xl:px-6');
+  });
+
+  it('applies correct gap classes', () => {
+    cy.mount(<InfoBlock block={mockBlock} />);
+    cy.get('div.flex.flex-col.md\\:flex-row')
+      .should('have.class', 'gap-8')
+      .and('have.class', 'lg:gap-20');
+  });
+
+  it('renders heading with correct typography classes', () => {
+    cy.mount(<InfoBlock block={mockBlock} />);
+    cy.get('h1')
+      .should('have.class', 'text-6xl')
+      .and('have.class', 'md:text-8xl/tight')
+      .and('have.class', 'font-special');
   });
 });

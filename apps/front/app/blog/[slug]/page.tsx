@@ -1,23 +1,30 @@
 import ArticlePageWrapper from "@/components/wrappers/ArticlePageWrapper"
-import { getArticle } from "@/data/loaders"
-import { headers } from "next/headers"
+import { getArticle, getArticles } from "@/data/loaders"
+
+export const revalidate = 3600; // Revalidate every hour
 
 interface PageProps {
   params: Promise<{ slug: string }>
 }
 
+export async function generateStaticParams() {
+  const locale = 'fr';
+  
+  try {
+    const articles = await getArticles(locale);
+    
+    return articles.data.map((article: any) => ({
+      slug: article.slug,
+    }));
+  } catch (error) {
+    console.error('Failed to generate static params:', error);
+    return [];
+  }
+}
+
 export default async function Page({ params }: PageProps) {
   const { slug } = await params
-  const headersList = await headers()
-  const acceptLanguage = headersList.get("accept-language") || ""
-
-  const preferredLanguage = acceptLanguage
-    .split(",")[0]
-    .split("-")[0]
-
-    .toLowerCase()
-
-  const locale = preferredLanguage === 'fr' ? 'fr' : 'en'
+  const locale = 'fr'; // Default locale for SSG
 
   try {
     const data = await getArticle(slug, locale)

@@ -1,4 +1,3 @@
-import { AnimationExamples } from "@/components/animations/AnimationExamples";
 import HeroSection from "@/components/blocks/HeroSection";
 import PageContent from "@/components/globals/PageContent";
 import { Article, BlogPageData } from "@/types";
@@ -44,7 +43,6 @@ export default function BlogPage({ data, articles }: BlogPageProps) {
                     </Link>
                 ))}
             </div>
-            <AnimationExamples />
         </PageContent>
         </div>
     );

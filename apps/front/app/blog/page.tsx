@@ -1,17 +1,10 @@
 import { getArticles, getBlog } from "@/data/loaders";
 import BlogPageWrapper from "@/components/wrappers/BlogPageWrapper";
-import { headers } from "next/headers";
+
+export const revalidate = 1800; // Revalidate every 30 minutes
 
 export default async function Blog() {
-  const headersList = await headers();
-  const acceptLanguage = headersList.get("accept-language") || "";
-  
-  const preferredLanguage = acceptLanguage
-    .split(",")[0]
-    .split("-")[0]
-    .toLowerCase();
-
-  const locale = preferredLanguage === 'fr' ? 'fr' : 'en';
+  const locale = 'fr'; // Default locale for SSG
   
   try {
     const [data, articles] = await Promise.all([

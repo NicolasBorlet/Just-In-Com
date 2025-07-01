@@ -26,8 +26,8 @@ describe('QuoteBlock Component', () => {
       .should('exist')
       .and('be.visible')
       .and('contain', 'Test Quote Content')
-      .and('have.class', 'text-lg')
-      .and('have.class', 'md:text-xl');
+      .and('have.class', 'text-center')
+      .and('have.class', 'text-4xl');
   });
 
   it('renders complex HTML content', () => {
@@ -41,7 +41,9 @@ describe('QuoteBlock Component', () => {
       .should('exist')
       .and('contain', 'Test')
       .and('contain', 'Bold')
-      .and('contain', 'Italic');
+      .and('contain', 'Italic')
+      .and('have.class', 'text-center')
+      .and('have.class', 'text-4xl');
 
     cy.get('strong').should('contain', 'Bold');
     cy.get('em').should('contain', 'Italic');
@@ -57,7 +59,7 @@ describe('QuoteBlock Component', () => {
 
     // Vérifier les classes du texte
     cy.get('p')
-      .should('have.class', 'text-lg')
-      .and('have.class', 'md:text-xl');
+      .should('have.class', 'text-center')
+      .and('have.class', 'text-4xl');
   });
 });

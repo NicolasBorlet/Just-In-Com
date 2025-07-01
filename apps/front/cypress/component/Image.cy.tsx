@@ -20,7 +20,9 @@ describe('Image Component', () => {
     cy.get('div')
       .should('exist')
       .and('have.class', 'w-full')
-      .and('have.class', 'h-[600px]');
+      .and('have.class', 'md:h-[600px]')
+      .and('have.class', 'h-[250px]')
+      .and('have.class', 'relative');
 
     cy.get('img')
       .should('exist')
@@ -51,13 +53,39 @@ describe('Image Component', () => {
     cy.get('img').should('not.exist');
   });
 
-  it('applies correct layout classes', () => {
+  it('applies correct responsive layout classes', () => {
     cy.get('div')
       .should('exist')
       .and('have.class', 'w-full')
-      .and('have.class', 'h-[600px]');
+      .and('have.class', 'md:h-[600px]')
+      .and('have.class', 'h-[250px]')
+      .and('have.class', 'relative');
 
     cy.get('img')
+      .should('have.class', 'w-full')
+      .and('have.class', 'h-full')
+      .and('have.class', 'object-cover')
+      .and('have.class', 'object-center')
+      .and('have.class', 'rounded-lg');
+  });
+
+  it('renders video when mime type is video', () => {
+    const videoBlock = {
+      ...mockBlock,
+      media: {
+        ...mockBlock.media,
+        mime: 'video/mp4',
+        url: '/test-video.mp4'
+      }
+    };
+    cy.mount(<ImageBlock block={videoBlock} alt="Test Video" />);
+
+    cy.get('video')
+      .should('exist')
+      .and('be.visible')
+      .and('have.attr', 'controls');
+    
+    cy.get('video')
       .should('have.class', 'w-full')
       .and('have.class', 'h-full')
       .and('have.class', 'object-cover')

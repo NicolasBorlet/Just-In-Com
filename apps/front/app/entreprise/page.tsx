@@ -1,17 +1,10 @@
 import { getEntreprise } from "@/data/loaders";
 import ClientEntreprisePage from "@/components/wrappers/ClientEntreprisePage";
-import { headers } from "next/headers";
+
+export const revalidate = 3600; // Revalidate every hour
 
 export default async function Entreprise() {
-  const headersList = await headers();
-  const acceptLanguage = headersList.get("accept-language") || "";
-  
-  const preferredLanguage = acceptLanguage
-    .split(",")[0]
-    .split("-")[0]
-    .toLowerCase();
-
-  const locale = preferredLanguage === 'fr' ? 'fr' : 'en';
+  const locale = 'fr'; // Default locale for SSG
   
   try {
     const data = await getEntreprise(locale);

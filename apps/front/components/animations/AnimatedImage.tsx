@@ -28,7 +28,7 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = ({
     <div ref={imageRef} className={`overflow-hidden ${containerClassName}`}>
       <Image
         {...imageProps}
-        className={`w-full h-full object-cover ${className}`}
+        className={`w-full h-full object-cover object-center rounded-lg ${className}`}
       />
     </div>
   );

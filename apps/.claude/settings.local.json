@@ -6,7 +6,9 @@
       "Bash(sqlite3:*)",
       "Bash(npm run lint)",
       "Bash(npx tsc:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(rm:*)",
+      "Bash(npm run component:*)"
     ],
     "deny": []
   }
