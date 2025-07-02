@@ -111,6 +111,9 @@ const mariageQuery = (locale: string = 'fr') => qs.stringify({
                         cta: true,
                     },
                 },
+                "blocks.services": {
+                    populate: true,
+                },
             },
         },
     },

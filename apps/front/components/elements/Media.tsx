@@ -8,9 +8,11 @@ interface MediaBlockProps {
     width?: number;
     height?: number;
     priority?: boolean;
+    enableHoverEffects?: boolean;
+    onClick?: () => void;
 }
 
-export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false }: MediaBlockProps) {
+export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false, enableHoverEffects = false, onClick }: MediaBlockProps) {
     const strapiUrl = getStrapiURL();
 
     // Handle both direct media blocks and gallery media items
@@ -50,12 +52,15 @@ export default function MediaBlock({ block, alt, width = 600, height = 600, prio
                    ['.mp4', '.webm', '.ogg'].some(ext => mediaUrl.toLowerCase().endsWith(ext));
 
     return (
-        <div className="w-full md:h-[600px] h-[250px] relative">
+        <div 
+            className={`w-full md:h-[600px] h-[250px] relative overflow-hidden rounded-lg group ${enableHoverEffects ? 'cursor-pointer' : ''}`}
+            onClick={onClick}
+        >
             {isVideo ? (
                 <video
                     src={mediaUrl}
                     controls
-                    className="w-full h-full object-cover object-center rounded-lg"
+                    className={`w-full h-full object-cover object-center transition-transform duration-500 ${enableHoverEffects ? 'group-hover:scale-110' : ''}`}
                     preload="metadata"
                 />
             ) : (
@@ -64,7 +69,8 @@ export default function MediaBlock({ block, alt, width = 600, height = 600, prio
                     alt={alt || media.alternativeText || "Media"}
                     width={width}
                     height={height}
-                    containerClassName="w-full h-full object-cover object-center rounded-lg"
+                    containerClassName="w-full h-full"
+                    className={`object-cover object-center transition-transform duration-500 ${enableHoverEffects ? 'group-hover:scale-110' : ''}`}
                     priority={priority}
                     placeholder="blur"
                     blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="

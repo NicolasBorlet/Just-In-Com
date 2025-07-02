@@ -22,7 +22,12 @@ export default function ContentSection({ block }: { block: ContentSectionType })
     </div>
     <div className={`grid-cols-1 gap-10 ${block.horizontal ? "flex" : "grid"} ${block.grid ? "grid-cols-2" : "grid-cols-1"}`}>
       {block.gallerie.map((image) => (
-        <MediaBlock key={image.id} block={{ media: image, __component: "elements.media", id: 0 }} alt={image.alternativeText || ""} />
+        <MediaBlock 
+          key={image.id} 
+          block={{ media: image, __component: "elements.media", id: 0 }} 
+          alt={image.alternativeText || ""}
+          enableHoverEffects={true}
+        />
       ))}
     </div>
     <AnimatedButton href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT} alignment={ButtonAlignment.CENTER} ariaLabel={block.cta.text}>{block.cta.text}</AnimatedButton>

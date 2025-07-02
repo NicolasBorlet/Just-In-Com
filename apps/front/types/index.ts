@@ -109,7 +109,7 @@ export interface MariagePageData {
         createdAt: string;
         updatedAt: string;
         publishedAt: string;
-        blocks: (HeroSectionBlock | TextBlock | MediaBlock | ContentSection | GallerieSection)[];
+        blocks: (HeroSectionBlock | TextBlock | MediaBlock | ContentSection | GallerieSection | TextBlock | ServicesBlock)[];
       };
       meta: Record<string, unknown>;
 }
@@ -237,4 +237,16 @@ export interface GallerieSection {
         text: string;
         isExternal: boolean;
     };
+}
+
+export interface ServicesBlock {
+    __component: "blocks.services";
+    id: number;
+    title: string;
+    description: string;
+    services: string; // RichText
+}
+
+export interface ServicesBlockProps {
+    block: ServicesBlock;
 }

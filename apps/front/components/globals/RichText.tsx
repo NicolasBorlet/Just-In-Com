@@ -21,18 +21,21 @@ function parseMarkdownToElements(markdown: string): MarkdownElement[] {
 
     // Headers
     if (trimmedLine.startsWith('### ')) {
+      currentList = null; // Reset list context
       elements.push({
         type: 'h3',
         level: 3,
         content: trimmedLine.substring(4)
       });
     } else if (trimmedLine.startsWith('## ')) {
+      currentList = null; // Reset list context
       elements.push({
         type: 'h2',
         level: 2,
         content: trimmedLine.substring(3)
       });
     } else if (trimmedLine.startsWith('# ')) {
+      currentList = null; // Reset list context
       elements.push({
         type: 'h1',
         level: 1,
@@ -89,7 +92,7 @@ function processInlineMarkdown(text: string): React.ReactNode {
   });
 }
 
-function RenderElement({ element, index }: { element: MarkdownElement; index: number }) {
+function RenderElement({ element, index, specialH3 }: { element: MarkdownElement; index: number; specialH3: boolean }) {
   const animationDelay = index * 0.1;
 
   switch (element.type) {
@@ -132,7 +135,7 @@ function RenderElement({ element, index }: { element: MarkdownElement; index: nu
         <AnimatedHeading
           key={index}
           level={3}
-          className="text-xl md:text-2xl font-bold mb-2 mt-4"
+          className={`text-xl md:text-2xl font-bold mb-2 mt-4${specialH3 ? ' font-special' : ''}`}
           options={{
             splitType: 'words',
             animationType: 'slideUp',
@@ -185,13 +188,13 @@ function RenderElement({ element, index }: { element: MarkdownElement; index: nu
   }
 }
 
-export default function RichText({ content, style }: { content: string, style?: string }) {
+export default function RichText({ content, style, specialH3 = false }: { content: string, style?: string, specialH3?: boolean }) {
   const elements = parseMarkdownToElements(content);
 
   return (
     <div className={`prose max-w-none ${style || ''}`}>
       {elements.map((element, index) => (
-        <RenderElement key={index} element={element} index={index} />
+        <RenderElement key={index} element={element} index={index} specialH3={specialH3} />
       ))}
     </div>
   );

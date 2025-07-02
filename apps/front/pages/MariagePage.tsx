@@ -1,6 +1,7 @@
 import ContentSection from "@/components/blocks/ContentSection";
 import GalerySection from "@/components/blocks/GalerySection";
 import HeroSection from "@/components/blocks/HeroSection";
+import ServicesBlock from "@/components/blocks/ServicesBlock";
 import MediaBlock from "@/components/elements/Media";
 import TextBlock from "@/components/elements/TextBlock";
 import PageContent from "@/components/globals/PageContent";
@@ -16,8 +17,6 @@ export default function MariagePage({ data }: MariagePageProps) {
 
      // Filtrer les autres blocs
      const otherBlocks = data?.data?.blocks?.filter(block => block.__component !== "blocks.hero-section") || [];
-
-     console.log("otherBlocks", otherBlocks);
 
     return (
         <div className="flex flex-col gap-24">
@@ -38,6 +37,9 @@ export default function MariagePage({ data }: MariagePageProps) {
                     }
                     if (block.__component === "blocks.gallerie-section") {
                         return <GalerySection key={block.id} block={block} />;
+                    }
+                    if (block.__component === "blocks.services") {
+                        return <ServicesBlock key={block.id} block={block} />;
                     }
                     return null;
                 })}

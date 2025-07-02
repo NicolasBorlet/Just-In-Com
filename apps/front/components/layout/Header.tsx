@@ -57,7 +57,7 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
                 alt={isHomePage ? block.logo_extensed.image.alternativeText || block.logo_extensed.logoText : block.logo.image.alternativeText || block.logo.logoText}
                 width={isHomePage ? 300 : 100}
                 height={isHomePage ? 300 : 100}
-                className={isHomePage ? "h-60 w-auto" : "h-12 w-auto"}
+                className={isHomePage ? "h-60 w-auto" : `h-12 w-auto ${hasScrolled ? 'invert' : ''}`}
                 priority={isHomePage}
                 placeholder="blur"
                 blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
