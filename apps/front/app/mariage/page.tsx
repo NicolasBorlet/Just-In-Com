@@ -1,27 +1,29 @@
-'use client'
-
-import { useLocale } from "@/contexts/LocaleContext";
 import { getMariage } from "@/data/loaders";
-import MariagePage from "@/pages/MariagePage";
-import { MariagePageData } from "@/types";
-import { useEffect, useState } from "react";
+import ClientMariagePage from "@/components/wrappers/ClientMariagePage";
 
-export default function Mariage() {
-    const { locale } = useLocale();
-    const [data, setData] = useState<MariagePageData | null>(null);
+export const revalidate = 3600; // Revalidate every hour
 
-    useEffect(() => {
-      const fetchData = async () => {
-        const result = await getMariage(locale);
-
-        console.log("result", result);
-        setData(result);
-      };
-
-      fetchData();
-    }, [locale]);
-
-    if (!data) return null;
-
-    return <MariagePage data={data} />;
+export default async function Mariage() {
+  const locale = 'fr'; // Default locale for SSG
+  
+  try {
+    const data = await getMariage(locale);
+    
+    return (
+      <ClientMariagePage
+        initialData={data}
+        initialLocale={locale}
+      />
+    );
+  } catch (error) {
+    console.error('Failed to load mariage data:', error);
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Unable to load content</h1>
+          <p>Please try refreshing the page.</p>
+        </div>
+      </main>
+    );
+  }
 }

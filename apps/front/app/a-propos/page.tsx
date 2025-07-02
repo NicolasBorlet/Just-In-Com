@@ -1,27 +1,29 @@
-'use client'
-
-import { useLocale } from "@/contexts/LocaleContext";
 import { getAbout } from "@/data/loaders";
-import AboutPage from "@/pages/AboutPage";
-import { AboutPageData } from "@/types";
-import { useEffect, useState } from "react";
+import ClientAboutPage from "@/components/wrappers/ClientAboutPage";
 
-export default function About() {
-    const { locale } = useLocale();
-    const [data, setData] = useState<AboutPageData | null>(null);
+export const revalidate = 3600; // Revalidate every hour
 
-    useEffect(() => {
-      const fetchData = async () => {
-        const result = await getAbout(locale);
-
-        console.log("result", result);
-        setData(result);
-      };
-
-      fetchData();
-    }, [locale]);
-
-    if (!data) return null;
-
-    return <AboutPage data={data} />;
+export default async function About() {
+  const locale = 'fr'; // Default locale for SSG
+  
+  try {
+    const data = await getAbout(locale);
+    
+    return (
+      <ClientAboutPage
+        initialData={data}
+        initialLocale={locale}
+      />
+    );
+  } catch (error) {
+    console.error('Failed to load about data:', error);
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Unable to load content</h1>
+          <p>Please try refreshing the page.</p>
+        </div>
+      </main>
+    );
+  }
 }

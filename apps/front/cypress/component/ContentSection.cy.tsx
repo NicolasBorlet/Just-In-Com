@@ -7,6 +7,7 @@ describe('ContentSection Component', () => {
     title: 'Test Title',
     description: 'Test Description',
     horizontal: false,
+    grid: false,
     gallerie: [
       {
         id: 1,
@@ -45,7 +46,6 @@ describe('ContentSection Component', () => {
       .and('be.visible')
       .and('contain', 'Test Title')
       .and('have.class', 'text-6xl')
-      .and('have.class', 'md:text-8xl')
       .and('have.class', 'text-center')
       .and('have.class', 'font-special');
 
@@ -54,7 +54,6 @@ describe('ContentSection Component', () => {
       .and('be.visible')
       .and('contain', 'Test Description')
       .and('have.class', 'text-lg')
-      .and('have.class', 'md:text-2xl')
       .and('have.class', 'text-center')
       .and('have.class', 'max-w-3xl')
       .and('have.class', 'mx-auto');
@@ -84,6 +83,10 @@ describe('ContentSection Component', () => {
   });
 
   it('renders CTA button correctly', () => {
+    cy.get('div.self-center')
+      .should('exist')
+      .and('be.visible');
+
     cy.get('a')
       .should('exist')
       .and('be.visible')
@@ -98,7 +101,6 @@ describe('ContentSection Component', () => {
       .and('have.class', 'transition-all')
       .and('have.class', 'duration-300')
       .and('have.class', 'w-fit')
-      .and('have.class', 'self-center')
       .and('have.class', 'font-special');
   });
 

@@ -1,40 +1,33 @@
-'use client'
-
-import { useLocale } from "@/contexts/LocaleContext";
 import { getArticles, getBlog } from "@/data/loaders";
-import BlogPage from "@/pages/BlogPage";
-import { Article, BlogPageData } from "@/types";
-import { useEffect, useState } from "react";
+import BlogPageWrapper from "@/components/wrappers/BlogPageWrapper";
 
-export default function Blog() {
-    const { locale } = useLocale();
-    const [data, setData] = useState<BlogPageData | null>(null);
-    const [articles, setArticles] = useState<{
-        data: Article[];
-        meta: {
-            pagination: {
-                page: number;
-                pageSize: number;
-                pageCount: number;
-                total: number;
-            };
-        };
-    } | null>(null);
+export const revalidate = 1800; // Revalidate every 30 minutes
 
-    useEffect(() => {
-      const fetchData = async () => {
-        const result = await getBlog(locale);
-
-        console.log("result", result);
-        setData(result);
-        const articlesResult = await getArticles(locale);
-        setArticles(articlesResult);
-      };
-
-      fetchData();
-    }, [locale]);
-
-    if (!data || !articles) return null;
-
-    return <BlogPage data={data} articles={articles} />;
+export default async function Blog() {
+  const locale = 'fr'; // Default locale for SSG
+  
+  try {
+    const [data, articles] = await Promise.all([
+      getBlog(locale),
+      getArticles(locale)
+    ]);
+    
+    return (
+      <BlogPageWrapper
+        initialData={data}
+        initialArticles={articles}
+        initialLocale={locale}
+      />
+    );
+  } catch (error) {
+    console.error('Failed to load blog data:', error);
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Unable to load content</h1>
+          <p>Please try refreshing the page.</p>
+        </div>
+      </main>
+    );
+  }
 }

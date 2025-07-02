@@ -1,22 +1,50 @@
-// app/blog/[slug]/page.tsx
-"use client"
+import ArticlePageWrapper from "@/components/wrappers/ArticlePageWrapper"
+import { getArticle, getArticles } from "@/data/loaders"
 
-import { useLocale } from "@/contexts/LocaleContext"
-import { getArticle } from "@/data/loaders"
-import ArticlePage from "@/pages/ArticlePage"
-import type { Article } from "@/types"
-import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
+export const revalidate = 3600; // Revalidate every hour
 
-export default function Page() {
-  const { slug } = useParams()!
-  const { locale } = useLocale()
-  const [data, setData] = useState<(Article & { data: Article[] }) | null>(null)
+interface PageProps {
+  params: Promise<{ slug: string }>
+}
 
-  useEffect(() => {
-    getArticle(slug as string, locale).then(setData)
-  }, [slug, locale])
+export async function generateStaticParams() {
+  const locale = 'fr';
+  
+  try {
+    const articles = await getArticles(locale);
+    
+    return articles.data.map((article: any) => ({
+      slug: article.slug,
+    }));
+  } catch (error) {
+    console.error('Failed to generate static params:', error);
+    return [];
+  }
+}
 
-  if (!data) return null
-  return <ArticlePage data={data}/>
+export default async function Page({ params }: PageProps) {
+  const { slug } = await params
+  const locale = 'fr'; // Default locale for SSG
+
+  try {
+    const data = await getArticle(slug, locale)
+
+    return (
+      <ArticlePageWrapper
+        initialData={data}
+        initialLocale={locale}
+        slug={slug}
+      />
+    )
+  } catch (error) {
+    console.error('Failed to load article data:', error)
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Article not found</h1>
+          <p>The article you&apos;re looking for doesn&apos;t exist.</p>
+        </div>
+      </main>
+    )
+  }
 }

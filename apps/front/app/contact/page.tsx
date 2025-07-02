@@ -1,27 +1,29 @@
-'use client'
-
-import { useLocale } from "@/contexts/LocaleContext";
 import { getContact } from "@/data/loaders";
-import ContactPage from "@/pages/ContactPage";
-import { ContactPageData } from "@/types";
-import { useEffect, useState } from "react";
+import ClientContactPage from "@/components/wrappers/ClientContactPage";
 
-export default function Contact() {
-    const { locale } = useLocale();
-    const [data, setData] = useState<ContactPageData | null>(null);
+export const revalidate = 3600; // Revalidate every hour
 
-    useEffect(() => {
-      const fetchData = async () => {
-        const result = await getContact(locale);
-
-        console.log("result", result);
-        setData(result);
-      };
-
-      fetchData();
-    }, [locale]);
-
-    if (!data) return null;
-
-    return <ContactPage data={data} />;
+export default async function Contact() {
+  const locale = 'fr'; // Default locale for SSG
+  
+  try {
+    const data = await getContact(locale);
+    
+    return (
+      <ClientContactPage
+        initialData={data}
+        initialLocale={locale}
+      />
+    );
+  } catch (error) {
+    console.error('Failed to load contact data:', error);
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Unable to load content</h1>
+          <p>Please try refreshing the page.</p>
+        </div>
+      </main>
+    );
+  }
 }

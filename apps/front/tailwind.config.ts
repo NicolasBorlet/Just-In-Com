@@ -9,7 +9,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-baloo)'],
+        sans: ['var(--font-baloo)', 'system-ui', 'arial'],
+        special: ['var(--font-italiana)', 'serif'],
       },
       colors: {
         background: "var(--background)",
@@ -25,4 +26,7 @@ export default {
     },
   },
   plugins: [],
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
 } satisfies Config;

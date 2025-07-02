@@ -1,27 +1,29 @@
-'use client'
-
-import { useLocale } from "@/contexts/LocaleContext";
 import { getEntreprise } from "@/data/loaders";
-import EntreprisePage from "@/pages/EntreprisePage";
-import { EntreprisePageData } from "@/types";
-import { useEffect, useState } from "react";
+import ClientEntreprisePage from "@/components/wrappers/ClientEntreprisePage";
 
-export default function Entreprise() {
-    const { locale } = useLocale();
-    const [data, setData] = useState<EntreprisePageData | null>(null);
+export const revalidate = 3600; // Revalidate every hour
 
-    useEffect(() => {
-      const fetchData = async () => {
-        const result = await getEntreprise(locale);
-
-        console.log("result", result);
-        setData(result);
-      };
-
-      fetchData();
-    }, [locale]);
-
-    if (!data) return null;
-
-    return <EntreprisePage data={data} />;
+export default async function Entreprise() {
+  const locale = 'fr'; // Default locale for SSG
+  
+  try {
+    const data = await getEntreprise(locale);
+    
+    return (
+      <ClientEntreprisePage
+        initialData={data}
+        initialLocale={locale}
+      />
+    );
+  } catch (error) {
+    console.error('Failed to load entreprise data:', error);
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Unable to load content</h1>
+          <p>Please try refreshing the page.</p>
+        </div>
+      </main>
+    );
+  }
 }

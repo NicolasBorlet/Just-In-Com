@@ -5,8 +5,6 @@ import Image from "next/image";
 export default function ArticleHeroSection({ cover }: { cover: Media }) {
     const strapiUrl = getStrapiURL();
 
-    console.log("cover", cover);
-
   return (
     <div className="relative h-[70vh] w-full">
       <Image

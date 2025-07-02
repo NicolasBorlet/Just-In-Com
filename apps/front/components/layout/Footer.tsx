@@ -1,3 +1,5 @@
+'use client';
+
 import { GlobalSettings } from "@/types";
 import { getStrapiURL } from "@/utils/get-strapi-url";
 import Image from "next/image";
@@ -16,13 +18,17 @@ export default function Footer({ block }: { block: GlobalSettings }) {
                     <div className="divider w-full h-[1px] bg-white"></div>
                     <div className="flex flex-col gap-4">
                         <ul className="flex flex-col md:flex-row gap-8 items-center justify-center">
-                            {block.menu.find(menu => menu.name === "main")?.item.map((item) => (
-                                <Link href={item.href.toLowerCase()} key={item.id} className="text-white text-xl uppercase">{item.text}</Link>
+                            {block.menu.find(menu => menu.name === "main")?.item.map((item, index) => (
+                                <Link href={item.href.toLowerCase().startsWith('/') ? item.href.toLowerCase() : `/${item.href.toLowerCase()}`} key={item.id} className="text-white text-xl uppercase">
+                                    {item.text}
+                                </Link>
                             ))}
                         </ul>
                         <ul className="flex flex-col md:flex-row gap-2 items-center justify-center">
-                            {block.menu.find(menu => menu.name === "legal")?.item.map((item) => (
-                                <Link href={item.href.toLowerCase()} key={item.id} className="text-white text-xl uppercase">{item.text}</Link>
+                            {block.menu.find(menu => menu.name === "legal")?.item.map((item, index) => (
+                                <Link href={item.href.toLowerCase().startsWith('/') ? item.href.toLowerCase() : `/${item.href.toLowerCase()}`} key={item.id} className="text-white text-xl uppercase">
+                                    {item.text}
+                                </Link>
                             ))}
                         </ul>
                     </div>

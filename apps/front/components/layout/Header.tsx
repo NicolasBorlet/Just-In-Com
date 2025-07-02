@@ -6,7 +6,7 @@ import { getStrapiURL } from "@/utils/get-strapi-url";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function Header({ block, availableLocales }: { block: GlobalSettings, availableLocales: string[] }) {
   const strapiUrl = getStrapiURL();
@@ -19,7 +19,11 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
   useEffect(() => {
     // Get browser locale on component mount
     const browserLocale = navigator.language.split('-')[0];
-    setLocale(browserLocale === 'fr' ? 'fr' : 'en');
+    const savedLocale = localStorage.getItem('locale');
+
+    // Utiliser la langue sauvegardée ou la langue du navigateur
+    const initialLocale = savedLocale || (browserLocale === 'fr' ? 'fr' : 'en');
+    setLocale(initialLocale);
 
     // Add scroll event listener
     const handleScroll = () => {
@@ -29,31 +33,37 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [setLocale]);
 
-  const toggleMenu = () => {
+  const toggleMenu = useCallback(() => {
     setIsMenuOpen(!isMenuOpen);
     document.body.style.overflow = !isMenuOpen ? 'hidden' : 'auto';
-  };
+  }, [isMenuOpen]);
 
-  const handleLanguageChange = (locale: string) => {
+  const handleLanguageChange = useCallback((locale: string) => {
     setLocale(locale);
     // Dispatch a custom event that can be listened to by other components
     window.dispatchEvent(new CustomEvent('localeChange', { detail: { locale } }));
-  };
+  }, [setLocale]);
 
   return (
     <header className={`left-0 right-0 z-50 transition-colors duration-300 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-20 md:top-10' : 'top-0'} ${hasScrolled ? 'bg-white shadow-lg' : ''}`}>
       <div className="container mx-auto px-4 py-4 relative">
         <div className={`flex items-center gap-8 ${isHomePage ? 'flex-col' : 'flex-row'} ${isHomePage ? 'justify-center' : 'justify-between'}`}>
           <Link href="/" className="flex items-center">
-            <Image
-              src={`${strapiUrl}${isHomePage ? block.logo_extensed.image.url : block.logo.image.url}`}
-              alt={isHomePage ? block.logo_extensed.image.alternativeText || block.logo_extensed.logoText : block.logo.image.alternativeText || block.logo.logoText}
-              width={isHomePage ? 300 : 100}
-              height={isHomePage ? 300 : 100}
-              className={isHomePage ? "h-60 w-auto" : "h-12 w-auto"}
-            />
+            <div className={`${isHomePage ? "h-60 w-auto" : "h-12 w-auto"} relative`}>
+              <Image
+                src={`${strapiUrl}${isHomePage ? block.logo_extensed.image.url : block.logo.image.url}`}
+                alt={isHomePage ? block.logo_extensed.image.alternativeText || block.logo_extensed.logoText : block.logo.image.alternativeText || block.logo.logoText}
+                width={isHomePage ? 300 : 100}
+                height={isHomePage ? 300 : 100}
+                className={isHomePage ? "h-60 w-auto" : `h-12 w-auto ${hasScrolled ? 'invert' : ''}`}
+                priority={isHomePage}
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                sizes={isHomePage ? "300px" : "100px"}
+              />
+            </div>
           </Link>
 
           <button
@@ -62,9 +72,9 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
             aria-label="Toggle menu"
           >
             <div className="w-6 h-5 relative flex flex-col justify-between">
-              <span className={`w-full h-0.5 ${hasScrolled ? 'bg-black' : 'bg-white'} transform transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`w-full h-0.5 ${hasScrolled ? 'bg-black' : 'bg-white'} transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
-              <span className={`w-full h-0.5 ${hasScrolled ? 'bg-black' : 'bg-white'} transform transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? 'rotate-45 translate-y-[9px]' : ''}`} />
+              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen ? 'bg-black' : 'bg-white'} transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? '-rotate-45 -translate-y-[9px]' : ''}`} />
             </div>
           </button>
 
@@ -72,7 +82,7 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
             {block.menu.find(menu => menu.name === "main")?.item.map((item) => (
               <Link
                 key={item.id}
-                href={item.href}
+                href={item.href.startsWith('/') ? item.href : `/${item.href}`}
                 className={`text-xl uppercase transition-colors duration-300 ${hasScrolled ? 'text-black' : 'text-white'}`}
               >
                 {item.text}
@@ -93,21 +103,34 @@ export default function Header({ block, availableLocales }: { block: GlobalSetti
           </div>
 
           <div
-            className={`fixed inset-0 bg-black bg-opacity-95 z-40 transition-transform duration-300 lg:hidden ${
+            className={`fixed inset-0 bg-black bg-opacity-85 z-40 transition-transform duration-300 lg:hidden ${
               isMenuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
           >
             <nav className="flex flex-col items-center justify-center h-full space-y-8">
+                <Link href="/" className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
+                    Accueil
+                </Link>
               {block.menu.find(menu => menu.name === "main")?.item.map((item) => (
                 <Link
                   key={item.id}
-                  href={item.href}
+                  href={item.href.startsWith('/') ? item.href : `/${item.href}`}
                   onClick={toggleMenu}
                   className="text-white text-2xl uppercase hover:text-gray-300 transition-colors"
                 >
                   {item.text}
                 </Link>
               ))}
+                <div className="flex items-center space-x-2">
+                    {availableLocales.map((locale) => (
+                        <button key={locale} onClick={() => {
+                            handleLanguageChange(locale)
+                            toggleMenu()
+                        }} className="px-3 py-1 rounded transition-colors duration-300 text-white">
+                        {locale.toUpperCase()}
+                        </button>
+                    ))}
+                </div>
             </nav>
           </div>
         </div>

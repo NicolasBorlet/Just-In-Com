@@ -1,5 +1,5 @@
 import HeroSection from "@/components/blocks/HeroSection";
-import ImageBlock from "@/components/elements/Image";
+import MediaBlock from "@/components/elements/Media";
 import TextBlock from "@/components/elements/TextBlock";
 import PageContent from "@/components/globals/PageContent";
 import { EntreprisePageData } from "@/types";
@@ -21,13 +21,14 @@ export default function EntreprisePage({ data }: EntreprisePageProps) {
         <div className="flex flex-col gap-24">
         {heroSection && <HeroSection key={heroSection.id} block={heroSection} />}
         <PageContent>
-            <div className="flex flex-col gap-24">
+            <div className="flex flex-col gap-12 md:gap-24">
                 {otherBlocks.map((block) => {
                     if (block.__component === "elements.text-box") {
                         return <TextBlock key={block.id} block={block} />;
                     }
                     if (block.__component === "elements.image") {
-                        return <ImageBlock key={block.id + 23} block={block} alt={block.image.alternativeText || "Image"} />;
+                        // @ts-expect-error TODO: fix this
+                        return <MediaBlock key={block.id + 23} block={block} alt={block.media.alternativeText || "Media"} />;
                     }
                     return null;
                 })}
