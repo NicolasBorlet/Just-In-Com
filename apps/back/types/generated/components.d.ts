@@ -20,7 +20,7 @@ export interface BlocksContentSection extends Struct.ComponentSchema {
   attributes: {
     cta: Schema.Attribute.Component<'elements.link', false>;
     description: Schema.Attribute.Text;
-    gallerie: Schema.Attribute.Media<'images' | 'files', true>;
+    gallerie: Schema.Attribute.Media<'images' | 'files' | 'videos', true>;
     horizontal: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     title: Schema.Attribute.String;
   };
