@@ -35,7 +35,9 @@
     "blocks": {
       "type": "dynamiczone",
       "components": [
-        "blocks.hero-section"
+        "blocks.hero-section",
+        "blocks.info-block",
+        "blocks.content-section"
       ],
       "pluginOptions": {
         "i18n": {

@@ -390,7 +390,9 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
     };
   };
   attributes: {
-    blocks: Schema.Attribute.DynamicZone<['blocks.hero-section']> &
+    blocks: Schema.Attribute.DynamicZone<
+      ['blocks.hero-section', 'blocks.info-block', 'blocks.content-section']
+    > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -780,7 +782,9 @@ export interface ApiMariageMariage extends Struct.SingleTypeSchema {
     };
   };
   attributes: {
-    blocks: Schema.Attribute.DynamicZone<['blocks.hero-section']> &
+    blocks: Schema.Attribute.DynamicZone<
+      ['blocks.hero-section', 'blocks.citation']
+    > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;

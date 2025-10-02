@@ -18,7 +18,8 @@
       "required": false,
       "allowedTypes": [
         "images",
-        "files"
+        "files",
+        "videos"
       ]
     },
     "cta": {
