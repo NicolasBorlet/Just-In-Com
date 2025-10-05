@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_blocks_wedding_blocks",
+  "info": {
+    "displayName": "Wedding Block",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "married": {
+      "displayName": "Married Item",
+      "type": "component",
+      "repeatable": true,
+      "component": "elements.married-item"
+    },
+    "miniature": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "link": {
+      "type": "text"
+    }
+  }
+}

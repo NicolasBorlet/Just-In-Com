@@ -63,6 +63,31 @@ export interface BlocksNavigation extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksServices extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_services';
+  info: {
+    description: '';
+    displayName: 'Services Block';
+  };
+  attributes: {
+    Services: Schema.Attribute.RichText;
+  };
+}
+
+export interface BlocksWeddingBlock extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_wedding_blocks';
+  info: {
+    description: '';
+    displayName: 'Wedding Block';
+  };
+  attributes: {
+    description: Schema.Attribute.RichText;
+    link: Schema.Attribute.Text;
+    married: Schema.Attribute.Component<'elements.married-item', true>;
+    miniature: Schema.Attribute.Media<'images' | 'files'>;
+  };
+}
+
 export interface ElementsImage extends Struct.ComponentSchema {
   collectionName: 'components_elements_images';
   info: {
@@ -94,6 +119,17 @@ export interface ElementsLogo extends Struct.ComponentSchema {
   attributes: {
     image: Schema.Attribute.Media<'images' | 'files'>;
     logoText: Schema.Attribute.String;
+  };
+}
+
+export interface ElementsMarriedItem extends Struct.ComponentSchema {
+  collectionName: 'components_elements_married_items';
+  info: {
+    description: '';
+    displayName: 'Married Item';
+  };
+  attributes: {
+    Name: Schema.Attribute.String;
   };
 }
 
@@ -142,9 +178,12 @@ declare module '@strapi/strapi' {
       'blocks.hero-section': BlocksHeroSection;
       'blocks.info-block': BlocksInfoBlock;
       'blocks.navigation': BlocksNavigation;
+      'blocks.services': BlocksServices;
+      'blocks.wedding-block': BlocksWeddingBlock;
       'elements.image': ElementsImage;
       'elements.link': ElementsLink;
       'elements.logo': ElementsLogo;
+      'elements.married-item': ElementsMarriedItem;
       'elements.text-box': ElementsTextBox;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
