@@ -6,3 +6,24 @@ export interface BlogType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface HeroSectionBlock {
+  __component: "blocks.hero-section";
+  id: number;
+  heading: string;
+  video: {
+    id: number;
+    documentId: string;
+    url: string;
+  };
+}
+
+export type Block = {
+  __component: string;
+  id: number;
+  [key: string]: any;
+};
+
+export interface BlockRendererProps {
+  blocks: Block[];
+}

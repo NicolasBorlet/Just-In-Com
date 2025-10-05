@@ -783,7 +783,13 @@ export interface ApiMariageMariage extends Struct.SingleTypeSchema {
   };
   attributes: {
     blocks: Schema.Attribute.DynamicZone<
-      ['blocks.hero-section', 'blocks.citation']
+      [
+        'blocks.hero-section',
+        'blocks.citation',
+        'blocks.wedding-block',
+        'blocks.services',
+        'elements.link',
+      ]
     > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

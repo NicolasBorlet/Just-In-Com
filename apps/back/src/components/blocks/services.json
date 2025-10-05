@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_blocks_services",
+  "info": {
+    "displayName": "Services Block",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Services": {
+      "type": "richtext"
+    }
+  }
+}

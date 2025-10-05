@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_elements_married_items",
+  "info": {
+    "displayName": "Married Item",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    }
+  }
+}
