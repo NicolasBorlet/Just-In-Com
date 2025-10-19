@@ -3,6 +3,7 @@ import { useGlobalQuery } from "@/services/globals/globalsQuery";
 import { useEffect } from "react";
 import BlockRenderer from "@/components/blocks/BlockRenderer";
 import { supportedLanguages } from "@/config/language";
+import PageContent from "@/components/layout/PageContent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,15 +42,17 @@ export default function Home({
   useEffect(() => {
     if (home) {
       console.log("Home data:", home);
-
     }
   }, [home]);
 
+  const renderedBlocks = BlockRenderer({ blocks: home.blocks });
+
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20`}
-    >
-      <BlockRenderer blocks={home.blocks} />
-    </div>
+    <>
+      {renderedBlocks.heroSection}
+      <PageContent>
+        {renderedBlocks.otherBlocks}
+      </PageContent>
+    </>
   );
 }
