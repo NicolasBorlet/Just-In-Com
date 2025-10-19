@@ -2,6 +2,8 @@ import { BlockRendererProps } from "@/types";
 import HeroSection from "./HeroSection/HeroSection";
 import WeddingSection from "./WeddingSection/WeddingSection";
 import InfoBlock from "./InfoBlock/InfoBlock";
+import ContentSection from "./ContentSection/ContentSection";
+import QuoteBlock from "./QuoteBlock/QuoteBlock";
 
 const BlockRenderer: React.FC<BlockRendererProps> = ({ blocks }) => {
   return (
@@ -17,10 +19,10 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({ blocks }) => {
             return <InfoBlock key={block.id} block={block} />;
           case 'blocks.content-section':
             // return <InfoBlock key={block.id} block={block} />;
-            return <h1>Content section</h1>
+            return <ContentSection key={block.id} block={block} />;
           case 'blocks.citation':
             // return <InfoBlock key={block.id} block={block} />;
-            return <h1>Citation</h1>
+            return <QuoteBlock key={block.id} block={block} />;
           default:
             return null;
         }
