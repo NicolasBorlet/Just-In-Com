@@ -25,7 +25,7 @@ export const getStaticProps = async ({ params }: { params: { lang: string } }) =
   };
 };
 
-export default function Blog({ result, weddings, lang }: { result: BlogType, weddings: Wedding, lang: string }) {
+export default function Mariage({ result, weddings, lang }: { result: BlogType, weddings: Wedding, lang: string }) {
 
   useEffect(() => {
     console.log('Weddings data:', weddings);
@@ -33,8 +33,6 @@ export default function Blog({ result, weddings, lang }: { result: BlogType, wed
 
   return (
     <div>
-      <h1>{result.title}, {lang}, {weddings?.title}</h1>
-
       <BlockRenderer blocks={weddings.blocks} />
     </div>
   );

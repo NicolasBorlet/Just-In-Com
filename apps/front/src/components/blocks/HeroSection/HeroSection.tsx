@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { HeroSectionProps } from "./HereSection.type";
 import { getStrapiURL } from "@/utils/get-strapi-url";
 
@@ -17,7 +18,6 @@ export default function HeroSection({ block }: HeroSectionProps) {
         className="absolute inset-0 h-full w-full object-cover pointer-events-none"
         preload="none"
       >
-        {/* Fallback pour les navigateurs qui ne supportent pas la vidéo */}
         <source src={`${strapiUrl}${block.video.url}`} type="video/mp4" />
         <source src={`${strapiUrl}${block.video.url.replace('.mp4', '.webm')}`} type="video/webm" />
       </video>

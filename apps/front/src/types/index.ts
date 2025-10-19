@@ -27,3 +27,10 @@ export type Block = {
 export interface BlockRendererProps {
   blocks: Block[];
 }
+
+export interface Media {
+  url: string;
+  alternativeText?: string;
+  documentId: string;
+  id: number;
+}
