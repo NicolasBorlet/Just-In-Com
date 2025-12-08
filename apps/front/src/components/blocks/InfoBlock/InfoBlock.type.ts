@@ -1,6 +1,6 @@
 import { Media } from "@/types";
 
-interface InfoBlockBlock {
+export interface InfoBlockBlock {
   __component: "blocks.info-block";
   id: number;
   headline: string;

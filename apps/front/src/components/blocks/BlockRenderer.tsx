@@ -39,7 +39,12 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({ blocks }) => {
     }
   });
 
-  return result;
+  return (
+    <>
+      {result.heroSection}
+      {result.otherBlocks}
+    </>
+  );
 };
 
 export default BlockRenderer;

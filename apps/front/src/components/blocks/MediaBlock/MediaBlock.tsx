@@ -10,6 +10,7 @@ interface MediaBlockProps {
     priority?: boolean;
     enableHoverEffects?: boolean;
     onClick?: () => void;
+    style?: React.CSSProperties;
 }
 
 export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false, enableHoverEffects = false, onClick, style }: MediaBlockProps) {
@@ -49,7 +50,7 @@ export default function MediaBlock({ block, alt, width = 600, height = 600, prio
     }
 
     const isVideo = media.mime?.startsWith('video/') ||
-                   ['.mp4', '.webm', '.ogg'].some(ext => mediaUrl.toLowerCase().endsWith(ext));
+        ['.mp4', '.webm', '.ogg'].some(ext => mediaUrl.toLowerCase().endsWith(ext));
 
     return (
         <div
