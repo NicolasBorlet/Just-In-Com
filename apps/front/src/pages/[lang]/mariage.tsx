@@ -3,6 +3,9 @@ import React, { useEffect } from 'react';
 import { supportedLanguages } from '@/config/language';
 import { Wedding } from '@/types/wedding';
 import BlockRenderer from '@/components/blocks/BlockRenderer';
+import PageContent from '@/components/layout/PageContent';
+import { fetchWeddings } from '@/services/weddings/weddingService';
+import { fetchGlobal } from '@/services/globals/globalsServices';
 
 export const getStaticPaths = async () => {
   return {
@@ -12,28 +15,30 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params }: { params: { lang: string } }) => {
-  const blogRes = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/blog`);
-  const blogJson = await blogRes.json();
-  const weddingsRes = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/mariage?populate[blocks][populate]=*`);
-  const weddingsJson = await weddingsRes.json();
+  const [weddingRes, globalRes] = await Promise.all([fetchWeddings(), fetchGlobal()]);
   return {
     props: {
-      result: blogJson.data,
-      weddings: weddingsJson.data,
+      wedding: weddingRes.data,
+      global: globalRes.data,
       lang: params.lang,
     },
   };
 };
 
-export default function Mariage({ result, weddings, lang }: { result: BlogType, weddings: Wedding, lang: string }) {
+export default function Mariage({ weddings, lang }: { result: BlogType, weddings: Wedding, lang: string }) {
 
   useEffect(() => {
     console.log('Weddings data:', weddings);
   }, [weddings]);
 
+  const renderedBlocks = BlockRenderer({ blocks: weddings.blocks });
+
   return (
-    <div>
-      <BlockRenderer blocks={weddings.blocks} />
-    </div>
+    <>
+      {renderedBlocks.heroSection}
+      <PageContent global={global} lang={lang}>
+        {renderedBlocks.otherBlocks}
+      </PageContent>
+    </>
   );
 }

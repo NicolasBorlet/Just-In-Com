@@ -5,7 +5,7 @@ import { ContentSectionProps } from "./ContentSection.type";
 import MediaBlock from "../MediaBlock/MediaBlock";
 
 export default function ContentSection({ block }: ContentSectionProps) {
-  return <div className="flex flex-col gap-12" key={block.id}>
+  return <div className="flex flex-col gap-8" key={block.id}>
     <div className="flex flex-col gap-4">
     <AnimatedHeading className="text-6xl md:text-8xl/tight text-center font-special" level={2} options={{
       splitType: 'words',

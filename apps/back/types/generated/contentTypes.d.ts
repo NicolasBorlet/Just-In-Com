@@ -676,6 +676,7 @@ export interface ApiEntrepriseEntreprise extends Struct.SingleTypeSchema {
         'blocks.hero-section',
         'elements.image',
         'elements.text-box',
+        'blocks.image-text',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

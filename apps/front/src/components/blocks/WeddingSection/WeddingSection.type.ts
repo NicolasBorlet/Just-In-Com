@@ -6,7 +6,7 @@ interface MarriedPerson {
 interface Miniature {
   id: string;
   url: string;
-  formats : {
+  formats: {
     small: {
       url: string;
     }
@@ -30,6 +30,7 @@ export interface WeddingSectionBlock {
   married: MarriedPerson[];
   miniature: Miniature;
 }
+
 export interface WeddingSectionBlockProps {
   block: WeddingSectionBlock;
 }

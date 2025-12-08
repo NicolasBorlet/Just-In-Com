@@ -1,5 +1,5 @@
 import { AnimatedImage } from "@/animations";
-import { getStrapiURL } from "@/utils/get-strapi-url";
+import { getFullUrl } from "@/utils/get-strapi-url";
 import { MediaBlock as MediaBlockType } from "./MediaBlock.type";
 
 interface MediaBlockProps {
@@ -12,8 +12,8 @@ interface MediaBlockProps {
     onClick?: () => void;
 }
 
-export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false, enableHoverEffects = false, onClick }: MediaBlockProps) {
-    const strapiUrl = getStrapiURL();
+export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false, enableHoverEffects = false, onClick, style }: MediaBlockProps) {
+    const strapiUrl = getFullUrl();
 
     // Handle both direct media blocks and gallery media items
     const mediaData = block.media || (block as any).media;
