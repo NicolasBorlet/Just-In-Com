@@ -11,7 +11,7 @@ interface BlockRendererResult {
   otherBlocks: ReactNode[];
 }
 
-const BlockRenderer: React.FC<BlockRendererProps> = ({ blocks }) => {
+const BlockRenderer = ({ blocks }: BlockRendererProps): BlockRendererResult => {
   const result: BlockRendererResult = {
     heroSection: null,
     otherBlocks: []
@@ -39,12 +39,7 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({ blocks }) => {
     }
   });
 
-  return (
-    <>
-      {result.heroSection}
-      {result.otherBlocks}
-    </>
-  );
+  return result;
 };
 
 export default BlockRenderer;

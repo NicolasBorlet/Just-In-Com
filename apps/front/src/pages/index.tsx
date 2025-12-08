@@ -5,8 +5,6 @@ import { fetchHome } from "@/services/home/homeService";
 import { fetchAvailableLocales, fetchGlobal } from "@/services/globals/globalsServices";
 import Head from "next/head";
 
-
-
 export const getStaticProps = async () => {
   const [homeRes, globalRes, availableLocales] = await Promise.all([fetchHome({ locale: 'fr' }), fetchGlobal({ locale: 'fr' }), fetchAvailableLocales()]);
   return {
