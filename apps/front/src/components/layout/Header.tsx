@@ -80,7 +80,7 @@ export default function Header({ global, lang, availableLocales }: { global?: an
           </button>
 
           <nav className="hidden md:flex space-x-8">
-            {global.menu.find(global => global.name === "main")?.item.map((item) => (
+            {global.menu.find((menu: any) => menu.name === "main")?.item.map((item: any) => (
               <Link
                 key={item.id}
                 href={item.href.startsWith('/') ? item.href : `/${item.href}`}
@@ -104,15 +104,14 @@ export default function Header({ global, lang, availableLocales }: { global?: an
           </div>
 
           <div
-            className={`fixed inset-0 bg-black bg-opacity-85 z-40 transition-transform duration-300 lg:hidden ${
-              isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-            }`}
+            className={`fixed inset-0 bg-black bg-opacity-85 z-40 transition-transform duration-300 lg:hidden ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+              }`}
           >
             <nav className="flex flex-col items-center justify-center h-full space-y-8">
-                <Link href="/" className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
-                    Accueil
-                </Link>
-              {global.menu.find(global => global.name === "main")?.item.map((item) => (
+              <Link href="/" className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
+                Accueil
+              </Link>
+              {global.menu.find((menu: any) => menu.name === "main")?.item.map((item: any) => (
                 <Link
                   key={item.id}
                   href={item.href.startsWith('/') ? item.href : `/${item.href}`}
@@ -122,19 +121,19 @@ export default function Header({ global, lang, availableLocales }: { global?: an
                   {item.text}
                 </Link>
               ))}
-                <div className="flex items-center space-x-2 mt-4 md:mt-0">
-                    {availableLocales.map((locale) => (
-                        <Link
-                            key={locale}
-                            href={getPathWithLocale(pathname, locale)}
-                            onClick={toggleMenu}
-                            className={`px-3 py-1 rounded transition-colors duration-300 ${lang === locale ? 'bg-white text-primary' : 'text-white hover:bg-white/20'}`}
-                            aria-label={`Switch to ${locale.toUpperCase()} language`}
-                        >
-                            {locale.toUpperCase()}
-                        </Link>
-                    ))}
-                </div>
+              <div className="flex items-center space-x-2 mt-4 md:mt-0">
+                {availableLocales.map((locale) => (
+                  <Link
+                    key={locale}
+                    href={getPathWithLocale(pathname, locale)}
+                    onClick={toggleMenu}
+                    className={`px-3 py-1 rounded transition-colors duration-300 ${lang === locale ? 'bg-white text-primary' : 'text-white hover:bg-white/20'}`}
+                    aria-label={`Switch to ${locale.toUpperCase()} language`}
+                  >
+                    {locale.toUpperCase()}
+                  </Link>
+                ))}
+              </div>
             </nav>
           </div>
         </div>
