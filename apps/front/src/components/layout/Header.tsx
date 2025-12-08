@@ -1,0 +1,143 @@
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { getPathWithLocale } from "@/lib/i18n";
+
+export default function Header({ global, lang, availableLocales }: { global?: any; lang?: string; availableLocales: string[] }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHomePage = pathname === '/' || pathname === `/${lang}`;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(!isMenuOpen);
+    document.body.style.overflow = !isMenuOpen ? 'hidden' : 'auto';
+  }, [isMenuOpen]);
+
+  const currentLocale = lang || 'fr';
+
+  const handleLanguageChange = useCallback((locale: string) => {
+    if (!pathname) return;
+
+    const normalize = (p: string) => (p === '' ? '/' : p.endsWith('/') && p !== '/' ? p.slice(0, -1) : p);
+
+    const newPath = getPathWithLocale(pathname, locale);
+
+    if (normalize(newPath) === normalize(pathname)) return;
+
+    router.push(newPath);
+  }, [pathname, router]);
+
+  useEffect(() => {
+    const onScroll = () => setHasScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // safe fallbacks when `global` isn't passed
+  const logoExtImage = global?.logo_extensed?.image;
+  const logoImage = global?.logo?.image;
+  const logoUrl = (isHomePage ? logoExtImage?.url : logoImage?.url) || logoImage?.url || '/favicon.ico';
+  const logoAlt = (isHomePage ? logoExtImage?.alternativeText : logoImage?.alternativeText) || global?.logo_extensed?.logoText || global?.logo?.logoText || 'Logo';
+
+  useEffect(() => {
+    console.log("Header global data:", global);
+  }, [global]);
+
+  return (
+    <header className={`left-0 right-0 z-50 transition-colors duration-300 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-20 md:top-10' : 'top-0'} ${hasScrolled ? 'bg-white shadow-lg' : ''}`}>
+      <div className="container mx-auto px-4 py-4 relative">
+        <div className={`flex items-center gap-8 ${isHomePage ? 'flex-col' : 'flex-row'} ${isHomePage ? 'justify-center' : 'justify-between'}`}>
+          <Link href="/" className="flex items-center">
+            <div className={`${isHomePage ? "h-60 w-auto" : "h-12 w-auto"} relative`}>
+              <Image
+                src={`${logoUrl}`}
+                alt={logoAlt}
+                width={isHomePage ? 300 : 100}
+                height={isHomePage ? 300 : 100}
+                className={isHomePage ? "h-60 w-auto" : `h-12 w-auto ${hasScrolled ? 'invert' : ''}`}
+                priority={isHomePage}
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                sizes={isHomePage ? "300px" : "100px"}
+              />
+            </div>
+          </Link>
+
+          <button
+            onClick={toggleMenu}
+            className="md:hidden fixed top-6 right-6 z-50 p-2"
+            aria-label="Toggle menu"
+          >
+            <div className="w-6 h-5 relative flex flex-col justify-between">
+              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen && !isHomePage ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? 'rotate-45 translate-y-[9px]' : ''}`} />
+              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen && !isHomePage ? 'bg-black' : 'bg-white'} transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen && !isHomePage ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? '-rotate-45 -translate-y-[9px]' : ''}`} />
+            </div>
+          </button>
+
+          <nav className="hidden md:flex space-x-8">
+            {global.menu.find((menu: any) => menu.name === "main")?.item.map((item: any) => (
+              <Link
+                key={item.id}
+                href={item.href.startsWith('/') ? item.href : `/${item.href}`}
+                className={`text-xl uppercase transition-colors duration-300 ${hasScrolled ? 'text-black' : 'text-white'}`}
+              >
+                {item.text}
+              </Link>
+            ))}
+          </nav>
+
+          <div className={`hidden md:flex items-center space-x-2 ${isHomePage ? 'absolute right-0 top-0' : ''}`}>
+            {availableLocales.map((locale) => (
+              <button
+                key={locale}
+                onClick={() => handleLanguageChange(locale)}
+                className={`px-3 py-1 rounded transition-colors duration-300 ${currentLocale === locale ? 'bg-black text-white' : hasScrolled ? 'text-black' : 'text-white'} cursor-pointer`}
+              >
+                {locale.toUpperCase()}
+              </button>
+            ))}
+          </div>
+
+          <div
+            className={`fixed inset-0 bg-black bg-opacity-85 z-40 transition-transform duration-300 lg:hidden ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+              }`}
+          >
+            <nav className="flex flex-col items-center justify-center h-full space-y-8">
+              <Link href="/" className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
+                Accueil
+              </Link>
+              {global.menu.find((menu: any) => menu.name === "main")?.item.map((item: any) => (
+                <Link
+                  key={item.id}
+                  href={item.href.startsWith('/') ? item.href : `/${item.href}`}
+                  onClick={toggleMenu}
+                  className="text-white text-2xl uppercase hover:text-gray-300 transition-colors"
+                >
+                  {item.text}
+                </Link>
+              ))}
+              <div className="flex items-center space-x-2 mt-4 md:mt-0">
+                {availableLocales.map((locale) => (
+                  <Link
+                    key={locale}
+                    href={getPathWithLocale(pathname, locale)}
+                    onClick={toggleMenu}
+                    className={`px-3 py-1 rounded transition-colors duration-300 ${lang === locale ? 'bg-white text-primary' : 'text-white hover:bg-white/20'}`}
+                    aria-label={`Switch to ${locale.toUpperCase()} language`}
+                  >
+                    {locale.toUpperCase()}
+                  </Link>
+                ))}
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}

@@ -18,12 +18,27 @@ export interface HeroSectionBlock {
   };
 }
 
-export type Block = {
-  __component: string;
-  id: number;
-  [key: string]: any;
-};
+// Import block types
+import { WeddingSectionBlock } from "@/components/blocks/WeddingSection/WeddingSection.type";
+import { InfoBlockBlock } from "@/components/blocks/InfoBlock/InfoBlock.type";
+import { ContentSection } from "@/components/blocks/ContentSection/ContentSection.type";
+import { QuoteBlock } from "@/components/blocks/QuoteBlock/QuoteBlock.type";
+
+// Union type for all blocks
+export type Block =
+  | HeroSectionBlock
+  | WeddingSectionBlock
+  | InfoBlockBlock
+  | ContentSection
+  | QuoteBlock;
 
 export interface BlockRendererProps {
   blocks: Block[];
+}
+
+export interface Media {
+  url: string;
+  alternativeText?: string;
+  documentId: string;
+  id: number;
 }

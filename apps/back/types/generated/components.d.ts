@@ -37,6 +37,21 @@ export interface BlocksHeroSection extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksImageText extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_image_texts';
+  info: {
+    description: '';
+    displayName: 'image - text';
+  };
+  attributes: {
+    Image: Schema.Attribute.Media<'images' | 'files' | 'videos'> &
+      Schema.Attribute.Required;
+    reversed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    Texte: Schema.Attribute.Component<'elements.text-box', false> &
+      Schema.Attribute.Required;
+  };
+}
+
 export interface BlocksInfoBlock extends Struct.ComponentSchema {
   collectionName: 'components_blocks_info_blocks';
   info: {
@@ -176,6 +191,7 @@ declare module '@strapi/strapi' {
       'blocks.citation': BlocksCitation;
       'blocks.content-section': BlocksContentSection;
       'blocks.hero-section': BlocksHeroSection;
+      'blocks.image-text': BlocksImageText;
       'blocks.info-block': BlocksInfoBlock;
       'blocks.navigation': BlocksNavigation;
       'blocks.services': BlocksServices;

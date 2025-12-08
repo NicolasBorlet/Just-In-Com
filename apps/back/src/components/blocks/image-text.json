@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_blocks_image_texts",
+  "info": {
+    "displayName": "image - text",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Texte": {
+      "type": "component",
+      "repeatable": false,
+      "component": "elements.text-box",
+      "required": true
+    },
+    "Image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ]
+    },
+    "reversed": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

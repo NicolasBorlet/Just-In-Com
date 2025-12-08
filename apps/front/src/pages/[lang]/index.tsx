@@ -1,38 +1,55 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import { useGlobalQuery } from "@/services/globals/globalsQuery";
 import { useEffect } from "react";
+import BlockRenderer from "@/components/blocks/BlockRenderer";
+import { supportedLanguages } from "@/config/language";
+import PageContent from "@/components/layout/PageContent";
+import { fetchHome } from "@/services/home/homeService";
+import { fetchAvailableLocales, fetchGlobal } from "@/services/globals/globalsServices";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+export const getStaticPaths = async () => {
+  return {
+    paths: supportedLanguages.map((lang) => ({ params: { lang } })),
+    fallback: false,
+  };
+}
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+export const getStaticProps = async ({ params }: { params: { lang: string } }) => {
+  const [homeRes, globalRes, availableLocales] = await Promise.all([fetchHome({ locale: params.lang }), fetchGlobal({ locale: params.lang }), fetchAvailableLocales()]);
+  return {
+    props: {
+      home: homeRes.data,
+      global: globalRes.data,
+      lang: params.lang,
+      availableLocales,
+    },
+  };
+};
 
-export default function Home() {
-  const { data, isLoading, error } = useGlobalQuery();
-
+export default function Home({
+  home, global, lang, availableLocales,
+}: {
+  home: any;
+  global?: any;
+  lang: string;
+  availableLocales: string[];
+}) {
   useEffect(() => {
-    if (data) {
-      console.log("Global data:", data);
+    if (home) {
+      console.log("Home data:", home);
     }
-  }, [data]);
 
-  if (isLoading) {
-    return <div>Loading global data...</div>;
-  }
+    if (global) {
+      console.log("Global data:", global);
+    }
+  }, [home, global]);
 
-  if (error) {
-    return <div>Error loading global data</div>;
-  }
+  const renderedBlocks = BlockRenderer({ blocks: home.blocks });
 
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20`}
-    >
-    </div>
+    <>
+      {renderedBlocks.heroSection}
+      <PageContent global={global} lang={lang} availableLocales={availableLocales}>
+        {renderedBlocks.otherBlocks}
+      </PageContent>
+    </>
   );
 }
