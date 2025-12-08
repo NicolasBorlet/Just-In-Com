@@ -15,7 +15,7 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params }: { params: { lang: string } }) => {
-  const [weddingRes, globalRes] = await Promise.all([fetchWeddings(), fetchGlobal()]);
+  const [weddingRes, globalRes] = await Promise.all([fetchWeddings({ locale: params.lang }), fetchGlobal({ locale: params.lang })]);
   return {
     props: {
       wedding: weddingRes.data,

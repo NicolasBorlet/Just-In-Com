@@ -23,6 +23,8 @@ import { WeddingSectionBlock } from "@/components/blocks/WeddingSection/WeddingS
 import { InfoBlockBlock } from "@/components/blocks/InfoBlock/InfoBlock.type";
 import { ContentSection } from "@/components/blocks/ContentSection/ContentSection.type";
 import { QuoteBlock } from "@/components/blocks/QuoteBlock/QuoteBlock.type";
+import { ServicesBlock } from "@/components/blocks/ServicesBlock/ServicesBlock.type";
+import { LinkBlock } from "@/components/elements/LinkBlock/LinkBlock.type";
 
 // Union type for all blocks
 export type Block =
@@ -30,7 +32,10 @@ export type Block =
   | WeddingSectionBlock
   | InfoBlockBlock
   | ContentSection
-  | QuoteBlock;
+  | QuoteBlock
+  | ServicesBlock
+  | LinkBlock;
+
 
 export interface BlockRendererProps {
   blocks: Block[];

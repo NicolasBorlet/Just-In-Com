@@ -8,6 +8,8 @@ import { fetchAvailableLocales, fetchGlobal } from "@/services/globals/globalsSe
 export const getStaticProps = async () => {
   const [weddingRes, globalRes, availableLocales] = await Promise.all([fetchWeddings({ locale: 'fr' }), fetchGlobal({ locale: 'fr' }), fetchAvailableLocales()]);
 
+  console.log('weddingRes', weddingRes.data);
+
   return {
     props: {
       weddings: weddingRes.data,
@@ -21,6 +23,8 @@ export const getStaticProps = async () => {
 export default function Mariage({ weddings, global, lang, availableLocales }: { global: any, weddings: Wedding, lang: string, availableLocales: string[] }) {
 
   const renderedBlocks = BlockRenderer({ blocks: weddings.blocks });
+
+  console.log('weddings', weddings);
 
   return (
     <>

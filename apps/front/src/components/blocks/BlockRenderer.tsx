@@ -5,13 +5,15 @@ import InfoBlock from "./InfoBlock/InfoBlock";
 import ContentSection from "./ContentSection/ContentSection";
 import QuoteBlock from "./QuoteBlock/QuoteBlock";
 import { ReactNode } from "react";
+import ServicesBlock from "./ServicesBlock/ServicesBlock";
+import LinkBlock from "../elements/LinkBlock/LinkBlock";
 
 interface BlockRendererResult {
   heroSection: ReactNode | null;
   otherBlocks: ReactNode[];
 }
 
-const BlockRenderer: React.FC<BlockRendererProps> = ({ blocks }) => {
+const BlockRenderer = ({ blocks }: BlockRendererProps): BlockRendererResult => {
   const result: BlockRendererResult = {
     heroSection: null,
     otherBlocks: []
@@ -36,15 +38,16 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({ blocks }) => {
       case 'blocks.citation':
         result.otherBlocks.push(<QuoteBlock key={key} block={block} />);
         break;
+      case 'blocks.services':
+        result.otherBlocks.push(<ServicesBlock key={key} block={block} />);
+        break;
+      case 'elements.link':
+        result.otherBlocks.push(<LinkBlock key={key} block={block} />);
+        break;
     }
   });
 
-  return (
-    <>
-      {result.heroSection}
-      {result.otherBlocks}
-    </>
-  );
+  return result;
 };
 
 export default BlockRenderer;
