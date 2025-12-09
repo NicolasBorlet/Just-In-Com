@@ -8,6 +8,9 @@
   "attributes": {
     "Services": {
       "type": "richtext"
+    },
+    "title": {
+      "type": "string"
     }
   }
 }

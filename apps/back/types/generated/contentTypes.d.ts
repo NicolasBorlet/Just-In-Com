@@ -391,7 +391,14 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
   };
   attributes: {
     blocks: Schema.Attribute.DynamicZone<
-      ['blocks.hero-section', 'blocks.info-block', 'blocks.content-section']
+      [
+        'blocks.hero-section',
+        'blocks.info-block',
+        'blocks.content-section',
+        'elements.text-box',
+        'blocks.image-text',
+        'blocks.services',
+      ]
     > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

@@ -44,7 +44,7 @@ export interface BlocksImageText extends Struct.ComponentSchema {
     displayName: 'image - text';
   };
   attributes: {
-    Image: Schema.Attribute.Media<'images' | 'files' | 'videos'> &
+    Media: Schema.Attribute.Media<'images' | 'files' | 'videos'> &
       Schema.Attribute.Required;
     reversed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     Texte: Schema.Attribute.Component<'elements.text-box', false> &
@@ -86,6 +86,7 @@ export interface BlocksServices extends Struct.ComponentSchema {
   };
   attributes: {
     Services: Schema.Attribute.RichText;
+    title: Schema.Attribute.String;
   };
 }
 

@@ -1,11 +1,11 @@
 export default interface ImageTextType {
-    __component: "elements.image-text";
+    __component: "blocks.image-text";
     id: number;
-    text: {
+    Texte: {
         title: string;
         content: string;
     }
-    image: {
+    Image: {
         url: string;
     }
     reversed: boolean;

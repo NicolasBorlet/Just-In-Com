@@ -43,14 +43,14 @@ const BlockRenderer = ({ blocks }: BlockRendererProps): BlockRendererResult => {
       case 'blocks.services':
         result.otherBlocks.push(<ServicesBlock key={key} block={block} />);
         break;
+      case 'blocks.image-text':
+        result.otherBlocks.push(<ImageText key={key} block={block} />);
+        break;
       case 'elements.link':
         result.otherBlocks.push(<LinkBlock key={key} block={block} />);
         break;
       case 'elements.text-box':
         result.otherBlocks.push(<TextBlock key={key} block={block} />);
-        break;
-      case 'elements.image-text':
-        result.otherBlocks.push(<ImageText key={key} block={block} />);
         break;
     }
   });

@@ -37,7 +37,10 @@
       "components": [
         "blocks.hero-section",
         "blocks.info-block",
-        "blocks.content-section"
+        "blocks.content-section",
+        "elements.text-box",
+        "blocks.image-text",
+        "blocks.services"
       ],
       "pluginOptions": {
         "i18n": {

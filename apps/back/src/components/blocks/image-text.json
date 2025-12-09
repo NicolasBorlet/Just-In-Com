@@ -12,7 +12,7 @@
       "component": "elements.text-box",
       "required": true
     },
-    "Image": {
+    "Media": {
       "type": "media",
       "multiple": false,
       "required": true,
