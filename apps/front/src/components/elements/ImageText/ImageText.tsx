@@ -15,8 +15,8 @@ export default function ImageText({ block }: { block: ImageTextType }) {
         console.log("block", block);
     }, [block]);
 
-    const mediaUrl = getFullUrl(block.Image.url);
-    const isVideoMedia = isVideo(block.Image.url);
+    const mediaUrl = getFullUrl(block.Media.url);
+    const isVideoMedia = isVideo(block.Media.url);
 
     return (
         <div className={`flex ${block.reversed ? 'flex-row-reverse' : 'flex-row'} gap-8`}>

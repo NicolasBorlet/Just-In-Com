@@ -22,6 +22,8 @@ export default function Contact({ contact, global, lang, availableLocales }: { g
 
     const renderedBlocks = BlockRenderer({ blocks: contact.blocks });
 
+    console.log("contact", contact.blocks);
+
     return (
         <>
             {renderedBlocks.heroSection}

@@ -11,6 +11,9 @@ import { getFullUrl } from '@/utils/get-strapi-url';
 export const getStaticProps = async () => {
   const [blogRes, articlesRes, globalRes, availableLocales] = await Promise.all([fetchBlog({ locale: 'fr' }), fetchArticles({ locale: 'fr' }), fetchGlobal({ locale: 'fr' }), fetchAvailableLocales()]);
 
+
+  console.log("blogRes", blogRes.blocks);
+
   return {
     props: {
       blog: blogRes.data,
@@ -34,16 +37,39 @@ export default function Blog({ blog, articles, global, lang, availableLocales }:
     <>
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
-        <div className="flex flex-col gap-12 md:gap-24 grid-cols-1 md:grid-cols-2">
-          {articles?.map((article) => (
-            <Link key={article.id} href={`/blog/${article.slug}`} className="shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-              <Image src={getFullUrl(article.cover.url)} alt={article.title} className="w-full h-64 object-cover mb-4" width={700} height={256} />
-              <div className="flex flex-col gap-4 p-4">
-                <h3 className="text-2xl">{article.title}</h3>
-                <p>{article.description}</p>
-              </div>
-            </Link>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {articles?.map((article: any, index: number) => {
+            const isEven = (index + 1) % 2 === 0;
+            const imageHeight = isEven ? 600 : 400;
+
+            return (
+              <Link
+                key={article.id}
+                href={`/blog/${article.slug}`}
+                className="flex flex-col gap-8 hover:opacity-90 transition-opacity duration-300 items-center"
+              >
+                <Image
+                  src={getFullUrl(article.cover.url)}
+                  alt={article.title}
+                  className="w-full object-cover"
+                  width={700}
+                  height={imageHeight}
+                  style={{ height: `${imageHeight}px` }}
+                />
+                <div className="flex flex-col gap-8">
+                  <p className="text-sm font-medium text-gray-600">
+                    {new Date(article.publishedAt || article.createdAt).toLocaleDateString('fr-FR', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </p>
+                  <h3 className="text-xl font-medium self-center">{article.title}</h3>
+                  <span className="text-lg font-normal self-center">Lire plus</span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </PageContent>
     </>
