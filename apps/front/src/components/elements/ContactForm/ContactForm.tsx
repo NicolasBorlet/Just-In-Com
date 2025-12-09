@@ -172,7 +172,7 @@ export default function ContactForm() {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-primary text-white px-4 py-2 rounded-2xl hover:bg-secondary transition-all duration-300 w-fit self-end"
+                    className="bg-[#772D44] text-white px-4 py-2 rounded-2xl hover:bg-[#772D44]/80 transition-all duration-300 w-fit self-end"
                 >
                     {isSubmitting ? "Envoi en cours..." : "Envoyer"}
                 </button>
@@ -182,5 +182,5 @@ export default function ContactForm() {
 }
 
 const styles = {
-    field: "bg-tertiary/30 rounded-xl p-4 placeholder:text-quaternary/50",
+    field: "bg-[#F4E1E7]/60 rounded-xl p-4 placeholder:text-[#3B1621]",
 };

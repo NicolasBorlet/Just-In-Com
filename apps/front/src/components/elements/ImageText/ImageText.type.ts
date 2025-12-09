@@ -5,7 +5,7 @@ export default interface ImageTextType {
         title: string;
         content: string;
     }
-    Image: {
+    Media: {
         url: string;
     }
     reversed: boolean;
