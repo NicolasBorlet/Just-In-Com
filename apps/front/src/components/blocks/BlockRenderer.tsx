@@ -7,6 +7,8 @@ import QuoteBlock from "./QuoteBlock/QuoteBlock";
 import { ReactNode } from "react";
 import ServicesBlock from "./ServicesBlock/ServicesBlock";
 import LinkBlock from "../elements/LinkBlock/LinkBlock";
+import TextBlock from "../elements/TextBlock/TextBlock";
+import ImageText from "../elements/ImageText/ImageText";
 
 interface BlockRendererResult {
   heroSection: ReactNode | null;
@@ -43,6 +45,12 @@ const BlockRenderer = ({ blocks }: BlockRendererProps): BlockRendererResult => {
         break;
       case 'elements.link':
         result.otherBlocks.push(<LinkBlock key={key} block={block} />);
+        break;
+      case 'elements.text-box':
+        result.otherBlocks.push(<TextBlock key={key} block={block} />);
+        break;
+      case 'elements.image-text':
+        result.otherBlocks.push(<ImageText key={key} block={block} />);
         break;
     }
   });

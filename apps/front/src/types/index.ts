@@ -25,6 +25,8 @@ import { ContentSection } from "@/components/blocks/ContentSection/ContentSectio
 import { QuoteBlock } from "@/components/blocks/QuoteBlock/QuoteBlock.type";
 import { ServicesBlock } from "@/components/blocks/ServicesBlock/ServicesBlock.type";
 import { LinkBlock } from "@/components/elements/LinkBlock/LinkBlock.type";
+import TextBlockType from "@/components/elements/TextBlock/TextBlock.type";
+import ImageTextType from "@/components/elements/ImageText/ImageText.type";
 
 // Union type for all blocks
 export type Block =
@@ -34,8 +36,9 @@ export type Block =
   | ContentSection
   | QuoteBlock
   | ServicesBlock
-  | LinkBlock;
-
+  | LinkBlock
+  | TextBlockType
+  | ImageTextType;
 
 export interface BlockRendererProps {
   blocks: Block[];
