@@ -19,7 +19,7 @@ export default function ImageText({ block }: { block: ImageTextType }) {
     const isVideoMedia = isVideo(block.Media.url);
 
     return (
-        <div className={`flex ${block.reversed ? 'flex-row-reverse' : 'flex-row'} gap-8`}>
+        <div className={`flex ${block.reversed ? 'flex-col lg:flex-row-reverse' : 'flex-col lg:flex-row'} gap-8`}>
             {isVideoMedia ? (
                 <video
                     src={mediaUrl}
