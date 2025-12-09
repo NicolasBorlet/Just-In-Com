@@ -1,6 +1,5 @@
 import { Baloo_2, Italiana } from "next/font/google";
 import { notFound } from 'next/navigation';
-import "./globals.css";
 
 // Define supported locales
 type Locale = 'fr' | 'en' | 'es';
@@ -33,32 +32,32 @@ export function generateStaticParams() {
 export const revalidate = 3600; // Revalidate every hour
 
 // Metadata for the page
-export async function generateMetadata({
-  params,
-}: {
-  params: { lang: Locale };
-}) {
-  return {
-    title: {
-      default: 'Just in Com',
-      template: '%s | Just in Com',
-    },
-    description: 'Your website description',
-  };
-}
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: { lang: Locale };
+// }) {
+//   return {
+//     title: {
+//       default: 'Just in Com',
+//       template: '%s | Just in Com',
+//     },
+//     description: 'Your website description',
+//   };
+// }
 
 export default function RootLayout({
   children,
-  params: { lang },
+  // params: { lang },
 }: {
   children: React.ReactNode;
   params: { lang: Locale };
 }) {
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(lang)) notFound();
+  // if (!locales.includes(lang)) notFound();
 
   return (
-    <html lang={lang} className={`${baloo2.variable} ${italiana.variable}`}>
+    <html className={`${baloo2.variable} ${italiana.variable}`}>
       <body>
         {children}
       </body>
