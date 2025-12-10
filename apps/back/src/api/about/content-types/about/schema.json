@@ -40,7 +40,8 @@
         "blocks.content-section",
         "elements.text-box",
         "blocks.image-text",
-        "blocks.services"
+        "blocks.services",
+        "elements.link"
       ],
       "pluginOptions": {
         "i18n": {
