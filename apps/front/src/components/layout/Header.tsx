@@ -48,7 +48,7 @@ export default function Header({ global, lang, availableLocales }: { global?: an
   }, [global]);
 
   return (
-    <header className={`left-0 right-0 z-50 transition-colors duration-300 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-20 md:top-10' : 'top-0'} ${hasScrolled ? 'bg-white shadow-lg' : ''}`}>
+    <header className={`left-0 right-0 z-50 transition-colors duration-300 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-20 md:top-10' : 'top-0'} ${hasScrolled && !isHomePage ? 'bg-white shadow-lg' : ''}`}>
       <div className="container mx-auto px-4 py-4 relative">
         <div className={`flex items-center gap-8 ${isHomePage ? 'flex-col' : 'flex-row'} ${isHomePage ? 'justify-center' : 'justify-between'}`}>
           <Link href="/" className="flex items-center">
@@ -84,7 +84,7 @@ export default function Header({ global, lang, availableLocales }: { global?: an
               <Link
                 key={item.id}
                 href={item.href.startsWith('/') ? item.href : `/${item.href}`}
-                className={`text-xl uppercase transition-colors duration-300 ${hasScrolled ? 'text-black' : 'text-white'}`}
+                className={`text-xl uppercase transition-colors duration-300 ${hasScrolled && !isHomePage ? 'text-black' : 'text-white'}`}
               >
                 {item.text}
               </Link>
