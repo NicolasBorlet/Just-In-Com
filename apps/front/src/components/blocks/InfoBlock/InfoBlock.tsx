@@ -30,7 +30,7 @@ export default function InfoBlock({ block }: InfoBlockProps) {
           </AnimatedButton>
         )}
       </div>
-      <AnimatedImage src={imageUrl} alt={block.image.alternativeText || ""} width={340} height={500} containerClassName="object-cover w-3/5 md:w-2/5 self-center rounded-4xl h-[300px] md:h-[500px]" />
+      <AnimatedImage src={imageUrl} alt={block.image.alternativeText || ""} width={340} height={500} containerClassName="object-cover w-3/5 md:w-2/5 self-center rounded-[999px] h-[300px] md:h-[500px]" />
     </div>
   );
 }
