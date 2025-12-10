@@ -398,6 +398,7 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
         'elements.text-box',
         'blocks.image-text',
         'blocks.services',
+        'elements.link',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -684,6 +685,7 @@ export interface ApiEntrepriseEntreprise extends Struct.SingleTypeSchema {
         'elements.image',
         'elements.text-box',
         'blocks.image-text',
+        'elements.link',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -797,6 +799,7 @@ export interface ApiMariageMariage extends Struct.SingleTypeSchema {
         'blocks.wedding-block',
         'blocks.services',
         'elements.link',
+        'elements.text-box',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

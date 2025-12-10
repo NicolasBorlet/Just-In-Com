@@ -39,7 +39,8 @@
         "blocks.citation",
         "blocks.wedding-block",
         "blocks.services",
-        "elements.link"
+        "elements.link",
+        "elements.text-box"
       ],
       "pluginOptions": {
         "i18n": {

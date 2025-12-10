@@ -23,7 +23,8 @@
         "blocks.hero-section",
         "elements.image",
         "elements.text-box",
-        "blocks.image-text"
+        "blocks.image-text",
+        "elements.link"
       ],
       "pluginOptions": {
         "i18n": {
