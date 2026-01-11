@@ -48,54 +48,40 @@ export default function Blog({
   lang: string;
   availableLocales: string[];
 }) {
-  useEffect(() => {
-    if (blog) {
-      console.log("Blog data:", blog);
-    }
-
-    if (articles) {
-      console.log("Articles data:", articles);
-    }
-
-    if (global) {
-      console.log("Global data:", global);
-    }
-  }, [blog, articles, global]);
-
   const renderedBlocks = BlockRenderer({ blocks: blog.blocks });
 
   return (
     <>
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
-        {renderedBlocks.otherBlocks}
-
-        {/* Articles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles?.map((article: any, index: number) => {
             const isEven = (index + 1) % 2 === 0;
             const imageHeight = isEven ? 600 : 400;
+            const coverUrl = article.cover ? getFullUrl(article.cover.url) : null;
 
             return (
               <Link
                 key={article.id}
-                href={`/${lang}/blog/${article.slug}`}
+                href={`/blog/${article.slug}`}
                 className="flex flex-col gap-8 hover:opacity-90 transition-opacity duration-300 items-center"
               >
-                <Image
-                  src={getFullUrl(article.cover.url)}
-                  alt={article.title}
-                  className="w-full object-cover"
-                  width={700}
-                  height={imageHeight}
-                  style={{ height: `${imageHeight}px` }}
-                />
+                {coverUrl && (
+                  <Image
+                    src={coverUrl}
+                    alt={article.title}
+                    className="w-full object-cover"
+                    width={700}
+                    height={imageHeight}
+                    style={{ height: `${imageHeight}px` }}
+                  />
+                )}
                 <div className="flex flex-col gap-8">
                   <p className="text-sm font-medium text-gray-600">
-                    {new Date(article.publishedAt || article.createdAt).toLocaleDateString(lang, {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
+                    {new Date(article.publishedAt || article.createdAt).toLocaleDateString('fr-FR', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
                     })}
                   </p>
                   <h3 className="text-xl font-medium self-center">{article.title}</h3>
