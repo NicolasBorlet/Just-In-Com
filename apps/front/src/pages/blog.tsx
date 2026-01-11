@@ -11,9 +11,6 @@ import { getFullUrl } from '@/utils/get-strapi-url';
 export const getStaticProps = async () => {
   const [blogRes, articlesRes, globalRes, availableLocales] = await Promise.all([fetchBlog({ locale: 'fr' }), fetchArticles({ locale: 'fr' }), fetchGlobal({ locale: 'fr' }), fetchAvailableLocales()]);
 
-
-  console.log("blogRes", blogRes.blocks);
-
   return {
     props: {
       blog: blogRes.data,
@@ -29,10 +26,6 @@ export default function Blog({ blog, articles, global, lang, availableLocales }:
 
   const renderedBlocks = BlockRenderer({ blocks: blog.blocks });
 
-  useEffect(() => {
-    console.log(articles);
-  }, [articles]);
-
   return (
     <>
       {renderedBlocks.heroSection}
@@ -41,6 +34,7 @@ export default function Blog({ blog, articles, global, lang, availableLocales }:
           {articles?.map((article: any, index: number) => {
             const isEven = (index + 1) % 2 === 0;
             const imageHeight = isEven ? 600 : 400;
+            const coverUrl = article.cover ? getFullUrl(article.cover.url) : null;
 
             return (
               <Link
@@ -48,14 +42,16 @@ export default function Blog({ blog, articles, global, lang, availableLocales }:
                 href={`/blog/${article.slug}`}
                 className="flex flex-col gap-8 hover:opacity-90 transition-opacity duration-300 items-center"
               >
-                <Image
-                  src={getFullUrl(article.cover.url)}
-                  alt={article.title}
-                  className="w-full object-cover"
-                  width={700}
-                  height={imageHeight}
-                  style={{ height: `${imageHeight}px` }}
-                />
+                {coverUrl && (
+                  <Image
+                    src={coverUrl}
+                    alt={article.title}
+                    className="w-full object-cover"
+                    width={700}
+                    height={imageHeight}
+                    style={{ height: `${imageHeight}px` }}
+                  />
+                )}
                 <div className="flex flex-col gap-8">
                   <p className="text-sm font-medium text-gray-600">
                     {new Date(article.publishedAt || article.createdAt).toLocaleDateString('fr-FR', {

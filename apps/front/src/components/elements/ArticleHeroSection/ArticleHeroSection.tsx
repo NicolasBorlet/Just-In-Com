@@ -3,13 +3,14 @@ import { getFullUrl } from "@/utils/get-strapi-url";
 import Image from "next/image";
 
 export default function ArticleHeroSection({ cover }: { cover: Media }) {
-    const strapiUrl = getFullUrl();
+    const coverUrl = cover ? getFullUrl(cover.url) : '';
+    const coverAlt = cover ? cover.alternativeText : '';
 
     return (
         <div className="relative h-[70vh] w-full">
             <Image
-                src={`${strapiUrl}${cover.url}`}
-                alt={cover.alternativeText || ""}
+                src={coverUrl}
+                alt={coverAlt || ''}
                 width={1920}
                 height={1080}
                 className="absolute inset-0 h-full w-full object-cover"

@@ -15,12 +15,12 @@ export default function ImageText({ block }: { block: ImageTextType }) {
         console.log("block", block);
     }, [block]);
 
-    const mediaUrl = getFullUrl(block.Media.url);
-    const isVideoMedia = isVideo(block.Media.url);
+    const mediaUrl = block.Media ? getFullUrl(block.Media.url) : null;
+    const isVideoMedia = block.Media ? isVideo(block.Media.url) : false;
 
     return (
         <div className={`flex ${block.reversed ? 'flex-col lg:flex-row-reverse' : 'flex-col lg:flex-row'} gap-8`}>
-            {isVideoMedia ? (
+            {mediaUrl && (isVideoMedia ? (
                 <video
                     src={mediaUrl}
                     className="max-w-[450px] rounded-lg"
@@ -37,7 +37,7 @@ export default function ImageText({ block }: { block: ImageTextType }) {
                     alt={block.Texte.title}
                     className="max-w-[450px] rounded-lg"
                 />
-            )}
+            ))}
             <div className="flex flex-col gap-8">
                 <AnimatedText className="font-medium text-[32px]">{block.Texte.title}</AnimatedText>
                 <AnimatedParagraph className="text-xl">{block.Texte.content}</AnimatedParagraph>
