@@ -50,3 +50,54 @@ export interface Media {
   documentId: string;
   id: number;
 }
+
+export interface MenuItem {
+  id: number;
+  text: string;
+  href: string;
+  isExternal?: boolean;
+}
+
+export interface Menu {
+  name: string;
+  item: MenuItem[];
+}
+
+export interface StrapiImage {
+  url: string;
+  alternativeText?: string;
+}
+
+export interface StrapiLogo {
+  image: StrapiImage;
+  logoText?: string;
+}
+
+export interface StrapiGlobal {
+  logo: StrapiLogo;
+  logo_extensed: StrapiLogo;
+  menu: Menu[];
+}
+
+export interface StrapiSeo {
+  metaTitle?: string;
+  metaDescription?: string;
+}
+
+export interface StrapiPageData {
+  blocks: Block[];
+  seo?: StrapiSeo;
+  description?: string;
+}
+
+export interface StrapiArticle {
+  id: number;
+  title: string;
+  description?: string;
+  slug: string;
+  cover?: StrapiImage;
+  publishedAt?: string;
+  createdAt: string;
+  updatedAt?: string;
+  seo?: StrapiSeo;
+}

@@ -13,18 +13,18 @@ interface MediaBlockProps {
     style?: React.CSSProperties;
 }
 
-export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false, enableHoverEffects = false, onClick, style }: MediaBlockProps) {
+export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false, enableHoverEffects = false, onClick }: MediaBlockProps) {
     const strapiUrl = getFullUrl();
 
     // Handle both direct media blocks and gallery media items
-    const mediaData = block.media || (block as any).media;
+    const mediaData = block.media || (block as unknown as { media?: MediaBlockType["media"] }).media;
     if (!mediaData) {
         console.error('No media data found in block:', block);
         return null;
     }
 
     // If we're dealing with a gallery item, extract the media object
-    const media = mediaData.url ? mediaData : (mediaData as any).media;
+    const media = mediaData.url ? mediaData : (mediaData as unknown as { media?: { url: string; alternativeText?: string; mime?: string } }).media;
     if (!media || !media.url) {
         console.error('Invalid media structure:', mediaData);
         return null;

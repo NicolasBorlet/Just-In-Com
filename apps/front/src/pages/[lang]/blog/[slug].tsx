@@ -6,13 +6,14 @@ import ArticleHeroSection from '@/components/elements/ArticleHeroSection/Article
 import { NextSeo, ArticleJsonLd } from 'next-seo';
 import { getLocalizedPath } from '@/lib/i18n';
 import { getFullUrl } from '@/utils/get-strapi-url';
+import { StrapiGlobal, StrapiArticle } from '@/types';
 
 export const getStaticPaths = async () => {
   const paths = [];
   for (const lang of supportedLanguages) {
     const articlesRes = await fetchArticles({ locale: lang });
     for (const article of articlesRes.data) {
-      paths.push({ params: { lang, slug: (article as any).slug } });
+      paths.push({ params: { lang, slug: (article as unknown as StrapiArticle).slug } });
     }
   }
   return { paths, fallback: 'blocking' };
@@ -47,8 +48,8 @@ export default function Article({
   lang,
   availableLocales,
 }: {
-  article: any;
-  global?: any;
+  article: StrapiArticle | StrapiArticle[];
+  global?: StrapiGlobal;
   lang: string;
   availableLocales: string[];
 }) {
@@ -82,7 +83,7 @@ export default function Article({
         authorName="Just in Com"
         description={articleData.description || ""}
       />
-      <ArticleHeroSection cover={articleData.cover} />
+      {articleData.cover && <ArticleHeroSection cover={articleData.cover as unknown as import("@/types").Media} />}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
         <div className="flex flex-col gap-12 md:gap-24">
           <h1 className="text-6xl md:text-8xl/tight font-special">{articleData.title}</h1>

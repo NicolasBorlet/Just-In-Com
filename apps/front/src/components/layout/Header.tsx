@@ -3,8 +3,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { getPathWithLocale } from "@/lib/i18n";
+import { StrapiGlobal, Menu, MenuItem } from "@/types";
 
-export default function Header({ global, lang, availableLocales }: { global?: any; lang?: string; availableLocales: string[] }) {
+export default function Header({ global, lang, availableLocales }: { global?: StrapiGlobal; lang?: string; availableLocales: string[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const isHomePage = pathname === '/' || pathname === `/${lang}`;
@@ -76,7 +77,7 @@ export default function Header({ global, lang, availableLocales }: { global?: an
           </button>
 
           <nav className="hidden md:flex space-x-8">
-            {global.menu.find((menu: any) => menu.name === "main")?.item.map((item: any) => (
+            {global?.menu.find((menu: Menu) => menu.name === "main")?.item.map((item: MenuItem) => (
               <Link
                 key={item.id}
                 href={item.href.startsWith('/') ? item.href : `/${item.href}`}
@@ -107,7 +108,7 @@ export default function Header({ global, lang, availableLocales }: { global?: an
               <Link href={lang === 'fr' ? '/' : `/${lang}`} className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
                 {lang === 'de' ? 'Startseite' : lang === 'en' ? 'Home' : 'Accueil'}
               </Link>
-              {global.menu.find((menu: any) => menu.name === "main")?.item.map((item: any) => (
+              {global?.menu.find((menu: Menu) => menu.name === "main")?.item.map((item: MenuItem) => (
                 <Link
                   key={item.id}
                   href={item.href.startsWith('/') ? item.href : `/${item.href}`}

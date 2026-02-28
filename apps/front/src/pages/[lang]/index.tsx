@@ -5,6 +5,7 @@ import { fetchHome } from "@/services/home/homeService";
 import { fetchAvailableLocales, fetchGlobal } from "@/services/globals/globalsServices";
 import { NextSeo, LocalBusinessJsonLd } from "next-seo";
 import { getLocalizedPath } from "@/lib/i18n";
+import { StrapiPageData, StrapiGlobal } from "@/types";
 
 export const getStaticPaths = async () => {
   return {
@@ -37,8 +38,8 @@ export default function Home({
   lang,
   availableLocales,
 }: {
-  home: any;
-  global?: any;
+  home: StrapiPageData;
+  global?: StrapiGlobal;
   lang: string;
   availableLocales: string[];
 }) {

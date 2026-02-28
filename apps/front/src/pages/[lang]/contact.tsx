@@ -6,6 +6,7 @@ import { fetchAvailableLocales, fetchGlobal } from '@/services/globals/globalsSe
 import ContactForm from '@/components/elements/ContactForm/ContactForm';
 import { NextSeo } from 'next-seo';
 import { getLocalizedPath } from '@/lib/i18n';
+import { StrapiPageData, StrapiGlobal } from '@/types';
 
 export const getStaticPaths = async () => {
   return {
@@ -39,8 +40,8 @@ export default function Contact({
   lang,
   availableLocales,
 }: {
-  contact: any;
-  global?: any;
+  contact: StrapiPageData;
+  global?: StrapiGlobal;
   lang: string;
   availableLocales: string[];
 }) {

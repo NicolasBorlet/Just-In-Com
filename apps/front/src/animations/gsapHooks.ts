@@ -13,7 +13,7 @@ if (typeof window !== 'undefined') {
 // Check if we're in a testing environment
 const isTestEnvironment = () => {
   if (typeof window === 'undefined') return false;
-  return !!(window as any).Cypress || process.env.NODE_ENV === 'test';
+  return !!(window as unknown as { Cypress?: boolean }).Cypress || process.env.NODE_ENV === 'test';
 };
 
 export interface TextRevealOptions {

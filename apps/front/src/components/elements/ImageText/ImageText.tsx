@@ -1,20 +1,14 @@
 import { getFullUrl } from "@/utils/get-strapi-url";
 import ImageTextType from "./ImageText.type";
-import { useEffect } from "react";
+import Image from "next/image";
 import { AnimatedParagraph, AnimatedText } from "@/animations";
 
-// Helper function to check if the URL is a video
 const isVideo = (url: string): boolean => {
     const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv'];
     return videoExtensions.some(ext => url.toLowerCase().endsWith(ext));
 };
 
 export default function ImageText({ block }: { block: ImageTextType }) {
-
-    useEffect(() => {
-        console.log("block", block);
-    }, [block]);
-
     const mediaUrl = block.Media ? getFullUrl(block.Media.url) : null;
     const isVideoMedia = block.Media ? isVideo(block.Media.url) : false;
 
@@ -32,10 +26,12 @@ export default function ImageText({ block }: { block: ImageTextType }) {
                     Your browser does not support the video tag.
                 </video>
             ) : (
-                <img
+                <Image
                     src={mediaUrl}
                     alt={block.Texte.title}
                     className="max-w-[450px] rounded-lg"
+                    width={450}
+                    height={300}
                 />
             ))}
             <div className="flex flex-col gap-8">

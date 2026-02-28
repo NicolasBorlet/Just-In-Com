@@ -1,7 +1,9 @@
 import { AnimatedHeading, AnimatedParagraphLine } from "@/animations/AnimatedText";
 import RichText from "@/components/atoms/RichText";
 
-export default function ServicesBlock({ block }: { block: any }) {
+import { ServicesBlock as ServicesBlockType } from "./ServicesBlock.type";
+
+export default function ServicesBlock({ block }: { block: ServicesBlockType }) {
     return <div className="flex flex-col gap-12">
         <div className="flex flex-col gap-8">
             {block.description && <AnimatedParagraphLine className="text-lg text-center">{block.description}</AnimatedParagraphLine>}

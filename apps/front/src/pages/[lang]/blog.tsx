@@ -9,6 +9,7 @@ import Image from "next/image";
 import { getFullUrl } from "@/utils/get-strapi-url";
 import { getLocalizedPath } from "@/lib/i18n";
 import { NextSeo } from "next-seo";
+import { StrapiPageData, StrapiGlobal, StrapiArticle } from "@/types";
 
 export const getStaticPaths = async () => {
   return {
@@ -45,9 +46,9 @@ export default function Blog({
   lang,
   availableLocales,
 }: {
-  blog: any;
-  articles: any;
-  global?: any;
+  blog: StrapiPageData;
+  articles: StrapiArticle[];
+  global?: StrapiGlobal;
   lang: string;
   availableLocales: string[];
 }) {
@@ -65,7 +66,7 @@ export default function Blog({
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articles?.map((article: any, index: number) => {
+          {articles?.map((article: StrapiArticle, index: number) => {
             const isEven = (index + 1) % 2 === 0;
             const imageHeight = isEven ? 600 : 400;
             const coverUrl = article.cover ? getFullUrl(article.cover.url) : null;

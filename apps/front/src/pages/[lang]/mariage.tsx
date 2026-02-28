@@ -6,6 +6,7 @@ import { fetchWeddings } from '@/services/weddings/weddingService';
 import { fetchAvailableLocales, fetchGlobal } from '@/services/globals/globalsServices';
 import { NextSeo } from 'next-seo';
 import { getLocalizedPath } from '@/lib/i18n';
+import { StrapiGlobal } from '@/types';
 
 export const getStaticPaths = async () => {
   return {
@@ -39,19 +40,20 @@ export default function Mariage({
   availableLocales,
 }: {
   wedding: Wedding;
-  global?: any;
+  global?: StrapiGlobal;
   lang: string;
   availableLocales: string[];
 }) {
   const renderedBlocks = BlockRenderer({ blocks: wedding.blocks });
+  const weddingData = wedding as Wedding & { seo?: { metaTitle?: string; metaDescription?: string } };
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr";
 
   return (
     <>
       <NextSeo
-        title={(wedding as any).seo?.metaTitle || "Mariage"}
-        description={(wedding as any).seo?.metaDescription || ""}
+        title={weddingData.seo?.metaTitle || "Mariage"}
+        description={weddingData.seo?.metaDescription || ""}
         canonical={`${siteUrl}${getLocalizedPath("mariage", lang)}`}
       />
       {renderedBlocks.heroSection}
