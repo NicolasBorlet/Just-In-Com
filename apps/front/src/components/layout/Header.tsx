@@ -43,10 +43,6 @@ export default function Header({ global, lang, availableLocales }: { global?: an
   const logoUrl = (isHomePage ? logoExtImage?.url : logoImage?.url) || logoImage?.url || '/favicon.ico';
   const logoAlt = (isHomePage ? logoExtImage?.alternativeText : logoImage?.alternativeText) || global?.logo_extensed?.logoText || global?.logo?.logoText || 'Logo';
 
-  useEffect(() => {
-    console.log("Header global data:", global);
-  }, [global]);
-
   return (
     <header className={`left-0 right-0 z-50 transition-colors duration-300 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-20 md:top-10' : 'top-0'} ${hasScrolled && !isHomePage ? 'bg-white shadow-lg' : ''}`}>
       <div className="container mx-auto px-4 py-4 relative">
@@ -108,8 +104,8 @@ export default function Header({ global, lang, availableLocales }: { global?: an
               }`}
           >
             <nav className="flex flex-col items-center justify-center h-full space-y-8">
-              <Link href="/" className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
-                Accueil
+              <Link href={lang === 'fr' ? '/' : `/${lang}`} className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
+                {lang === 'de' ? 'Startseite' : lang === 'en' ? 'Home' : 'Accueil'}
               </Link>
               {global.menu.find((menu: any) => menu.name === "main")?.item.map((item: any) => (
                 <Link

@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Script from "next/script";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { getStrapiURL } from "@/utils/get-strapi-url";
 
 const contactFormSchema = z.object({
     reason: z.enum(["contact", "recrutement", "autre"]),
@@ -43,7 +44,7 @@ export default function ContactForm() {
                 action: 'submit_contact_form'
             });
 
-            const response = await fetch("/api/contact", {
+            const response = await fetch(`${getStrapiURL()}/api/contacts`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

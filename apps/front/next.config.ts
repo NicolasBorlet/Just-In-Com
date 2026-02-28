@@ -3,36 +3,28 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      `${process.env.DOMAIN}`,
-      'precious-cats-888e8b9726.strapiapp.com',
-      'precious-cats-888e8b9726.media.strapiapp.com'
-    ]
+    remotePatterns: [
+      { protocol: 'https', hostname: 'precious-cats-888e8b9726.strapiapp.com' },
+      { protocol: 'https', hostname: 'precious-cats-888e8b9726.media.strapiapp.com' },
+      ...(process.env.DOMAIN ? [{ protocol: 'https' as const, hostname: process.env.DOMAIN }] : []),
+    ],
+  },
+  async rewrites() {
+    return [
+      { source: '/', destination: '/fr' },
+      { source: '/mariage', destination: '/fr/mariage' },
+      { source: '/blog', destination: '/fr/blog' },
+      { source: '/blog/:slug', destination: '/fr/blog/:slug' },
+      { source: '/a-propos', destination: '/fr/a-propos' },
+      { source: '/contact', destination: '/fr/contact' },
+      { source: '/professionnels', destination: '/fr/professionnels' },
+    ];
   },
   async redirects() {
     return [
-      {
-        source: '/fr',
-        destination: '/',
-        permanent: true, // or false if you want a temporary redirect
-      },
-      {
-        source: '/fr/blog',
-        destination: '/blog',
-        permanent: true, // or false if you want a temporary redirect
-      },
-      {
-        source: '/fr/mariage',
-        destination: '/mariage',
-        permanent: true, // or false if you want a temporary redirect
-      },
+      { source: '/fr', destination: '/', permanent: true },
+      { source: '/fr/:path*', destination: '/:path*', permanent: true },
     ];
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
   },
 };
 
