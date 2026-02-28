@@ -11,7 +11,7 @@ import { StrapiGlobal } from '@/types';
 export const getStaticPaths = async () => {
   return {
     paths: supportedLanguages.map((lang) => ({ params: { lang } })),
-    fallback: false,
+    fallback: 'blocking',
   };
 };
 
@@ -22,6 +22,11 @@ export const getStaticProps = async ({ params }: { params: { lang: string } }) =
     fetchGlobal({ locale }),
     fetchAvailableLocales(),
   ]);
+
+  if (!weddingRes.data || !globalRes.data || !globalRes.data.logo_extensed) {
+    return { notFound: true };
+  }
+
   return {
     props: {
       wedding: weddingRes.data,

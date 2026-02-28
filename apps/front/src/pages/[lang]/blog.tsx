@@ -14,7 +14,7 @@ import { StrapiPageData, StrapiGlobal, StrapiArticle } from "@/types";
 export const getStaticPaths = async () => {
   return {
     paths: supportedLanguages.map((lang) => ({ params: { lang } })),
-    fallback: false,
+    fallback: 'blocking',
   };
 };
 
@@ -27,10 +27,14 @@ export const getStaticProps = async ({ params }: { params: { lang: string } }) =
     fetchAvailableLocales(),
   ]);
 
+  if (!blogRes.data || !globalRes.data || !globalRes.data.logo_extensed) {
+    return { notFound: true };
+  }
+
   return {
     props: {
       blog: blogRes.data,
-      articles: articlesRes.data,
+      articles: articlesRes.data ?? [],
       global: globalRes.data,
       lang: locale,
       availableLocales,
