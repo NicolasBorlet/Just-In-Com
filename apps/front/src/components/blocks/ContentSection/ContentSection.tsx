@@ -8,7 +8,9 @@ import MediaBlock from "../MediaBlock/MediaBlock";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { Media } from "@/types";
 
-function HorizontalGallery({ images }: { images: Media[] }) {
+function HorizontalGallery({ images }: { images?: Media[] | null }) {
+  const safeImages = Array.isArray(images) ? images : [];
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -32,6 +34,8 @@ function HorizontalGallery({ images }: { images: Media[] }) {
     };
   }, [updateArrows]);
 
+  if (safeImages.length === 0) return null;
+
   const scroll = (direction: "left" | "right") => {
     const el = scrollRef.current;
     if (!el) return;
@@ -49,7 +53,7 @@ function HorizontalGallery({ images }: { images: Media[] }) {
         className="flex gap-6 md:gap-12 overflow-x-auto snap-x snap-mandatory md:snap-none"
         style={{ scrollbarWidth: "none" }}
       >
-        {images.map((image) => (
+        {safeImages.map((image) => (
           <div key={image.id} className="shrink-0 w-[85vw] md:w-[420px] snap-start">
             <MediaBlock
               block={{ media: image, __component: "elements.media", id: 0 }}
@@ -108,7 +112,7 @@ export default function ContentSection({ block }: ContentSectionProps) {
     }}>{block.description}</AnimatedParagraph>}
     </div>
     {block.horizontal ? (
-      <HorizontalGallery images={block.gallerie} />
+      <HorizontalGallery images={Array.isArray(block.gallerie) ? block.gallerie : null} />
     ) : (
       <div className={`grid gap-10 ${block.grid ? "grid-cols-2" : "grid-cols-1"}`}>
         {Array.isArray(block.gallerie) && block.gallerie.length > 0 && block.gallerie.map((image) => (
