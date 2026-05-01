@@ -9,11 +9,13 @@ interface MediaBlockProps {
     height?: number;
     priority?: boolean;
     enableHoverEffects?: boolean;
+    noRadius?: boolean;
+    smallHeight?: boolean;
     onClick?: () => void;
     style?: React.CSSProperties;
 }
 
-export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false, enableHoverEffects = false, onClick }: MediaBlockProps) {
+export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false, enableHoverEffects = false, noRadius = false, smallHeight = false, onClick }: MediaBlockProps) {
     const strapiUrl = getFullUrl();
 
     // Handle both direct media blocks and gallery media items
@@ -54,7 +56,7 @@ export default function MediaBlock({ block, alt, width = 600, height = 600, prio
 
     return (
         <div
-            className={`w-full md:h-[600px] h-[250px] relative overflow-hidden rounded-lg group ${enableHoverEffects ? 'cursor-pointer' : ''}`}
+            className={`w-full ${smallHeight ? 'md:h-[560px] h-[110vw]' : 'md:h-[600px] h-[250px]'} relative overflow-hidden ${noRadius ? '' : 'rounded-lg'} group ${enableHoverEffects ? 'cursor-pointer' : ''}`}
             onClick={onClick}
         >
             {isVideo ? (

@@ -13,5 +13,5 @@ export enum ButtonAlignment {
 }
 
 export default function Button({ children, href, isExternal, width, ariaLabel = ButtonWidth.AUTO }: { children: React.ReactNode, href: string, isExternal: boolean, width?: ButtonWidth, alignment?: ButtonAlignment, ariaLabel: string }) {
-  return <Link href={href} target={isExternal ? "_blank" : "_self"} className={`bg-primary text-white px-5 py-2 rounded-2xl hover:bg-secondary transition-all duration-300 ${width === ButtonWidth.FULL ? "w-full" : width === ButtonWidth.FIT ? "w-fit" : "w-auto"} font-special`} aria-label={ariaLabel}>{children}</Link>;
+  return <Link href={href} target={isExternal ? "_blank" : "_self"} className={`bg-[#A33E5E] text-white px-7 py-3 rounded-2xl hover:bg-[#8a3450] transition-all duration-300 text-sm md:text-xl ${width === ButtonWidth.FULL ? "w-full" : width === ButtonWidth.FIT ? "w-fit" : "w-auto"} font-special`} aria-label={ariaLabel}>{children}</Link>;
 }

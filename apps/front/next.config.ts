@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'precious-cats-888e8b9726.strapiapp.com' },
       { protocol: 'https', hostname: 'precious-cats-888e8b9726.media.strapiapp.com' },
+      { protocol: 'https', hostname: 'picsum.photos' },
       ...(process.env.DOMAIN ? [{ protocol: 'https' as const, hostname: process.env.DOMAIN }] : []),
     ],
   },
