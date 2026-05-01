@@ -26,6 +26,7 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = ({
 
   return (
     <div ref={imageRef} className={`overflow-hidden ${containerClassName}`}>
+      {/* eslint-disable-next-line jsx-a11y/alt-text -- alt is passed via imageProps spread */}
       <Image
         {...imageProps}
         className={`w-full h-full object-cover object-center ${className}`}

@@ -73,7 +73,7 @@ export class SplitText {
     const words: HTMLElement[] = [];
     const wordArray = text.split(/(\s+)/);
 
-    wordArray.forEach((word, index) => {
+    wordArray.forEach((word) => {
       const span = document.createElement('span');
 
       if (word.trim() === '') {
@@ -110,10 +110,9 @@ export class SplitText {
     document.body.removeChild(tempDiv);
 
     const words = text.split(' ');
-    const currentLine = '';
     let wordIndex = 0;
 
-    lineBreaks.forEach((breakIndex, lineIndex) => {
+    lineBreaks.forEach((breakIndex) => {
       const lineWords = words.slice(wordIndex, breakIndex + 1);
       const span = document.createElement('span');
       span.textContent = lineWords.join(' ');

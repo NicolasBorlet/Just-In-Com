@@ -1,4 +1,3 @@
-import { JSX } from "react";
 import TextBlockType from "./TextBlock.type";
 import { AnimatedText, AnimatedParagraph } from "@/animations";
 

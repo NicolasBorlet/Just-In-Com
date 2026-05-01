@@ -4,10 +4,11 @@ import React from 'react';
 import { AnimatedHeading, AnimatedParagraph } from '@/animations';
 
 interface MarkdownElement {
-  type: 'h1' | 'h2' | 'h3' | 'p' | 'ul' | 'li' | 'strong' | 'em' | 'a';
+  type: 'h1' | 'h2' | 'h3' | 'p' | 'ul' | 'li' | 'strong' | 'em' | 'a' | 'img';
   content: string;
   level?: number;
   href?: string;
+  src?: string;
   children?: MarkdownElement[];
 }
 
@@ -60,6 +61,52 @@ function parseMarkdownToElements(markdown: string): MarkdownElement[] {
         content: listItemContent
       });
     }
+    // Markdown images: ![alt](url)
+    else if (trimmedLine.match(/^!\[.*?\]\(.*?\)$/)) {
+      currentList = null;
+      const match = trimmedLine.match(/^!\[(.*?)\]\((.*?)\)$/);
+      if (match) {
+        elements.push({
+          type: 'img',
+          content: match[1],
+          src: match[2]
+        });
+      }
+    }
+    // HTML img tags: <img src="..." alt="..." />
+    else if (trimmedLine.match(/^<img\s/i)) {
+      currentList = null;
+      const srcMatch = trimmedLine.match(/src=["'](.*?)["']/i);
+      const altMatch = trimmedLine.match(/alt=["'](.*?)["']/i);
+      if (srcMatch) {
+        elements.push({
+          type: 'img',
+          content: altMatch?.[1] || '',
+          src: srcMatch[1]
+        });
+      }
+    }
+    // Bare image URLs on their own line
+    else if (trimmedLine.match(/^https?:\/\/.*\.(jpg|jpeg|png|gif|webp|svg|avif)(\?.*)?$/i)) {
+      currentList = null;
+      elements.push({
+        type: 'img',
+        content: '',
+        src: trimmedLine
+      });
+    }
+    // Markdown link wrapping an image URL: [filename](url)
+    else if (trimmedLine.match(/^\[.*?\]\(https?:\/\/.*\.(jpg|jpeg|png|gif|webp|svg|avif)(\?.*)?.*\)$/i)) {
+      currentList = null;
+      const match = trimmedLine.match(/^\[(.*?)\]\((.*?)\)$/);
+      if (match) {
+        elements.push({
+          type: 'img',
+          content: match[1],
+          src: match[2]
+        });
+      }
+    }
     // Paragraphs
     else {
       currentList = null; // Reset list context
@@ -74,17 +121,28 @@ function parseMarkdownToElements(markdown: string): MarkdownElement[] {
 }
 
 function processInlineMarkdown(text: string): React.ReactNode {
-  // Handle bold, italic, and links
-  const parts = text.split(/(\*\*.*?\*\*|\*.*?\*|\[.*?\]\(.*?\))/g);
+  // Handle bold, italic, links, inline images, and bare image URLs
+  const parts = text.split(/(!\[.*?\]\(.*?\)|\*\*.*?\*\*|\*.*?\*|\[.*?\]\(.*?\)|https?:\/\/\S+\.(?:jpg|jpeg|png|gif|webp|svg|avif)(?:\?\S*)?)/gi);
 
   return parts.map((part, index) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
+    if (part.startsWith('![')) {
+      const match = part.match(/!\[(.*?)\]\((.*?)\)/);
+      if (match) {
+        return <img key={index} src={match[2]} alt={match[1]} className="inline-block max-w-full h-auto rounded-lg my-2" />;
+      }
+    } else if (part.match(/^https?:\/\/\S+\.(?:jpg|jpeg|png|gif|webp|svg|avif)(?:\?\S*)?$/i)) {
+      return <img key={index} src={part} alt="" className="inline-block max-w-full h-auto rounded-lg my-2" />;
+    } else if (part.startsWith('**') && part.endsWith('**')) {
       return <strong key={index}>{part.slice(2, -2)}</strong>;
     } else if (part.startsWith('*') && part.endsWith('*')) {
       return <em key={index}>{part.slice(1, -1)}</em>;
     } else if (part.match(/\[.*?\]\(.*?\)/)) {
       const match = part.match(/\[(.*?)\]\((.*?)\)/);
       if (match) {
+        const isImage = /\.(jpg|jpeg|png|gif|webp|svg|avif)(\?.*)?$/i.test(match[2]);
+        if (isImage) {
+          return <img key={index} src={match[2]} alt={match[1]} className="block max-w-full h-auto rounded-lg my-2" />;
+        }
         return <a key={index} href={match[2]} className="text-blue-600 hover:text-blue-800 underline">{match[1]}</a>;
       }
     }
@@ -93,7 +151,7 @@ function processInlineMarkdown(text: string): React.ReactNode {
 }
 
 function RenderElement({ element, index, specialH3 }: { element: MarkdownElement; index: number; specialH3: boolean }) {
-  const animationDelay = index * 0.1;
+  const animationDelay = index * 0.03;
 
   switch (element.type) {
     case 'h1':
@@ -181,6 +239,16 @@ function RenderElement({ element, index, specialH3 }: { element: MarkdownElement
             </AnimatedParagraph>
           ))}
         </ul>
+      );
+
+    case 'img':
+      return (
+        <img
+          key={index}
+          src={element.src}
+          alt={element.content}
+          className="w-full h-auto rounded-lg my-4"
+        />
       );
 
     default:

@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(rm:*)",
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npx next:*)",
+      "Bash(npx tsc:*)",
+      "Bash(curl:*)"
     ],
     "deny": []
   }

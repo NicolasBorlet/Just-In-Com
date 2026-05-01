@@ -1,30 +1,39 @@
-import { useEffect } from "react";
 import BlockRenderer from "@/components/blocks/BlockRenderer";
 import { supportedLanguages } from "@/config/language";
 import PageContent from "@/components/layout/PageContent";
 import { fetchAbout } from "@/services/about/aboutService";
 import { fetchAvailableLocales, fetchGlobal } from "@/services/globals/globalsServices";
+import { NextSeo } from "next-seo";
+import { getLocalizedPath } from "@/lib/i18n";
+import { StrapiPageData, StrapiGlobal } from "@/types";
 
 export const getStaticPaths = async () => {
   return {
     paths: supportedLanguages.map((lang) => ({ params: { lang } })),
-    fallback: false,
+    fallback: 'blocking',
   };
 };
 
 export const getStaticProps = async ({ params }: { params: { lang: string } }) => {
+  const locale = params.lang;
   const [aboutRes, globalRes, availableLocales] = await Promise.all([
-    fetchAbout({ locale: params.lang }),
-    fetchGlobal({ locale: params.lang }),
-    fetchAvailableLocales()
+    fetchAbout({ locale }),
+    fetchGlobal({ locale }),
+    fetchAvailableLocales(),
   ]);
+
+  if (!aboutRes.data || !globalRes.data || !globalRes.data.logo_extensed) {
+    return { notFound: true };
+  }
+
   return {
     props: {
       about: aboutRes.data,
       global: globalRes.data,
-      lang: params.lang,
+      lang: locale,
       availableLocales,
     },
+    revalidate: 3600,
   };
 };
 
@@ -34,25 +43,22 @@ export default function About({
   lang,
   availableLocales,
 }: {
-  about: any;
-  global?: any;
+  about: StrapiPageData;
+  global?: StrapiGlobal;
   lang: string;
   availableLocales: string[];
 }) {
-  useEffect(() => {
-    if (about) {
-      console.log("About data:", about);
-    }
-
-    if (global) {
-      console.log("Global data:", global);
-    }
-  }, [about, global]);
-
   const renderedBlocks = BlockRenderer({ blocks: about.blocks });
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr";
 
   return (
     <>
+      <NextSeo
+        title={about.seo?.metaTitle || "A propos"}
+        description={about.seo?.metaDescription || ""}
+        canonical={`${siteUrl}${getLocalizedPath("a-propos", lang)}`}
+      />
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
         {renderedBlocks.otherBlocks}

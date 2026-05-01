@@ -1,4 +1,4 @@
-import { getFullUrl, getStrapiURL } from "@/utils/get-strapi-url";
+import { getFullUrl } from "@/utils/get-strapi-url";
 import { InfoBlockProps } from "./InfoBlock.type";
 import RichText from "@/components/atoms/RichText";
 import { ButtonAlignment, ButtonWidth } from "@/components/atoms/Button";

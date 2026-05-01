@@ -3,8 +3,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { getPathWithLocale } from "@/lib/i18n";
+import { StrapiGlobal, Menu, MenuItem } from "@/types";
 
-export default function Header({ global, lang, availableLocales }: { global?: any; lang?: string; availableLocales: string[] }) {
+export default function Header({ global, lang, availableLocales }: { global?: StrapiGlobal; lang?: string; availableLocales: string[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const isHomePage = pathname === '/' || pathname === `/${lang}`;
@@ -43,10 +44,6 @@ export default function Header({ global, lang, availableLocales }: { global?: an
   const logoUrl = (isHomePage ? logoExtImage?.url : logoImage?.url) || logoImage?.url || '/favicon.ico';
   const logoAlt = (isHomePage ? logoExtImage?.alternativeText : logoImage?.alternativeText) || global?.logo_extensed?.logoText || global?.logo?.logoText || 'Logo';
 
-  useEffect(() => {
-    console.log("Header global data:", global);
-  }, [global]);
-
   return (
     <header className={`left-0 right-0 z-50 transition-colors duration-300 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-20 md:top-10' : 'top-0'} ${hasScrolled && !isHomePage ? 'bg-white shadow-lg' : ''}`}>
       <div className="container mx-auto px-4 py-4 relative">
@@ -80,7 +77,7 @@ export default function Header({ global, lang, availableLocales }: { global?: an
           </button>
 
           <nav className="hidden md:flex space-x-8">
-            {global.menu.find((menu: any) => menu.name === "main")?.item.map((item: any) => (
+            {global?.menu.find((menu: Menu) => menu.name === "main")?.item.map((item: MenuItem) => (
               <Link
                 key={item.id}
                 href={item.href.startsWith('/') ? item.href : `/${item.href}`}
@@ -108,10 +105,10 @@ export default function Header({ global, lang, availableLocales }: { global?: an
               }`}
           >
             <nav className="flex flex-col items-center justify-center h-full space-y-8">
-              <Link href="/" className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
-                Accueil
+              <Link href={lang === 'fr' ? '/' : `/${lang}`} className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
+                {lang === 'de' ? 'Startseite' : lang === 'en' ? 'Home' : 'Accueil'}
               </Link>
-              {global.menu.find((menu: any) => menu.name === "main")?.item.map((item: any) => (
+              {global?.menu.find((menu: Menu) => menu.name === "main")?.item.map((item: MenuItem) => (
                 <Link
                   key={item.id}
                   href={item.href.startsWith('/') ? item.href : `/${item.href}`}

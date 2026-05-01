@@ -13,7 +13,7 @@ if (typeof window !== 'undefined') {
 // Check if we're in a testing environment
 const isTestEnvironment = () => {
   if (typeof window === 'undefined') return false;
-  return !!(window as any).Cypress || process.env.NODE_ENV === 'test';
+  return !!(window as unknown as { Cypress?: boolean }).Cypress || process.env.NODE_ENV === 'test';
 };
 
 export interface TextRevealOptions {
@@ -44,12 +44,12 @@ export const useTextReveal = (
   options: TextRevealOptions = {}
 ) => {
   const {
-    duration = 0.8,
+    duration = 0.4,
     delay = 0,
-    stagger = 0.02,
+    stagger = 0.01,
     ease = 'power2.out',
     trigger,
-    start = 'top 80%',
+    start = 'top 90%',
     end = 'bottom 20%',
     splitType = 'words',
     animationType = 'slideUp'
@@ -116,12 +116,12 @@ export const useLineReveal = (
   options: TextRevealOptions = {}
 ) => {
   const {
-    duration = 0.8,
+    duration = 0.4,
     delay = 0,
-    stagger = 0.02,
+    stagger = 0.01,
     ease = 'power2.out',
     trigger,
-    start = 'top 80%',
+    start = 'top 90%',
     end = 'bottom 20%',
     animationType = 'slideUp'
   } = options;
@@ -167,11 +167,11 @@ export const useImageReveal = (
   options: ImageRevealOptions = {}
 ) => {
   const {
-    duration = 1,
+    duration = 0.5,
     delay = 0,
     ease = 'power2.out',
     trigger,
-    start = 'top 80%',
+    start = 'top 90%',
     end = 'bottom 20%',
     animationType = 'slideUp',
     direction = 'up'
@@ -246,13 +246,13 @@ export const useParallax = (
 const getInitialState = (animationType: string) => {
   switch (animationType) {
     case 'slideUp':
-      return { y: 50, opacity: 0 };
+      return { y: 20, opacity: 0 };
     case 'fadeIn':
       return { opacity: 0 };
     case 'scaleIn':
-      return { scale: 0.8, opacity: 0 };
+      return { scale: 0.9, opacity: 0 };
     default:
-      return { y: 50, opacity: 0 };
+      return { y: 20, opacity: 0 };
   }
 };
 

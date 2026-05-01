@@ -1,12 +1,11 @@
-import { Wedding } from '@/types/wedding';
 import BlockRenderer from '@/components/blocks/BlockRenderer';
 import { supportedLanguages } from '@/config/language';
 import PageContent from '@/components/layout/PageContent';
-import { fetchWeddings } from '@/services/weddings/weddingService';
+import { fetchProfessionnels } from '@/services/professionnels/professionnelService';
 import { fetchAvailableLocales, fetchGlobal } from '@/services/globals/globalsServices';
 import { NextSeo } from 'next-seo';
 import { getLocalizedPath } from '@/lib/i18n';
-import { StrapiGlobal } from '@/types';
+import { StrapiPageData, StrapiGlobal } from '@/types';
 
 export const getStaticPaths = async () => {
   return {
@@ -17,19 +16,19 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: { params: { lang: string } }) => {
   const locale = params.lang;
-  const [weddingRes, globalRes, availableLocales] = await Promise.all([
-    fetchWeddings({ locale }),
+  const [professionnelsRes, globalRes, availableLocales] = await Promise.all([
+    fetchProfessionnels({ locale }),
     fetchGlobal({ locale }),
     fetchAvailableLocales(),
   ]);
 
-  if (!weddingRes.data || !globalRes.data || !globalRes.data.logo_extensed) {
+  if (!professionnelsRes.data || !globalRes.data || !globalRes.data.logo_extensed) {
     return { notFound: true };
   }
 
   return {
     props: {
-      wedding: weddingRes.data,
+      professionnels: professionnelsRes.data,
       global: globalRes.data,
       lang: locale,
       availableLocales,
@@ -38,28 +37,27 @@ export const getStaticProps = async ({ params }: { params: { lang: string } }) =
   };
 };
 
-export default function Mariage({
-  wedding,
+export default function Professionnels({
+  professionnels,
   global,
   lang,
   availableLocales,
 }: {
-  wedding: Wedding;
+  professionnels: StrapiPageData;
   global?: StrapiGlobal;
   lang: string;
   availableLocales: string[];
 }) {
-  const renderedBlocks = BlockRenderer({ blocks: wedding.blocks });
-  const weddingData = wedding as Wedding & { seo?: { metaTitle?: string; metaDescription?: string } };
+  const renderedBlocks = BlockRenderer({ blocks: professionnels.blocks });
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr";
 
   return (
     <>
       <NextSeo
-        title={weddingData.seo?.metaTitle || "Mariage"}
-        description={weddingData.seo?.metaDescription || ""}
-        canonical={`${siteUrl}${getLocalizedPath("mariage", lang)}`}
+        title={professionnels.seo?.metaTitle || "Professionnels"}
+        description={professionnels.seo?.metaDescription || ""}
+        canonical={`${siteUrl}${getLocalizedPath("professionnels", lang)}`}
       />
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
