@@ -10,6 +10,9 @@ export async function fetchGlobal({ locale = 'en' }: { locale?: string } = { loc
 	return res.json();
 }
 
+// Only these locales are offered on the site (Italian/German removed).
+const ALLOWED_LOCALES = ['fr', 'en'];
+
 export async function fetchAvailableLocales() {
   try {
     const response = await fetch(`${getStrapiURL()}/i18n/locales`);
@@ -17,10 +20,12 @@ export async function fetchAvailableLocales() {
       throw new Error('Failed to fetch available locales');
     }
     const data = await response.json();
-    return data.map((locale: { code: string }) => locale.code);
+    return data
+      .map((locale: { code: string }) => locale.code)
+      .filter((code: string) => ALLOWED_LOCALES.includes(code));
   } catch (error) {
     console.error('Error fetching locales:', error);
     // Retourne les locales par défaut en cas d'erreur
-    return ['fr', 'en', 'es'];
+    return ALLOWED_LOCALES;
   }
 }

@@ -3,6 +3,7 @@ import { supportedLanguages } from "@/config/language";
 import PageContent from "@/components/layout/PageContent";
 import { fetchAbout } from "@/services/about/aboutService";
 import { fetchAvailableLocales, fetchGlobal } from "@/services/globals/globalsServices";
+import ContactCta from "@/components/elements/ContactCta/ContactCta";
 import { NextSeo } from "next-seo";
 import { getLocalizedPath } from "@/lib/i18n";
 import { StrapiPageData, StrapiGlobal } from "@/types";
@@ -62,6 +63,7 @@ export default function About({
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
         {renderedBlocks.otherBlocks}
+        <ContactCta lang={lang} />
       </PageContent>
     </>
   );

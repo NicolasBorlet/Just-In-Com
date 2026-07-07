@@ -34,7 +34,7 @@ export default function WeddingSection({ block }: WeddingSectionBlockProps) {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="group relative w-full overflow-hidden rounded-2xl cursor-pointer"
+        className="group relative block w-full max-w-3xl mx-auto overflow-hidden rounded-2xl cursor-pointer"
       >
         <Image
           src={getFullUrl(block.miniature.url)}

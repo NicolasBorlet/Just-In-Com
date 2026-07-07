@@ -5,14 +5,15 @@ import { z } from "zod";
 import { getStrapiURL } from "@/utils/get-strapi-url";
 
 const contactFormSchema = z.object({
-    reason: z.enum(["contact", "recrutement", "autre"]),
+    reason: z.enum(["mariage", "prive", "professionnel", "autre"]),
     lastName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
     firstName: z.string().min(2, "Le prénom doit contenir au moins 2 caractères"),
     email: z.email("Veuillez entrer une adresse email valide"),
     phone: z.string()
         .min(10, "Le numéro de téléphone doit contenir au moins 10 caractères")
         .regex(/^[0-9]+$/, "Le numéro de téléphone doit contenir uniquement des chiffres"),
-    prestation: z.enum(["prestation1", "prestation2", "prestation3"]),
+    date: z.string().optional(),
+    lieu: z.string().optional(),
     message: z.string().min(10, "Le message doit contenir au moins 10 caractères"),
 });
 
@@ -77,10 +78,12 @@ export default function ContactForm() {
                     <select
                         {...register("reason")}
                         id="reason"
+                        defaultValue="mariage"
                         className={styles.field}
                     >
-                        <option value="contact">Contact</option>
-                        <option value="recrutement">Recrutement</option>
+                        <option value="mariage">Mariage</option>
+                        <option value="prive">Événement privé</option>
+                        <option value="professionnel">Professionnel</option>
                         <option value="autre">Autre</option>
                     </select>
                     {errors.reason && (
@@ -142,19 +145,33 @@ export default function ContactForm() {
                     )}
                 </div>
 
-                <div className="flex flex-col gap-2">
-                    <select
-                        {...register("prestation")}
-                        id="prestation"
-                        className={styles.field}
-                    >
-                        <option value="prestation1">Prestation 1</option>
-                        <option value="prestation2">Prestation 2</option>
-                        <option value="prestation3">Prestation 3</option>
-                    </select>
-                    {errors.prestation && (
-                        <span className="text-sm text-red-500">{errors.prestation.message}</span>
-                    )}
+                <div className="flex gap-4 md:flex-row flex-col">
+                    <div className="flex flex-col gap-2 flex-1">
+                        <label htmlFor="date" className="text-sm text-[#3B1621]/70">Date de l&apos;événement</label>
+                        <input
+                            {...register("date")}
+                            type="date"
+                            id="date"
+                            className={styles.field}
+                        />
+                        {errors.date && (
+                            <span className="text-sm text-red-500">{errors.date.message}</span>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col gap-2 flex-1">
+                        <label htmlFor="lieu" className="text-sm text-[#3B1621]/70">Lieu de l&apos;événement</label>
+                        <input
+                            {...register("lieu")}
+                            type="text"
+                            id="lieu"
+                            placeholder="Ville, domaine, salle..."
+                            className={styles.field}
+                        />
+                        {errors.lieu && (
+                            <span className="text-sm text-red-500">{errors.lieu.message}</span>
+                        )}
+                    </div>
                 </div>
 
                 <div className="flex flex-col gap-2">

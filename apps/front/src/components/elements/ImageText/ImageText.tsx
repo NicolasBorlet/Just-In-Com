@@ -137,7 +137,7 @@ export default function ImageText({ block }: { block: ImageTextType }) {
         return (
             <div className={`flex flex-col ${block.reversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8`}>
                 {textBlock}
-                <div className="lg:w-[60%] lg:shrink-0">
+                <div className="lg:w-[50%] lg:shrink-0">
                     <VideoMedia src={mediaUrl} />
                 </div>
             </div>

@@ -6,6 +6,5 @@ module.exports = {
   alternateRefs: [
     { href: 'https://justincom.fr', hreflang: 'fr' },
     { href: 'https://justincom.fr/en', hreflang: 'en' },
-    { href: 'https://justincom.fr/de', hreflang: 'de' },
   ],
 };

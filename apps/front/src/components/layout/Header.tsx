@@ -38,28 +38,33 @@ export default function Header({ global, lang, availableLocales }: { global?: St
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // `compact` = small horizontal bar (internal pages, or homepage once scrolled).
+  // `solid` = white background + dark text (any page once scrolled).
+  const compact = !isHomePage || hasScrolled;
+  const solid = hasScrolled;
+
   // safe fallbacks when `global` isn't passed
   const logoExtImage = global?.logo_extensed?.image;
   const logoImage = global?.logo?.image;
-  const logoUrl = (isHomePage ? logoExtImage?.url : logoImage?.url) || logoImage?.url || '/favicon.ico';
-  const logoAlt = (isHomePage ? logoExtImage?.alternativeText : logoImage?.alternativeText) || global?.logo_extensed?.logoText || global?.logo?.logoText || 'Logo';
+  const logoUrl = (compact ? logoImage?.url : logoExtImage?.url) || logoImage?.url || '/favicon.ico';
+  const logoAlt = (compact ? logoImage?.alternativeText : logoExtImage?.alternativeText) || global?.logo_extensed?.logoText || global?.logo?.logoText || 'Logo';
 
   return (
-    <header className={`left-0 right-0 z-50 transition-colors duration-300 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-20 md:top-10' : 'top-0'} ${hasScrolled && !isHomePage ? 'bg-white shadow-lg' : ''}`}>
+    <header className={`left-0 right-0 z-50 transition-all duration-300 ${isHomePage && !hasScrolled ? 'absolute top-20 md:top-10' : 'fixed top-0'} ${solid ? 'bg-white shadow-lg' : ''}`}>
       <div className="container mx-auto px-4 py-4 relative">
-        <div className={`flex items-center gap-8 ${isHomePage ? 'flex-col' : 'flex-row'} ${isHomePage ? 'justify-center' : 'justify-between'}`}>
+        <div className={`flex items-center gap-8 ${compact ? 'flex-row justify-between' : 'flex-col justify-center'}`}>
           <Link href="/" className="flex items-center">
-            <div className={`${isHomePage ? "h-40 md:h-48 w-auto" : "h-12 w-auto"} relative`}>
+            <div className={`${compact ? "h-12 w-auto" : "h-40 md:h-48 w-auto"} relative`}>
               <Image
                 src={`${logoUrl}`}
                 alt={logoAlt}
-                width={isHomePage ? 300 : 100}
-                height={isHomePage ? 300 : 100}
-                className={isHomePage ? "h-40 md:h-48 w-auto" : `h-12 w-auto ${hasScrolled ? 'invert' : ''}`}
-                priority={isHomePage}
+                width={compact ? 100 : 300}
+                height={compact ? 100 : 300}
+                className={compact ? `h-12 w-auto ${solid ? 'invert' : ''}` : "h-40 md:h-48 w-auto"}
+                priority={!compact}
                 placeholder="blur"
                 blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                sizes={isHomePage ? "300px" : "100px"}
+                sizes={compact ? "100px" : "300px"}
               />
             </div>
           </Link>
@@ -70,9 +75,9 @@ export default function Header({ global, lang, availableLocales }: { global?: St
             aria-label="Toggle menu"
           >
             <div className="w-6 h-5 relative flex flex-col justify-between">
-              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen && !isHomePage ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? 'rotate-45 translate-y-[9px]' : ''}`} />
-              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen && !isHomePage ? 'bg-black' : 'bg-white'} transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
-              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen && !isHomePage ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? '-rotate-45 -translate-y-[9px]' : ''}`} />
+              <span className={`w-full h-0.5 ${solid && !isMenuOpen ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? 'rotate-45 translate-y-[9px]' : ''}`} />
+              <span className={`w-full h-0.5 ${solid && !isMenuOpen ? 'bg-black' : 'bg-white'} transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-full h-0.5 ${solid && !isMenuOpen ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? '-rotate-45 -translate-y-[9px]' : ''}`} />
             </div>
           </button>
 
@@ -81,19 +86,19 @@ export default function Header({ global, lang, availableLocales }: { global?: St
               <Link
                 key={item.id}
                 href={item.href.startsWith('/') ? item.href : `/${item.href}`}
-                className={`text-xl uppercase transition-colors duration-300 ${hasScrolled && !isHomePage ? 'text-black' : 'text-white'}`}
+                className={`text-xl uppercase transition-colors duration-300 ${solid ? 'text-black' : 'text-white'}`}
               >
                 {item.text}
               </Link>
             ))}
           </nav>
 
-          <div className={`hidden md:flex items-center space-x-2 ${isHomePage ? 'absolute right-0 top-0' : ''}`}>
+          <div className={`hidden md:flex items-center space-x-2 ${!compact ? 'absolute right-0 top-0' : ''}`}>
             {availableLocales.map((locale) => (
               <button
                 key={locale}
                 onClick={() => handleLanguageChange(locale)}
-                className={`px-3 py-1 rounded transition-colors duration-300 ${currentLocale === locale ? 'bg-black text-white' : hasScrolled ? 'text-black' : 'text-white'} cursor-pointer`}
+                className={`px-3 py-1 rounded transition-colors duration-300 ${currentLocale === locale ? 'bg-black text-white' : solid ? 'text-black' : 'text-white'} cursor-pointer`}
               >
                 {locale.toUpperCase()}
               </button>
@@ -106,7 +111,7 @@ export default function Header({ global, lang, availableLocales }: { global?: St
           >
             <nav className="flex flex-col items-center justify-center h-full space-y-8">
               <Link href={lang === 'fr' ? '/' : `/${lang}`} className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
-                {lang === 'de' ? 'Startseite' : lang === 'en' ? 'Home' : 'Accueil'}
+                {lang === 'en' ? 'Home' : 'Accueil'}
               </Link>
               {global?.menu.find((menu: Menu) => menu.name === "main")?.item.map((item: MenuItem) => (
                 <Link

@@ -8,6 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getFullUrl } from "@/utils/get-strapi-url";
 import { getLocalizedPath } from "@/lib/i18n";
+import ContactCta from "@/components/elements/ContactCta/ContactCta";
 import { NextSeo } from "next-seo";
 import { StrapiPageData, StrapiGlobal, StrapiArticle } from "@/types";
 
@@ -69,44 +70,50 @@ export default function Blog({
       />
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articles?.map((article: StrapiArticle, index: number) => {
-            const isEven = (index + 1) % 2 === 0;
-            const imageHeight = isEven ? 600 : 400;
-            const coverUrl = article.cover ? getFullUrl(article.cover.url) : null;
+        <div className="flex flex-col gap-16 md:gap-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
+            {articles?.map((article: StrapiArticle) => {
+              const coverUrl = article.cover ? getFullUrl(article.cover.url) : null;
 
-            return (
-              <Link
-                key={article.id}
-                href={getLocalizedPath(`blog/${article.slug}`, lang)}
-                className="flex flex-col gap-8 hover:opacity-90 transition-opacity duration-300 items-center"
-              >
-                {coverUrl && (
-                  <Image
-                    src={coverUrl}
-                    alt={article.title}
-                    className="w-full object-cover"
-                    width={700}
-                    height={imageHeight}
-                    style={{ height: `${imageHeight}px` }}
-                  />
-                )}
-                <div className="flex flex-col gap-8">
-                  <p className="text-sm font-medium text-gray-600">
-                    {new Date(article.publishedAt || article.createdAt).toLocaleDateString(lang === 'fr' ? 'fr-FR' : lang === 'de' ? 'de-DE' : 'en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </p>
-                  <h3 className="text-xl font-medium self-center">{article.title}</h3>
-                  <span className="text-lg font-normal self-center">
-                    {lang === 'fr' ? 'Lire plus' : lang === 'de' ? 'Mehr lesen' : 'Read more'}
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
+              return (
+                <Link
+                  key={article.id}
+                  href={getLocalizedPath(`blog/${article.slug}`, lang)}
+                  className="group flex flex-col gap-5"
+                >
+                  {coverUrl && (
+                    <div className="overflow-hidden rounded-2xl aspect-[4/5]">
+                      <Image
+                        src={coverUrl}
+                        alt={article.title}
+                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        width={700}
+                        height={875}
+                      />
+                    </div>
+                  )}
+                  <div className="flex flex-col gap-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#A33E5E]">
+                      {new Date(article.publishedAt || article.createdAt).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </p>
+                    <h3 className="text-2xl font-special text-[#431927] leading-tight group-hover:text-[#A33E5E] transition-colors duration-300">
+                      {article.title}
+                    </h3>
+                    <span className="inline-flex items-center gap-2 text-[#A33E5E] font-semibold">
+                      {lang === 'fr' ? 'Lire l’article' : 'Read the article'}
+                      <span className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
+          <ContactCta lang={lang} />
         </div>
       </PageContent>
     </>
