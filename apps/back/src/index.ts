@@ -16,5 +16,28 @@ export default {
    * This gives you an opportunity to set up your data model,
    * run jobs, or perform some special logic.
    */
-  bootstrap(/* { strapi }: { strapi: Core.Strapi } */) {},
+  async bootstrap({ strapi }: { strapi: any }) {
+    // Allow anonymous visitors to submit the contact form (create only).
+    try {
+      const publicRole = await strapi
+        .query('plugin::users-permissions.role')
+        .findOne({ where: { type: 'public' } });
+
+      if (!publicRole) return;
+
+      const action = 'api::contact-message.contact-message.create';
+      const existing = await strapi
+        .query('plugin::users-permissions.permission')
+        .findOne({ where: { action, role: publicRole.id } });
+
+      if (!existing) {
+        await strapi
+          .query('plugin::users-permissions.permission')
+          .create({ data: { action, role: publicRole.id } });
+        strapi.log.info(`[bootstrap] Granted public permission: ${action}`);
+      }
+    } catch (err) {
+      strapi.log.error(`[bootstrap] Unable to set contact-message permission: ${err}`);
+    }
+  },
 };

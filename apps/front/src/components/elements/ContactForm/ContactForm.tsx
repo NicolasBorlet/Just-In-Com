@@ -45,14 +45,23 @@ export default function ContactForm() {
                 action: 'submit_contact_form'
             });
 
-            const response = await fetch(`${getStrapiURL()}/api/contacts`, {
+            const response = await fetch(`${getStrapiURL()}/contact-messages`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    ...data,
-                    recaptchaToken: token
+                    data: {
+                        reason: data.reason,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        email: data.email,
+                        phone: data.phone,
+                        eventDate: data.date || undefined,
+                        location: data.lieu || undefined,
+                        message: data.message,
+                    },
+                    recaptchaToken: token,
                 }),
             });
 
