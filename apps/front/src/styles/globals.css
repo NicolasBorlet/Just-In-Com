@@ -19,6 +19,7 @@ body {
   background: var(--background);
   font-family: var(--font-baloo), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-display: swap;
+  overflow-x: hidden;
 }
 
 @theme inline {

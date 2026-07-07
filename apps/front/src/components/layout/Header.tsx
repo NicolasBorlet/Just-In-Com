@@ -49,13 +49,13 @@ export default function Header({ global, lang, availableLocales }: { global?: St
       <div className="container mx-auto px-4 py-4 relative">
         <div className={`flex items-center gap-8 ${isHomePage ? 'flex-col' : 'flex-row'} ${isHomePage ? 'justify-center' : 'justify-between'}`}>
           <Link href="/" className="flex items-center">
-            <div className={`${isHomePage ? "h-60 w-auto" : "h-12 w-auto"} relative`}>
+            <div className={`${isHomePage ? "h-40 md:h-48 w-auto" : "h-12 w-auto"} relative`}>
               <Image
                 src={`${logoUrl}`}
                 alt={logoAlt}
                 width={isHomePage ? 300 : 100}
                 height={isHomePage ? 300 : 100}
-                className={isHomePage ? "h-60 w-auto" : `h-12 w-auto ${hasScrolled ? 'invert' : ''}`}
+                className={isHomePage ? "h-40 md:h-48 w-auto" : `h-12 w-auto ${hasScrolled ? 'invert' : ''}`}
                 priority={isHomePage}
                 placeholder="blur"
                 blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="

@@ -12,7 +12,7 @@ interface InstagramPost {
 // Placeholder posts until Instagram API is connected
 const placeholderPosts: InstagramPost[] = Array.from({ length: 10 }, (_, i) => ({
   id: `placeholder-${i}`,
-  media_url: `https://picsum.photos/seed/insta${i}/360/360`,
+  media_url: `https://picsum.photos/seed/insta${i}/240/240`,
   permalink: "https://www.instagram.com/justinfilm_/",
 }));
 
@@ -78,9 +78,9 @@ export default function InstagramFeed() {
             <Image
               src={post.media_url}
               alt="Instagram post"
-              width={360}
-              height={360}
-              className="w-[360px] h-[360px] object-cover"
+              width={240}
+              height={240}
+              className="w-[180px] h-[180px] md:w-[240px] md:h-[240px] object-cover"
             />
           </a>
         ))}
@@ -92,7 +92,7 @@ export default function InstagramFeed() {
           href="https://www.instagram.com/justinfilm_/"
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-white px-4 py-2 md:px-8 md:py-4 text-[24px] md:text-[48px] font-normal pointer-events-auto hover:opacity-90 transition-opacity text-[#A33E5E] rounded-[12px]"
+          className="bg-white px-3 py-1.5 md:px-5 md:py-2.5 text-[16px] md:text-[28px] font-normal pointer-events-auto hover:opacity-90 transition-opacity text-[#A33E5E] rounded-[12px]"
           style={{ fontFamily: "var(--font-baloo)" }}
         >
           @justinfilm_

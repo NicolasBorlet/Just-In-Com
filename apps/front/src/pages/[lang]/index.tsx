@@ -1,12 +1,15 @@
 import BlockRenderer from "@/components/blocks/BlockRenderer";
+import LatestArticles from "@/components/blocks/LatestArticles/LatestArticles";
+import Reviews from "@/components/blocks/Reviews/Reviews";
 import { WeddingSectionBlock } from "@/components/blocks/WeddingSection/WeddingSection.type";
 import PageContent from "@/components/layout/PageContent";
 import { supportedLanguages } from "@/config/language";
 import { getLocalizedPath } from "@/lib/i18n";
+import { fetchArticles } from "@/services/blog/articleService";
 import { fetchAvailableLocales, fetchGlobal } from "@/services/globals/globalsServices";
 import { fetchHome } from "@/services/home/homeService";
 import { fetchWeddings } from "@/services/weddings/weddingService";
-import { StrapiGlobal, StrapiPageData } from "@/types";
+import { StrapiArticle, StrapiGlobal, StrapiPageData } from "@/types";
 import { LocalBusinessJsonLd, NextSeo } from "next-seo";
 
 export const getStaticPaths = async () => {
@@ -18,11 +21,12 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: { params: { lang: string } }) => {
   const locale = params.lang;
-  const [homeRes, globalRes, availableLocales, weddingRes] = await Promise.all([
+  const [homeRes, globalRes, availableLocales, weddingRes, articlesRes] = await Promise.all([
     fetchHome({ locale }),
     fetchGlobal({ locale }),
     fetchAvailableLocales(),
     fetchWeddings({ locale }),
+    fetchArticles({ locale }),
   ]);
   if (!homeRes.data || !globalRes.data || !globalRes.data.logo_extensed) {
     return { notFound: true };
@@ -39,6 +43,7 @@ export const getStaticProps = async ({ params }: { params: { lang: string } }) =
       lang: locale,
       availableLocales,
       weddingBlocks,
+      articles: articlesRes.data ?? [],
     },
     revalidate: 3600,
   };
@@ -49,13 +54,14 @@ export default function Home({
   global,
   lang,
   availableLocales,
-  weddingBlocks,
+  articles,
 }: {
   home: StrapiPageData;
   global?: StrapiGlobal;
   lang: string;
   availableLocales: string[];
   weddingBlocks: WeddingSectionBlock[];
+  articles: StrapiArticle[];
 }) {
   const renderedBlocks = BlockRenderer({ blocks: home.blocks });
 
@@ -78,8 +84,11 @@ export default function Home({
         address={{ streetAddress: "", addressLocality: "", addressRegion: "", postalCode: "", addressCountry: "FR" }}
       />
       {renderedBlocks.heroSection}
+      {/* Order: Mariage / Professionnels / Qui suis-je (CMS blocks) → Derniers articles → Avis → Instagram (footer) */}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
         {renderedBlocks.otherBlocks}
+        <LatestArticles articles={articles} lang={lang} />
+        <Reviews lang={lang} />
       </PageContent>
     </>
   );
