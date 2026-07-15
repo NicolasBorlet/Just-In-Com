@@ -207,6 +207,11 @@ docker run --rm \
 
 ## 7. Notes / évolutions
 
+- **Erreur `db.config.connection` undefined** : sur un projet Strapi TypeScript,
+  l'image Docker doit embarquer `tsconfig.json` **et** `src/` (en plus de
+  `dist/` et `config/`). Sinon Strapi ne détecte pas le projet comme TS, ignore
+  `config/database.ts`, et plante au boot. C'est déjà géré dans
+  `apps/back/Dockerfile`.
 - **SQLite** convient à un site vitrine à faible trafic. Si le volume de
   contenu/rédacteurs grandit, on pourra passer à **PostgreSQL** (la config
   `apps/back/config/database.ts` le supporte déjà : il suffira d'ajouter un

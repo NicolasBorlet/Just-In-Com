@@ -26,11 +26,14 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/config ./config
 COPY --from=builder /app/database ./database
-COPY --from=builder --chown=node:node /app/public ./public
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/src ./src
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
+COPY --from=builder /app/favicon.png ./favicon.png
 
 # Prépare les points de montage des volumes (DB SQLite + médias uploadés)
 # et les rend accessibles à l'utilisateur non-root `node`.
-RUN mkdir -p .tmp public/uploads && chown -R node:node .tmp public/uploads
+RUN mkdir -p .tmp public/uploads && chown -R node:node .tmp public/uploads public
 
 ENV NODE_ENV=production
 
