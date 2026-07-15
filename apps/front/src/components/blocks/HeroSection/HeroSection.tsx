@@ -1,19 +1,15 @@
-import { useEffect, useState } from 'react';
 import { HeroSectionProps } from "./HereSection.type";
 import { getFullUrl } from "@/utils/get-strapi-url";
 
-export default function HeroSection({ block }: HeroSectionProps) {
+export default function HeroSection({ block, isHome = false }: HeroSectionProps) {
   const videoUrl = getFullUrl(block.video?.url);
   const webmUrl = videoUrl ? videoUrl.replace(/\.mp4(\?.*)?$/i, v => v.replace('.mp4', '.webm')) : "";
+  const posterUrl = block.poster?.url ? getFullUrl(block.poster.url) : undefined;
 
-  // Avoid SSR/client mismatch: don't rely on `window` during render.
-  // Only decide to show the heading on the client after mount.
-  const [showHeading, setShowHeading] = useState(false);
-
-  useEffect(() => {
-    const isHome = window.location.pathname === '/' || /^\/[a-z]{2}$/.test(window.location.pathname);
-    setShowHeading(!!block?.heading && !isHome);
-  }, [block?.heading]);
+  // The heading is rendered as the page H1 (server-side) on inner pages.
+  // The home page keeps a clean visual (logo only) and provides its own
+  // visually-hidden H1, so we don't render a heading here in that case.
+  const showHeading = !!block?.heading && !isHome;
 
   return (
     <div className="relative h-screen w-full mb-24">
@@ -27,6 +23,7 @@ export default function HeroSection({ block }: HeroSectionProps) {
         controlsList="nodownload nofullscreen noremoteplayback"
         className="absolute inset-0 h-full w-full object-cover pointer-events-none"
         preload="none"
+        poster={posterUrl}
       >
         {videoUrl && <source src={videoUrl} type="video/mp4" />}
         {webmUrl && <source src={webmUrl} type="video/webm" />}

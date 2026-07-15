@@ -4,7 +4,7 @@ import PageContent from '@/components/layout/PageContent';
 import { fetchProfessionnels } from '@/services/professionnels/professionnelService';
 import { fetchAvailableLocales, fetchGlobal } from '@/services/globals/globalsServices';
 import { NextSeo } from 'next-seo';
-import { getLocalizedPath } from '@/lib/i18n';
+import { buildSeo } from '@/lib/seo';
 import { StrapiPageData, StrapiGlobal } from '@/types';
 
 export const getStaticPaths = async () => {
@@ -50,14 +50,16 @@ export default function Professionnels({
 }) {
   const renderedBlocks = BlockRenderer({ blocks: professionnels.blocks });
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr";
-
   return (
     <>
       <NextSeo
-        title={professionnels.seo?.metaTitle || "Professionnels"}
-        description={professionnels.seo?.metaDescription || ""}
-        canonical={`${siteUrl}${getLocalizedPath("professionnels", lang)}`}
+        {...buildSeo({
+          seo: professionnels.seo,
+          lang,
+          basePath: "professionnels",
+          fallbackTitle: "Professionnels",
+          fallbackDescription: professionnels.description,
+        })}
       />
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>

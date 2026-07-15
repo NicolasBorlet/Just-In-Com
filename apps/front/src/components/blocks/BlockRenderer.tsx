@@ -15,7 +15,7 @@ interface BlockRendererResult {
   otherBlocks: ReactNode[];
 }
 
-const BlockRenderer = ({ blocks }: BlockRendererProps): BlockRendererResult => {
+const BlockRenderer = ({ blocks, isHome = false }: BlockRendererProps): BlockRendererResult => {
   const result: BlockRendererResult = {
     heroSection: null,
     otherBlocks: []
@@ -26,7 +26,7 @@ const BlockRenderer = ({ blocks }: BlockRendererProps): BlockRendererResult => {
 
     switch (block.__component) {
       case 'blocks.hero-section':
-        result.heroSection = <HeroSection key={key} block={block} />;
+        result.heroSection = <HeroSection key={key} block={block} isHome={isHome} />;
         break;
       case 'blocks.wedding-block':
         result.otherBlocks.push(<WeddingSection key={key} block={block} />);

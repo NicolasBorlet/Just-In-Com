@@ -5,7 +5,7 @@ import { fetchContact } from '@/services/contact/contactService';
 import { fetchAvailableLocales, fetchGlobal } from '@/services/globals/globalsServices';
 import ContactForm from '@/components/elements/ContactForm/ContactForm';
 import { NextSeo } from 'next-seo';
-import { getLocalizedPath } from '@/lib/i18n';
+import { buildSeo } from '@/lib/seo';
 import { StrapiPageData, StrapiGlobal } from '@/types';
 
 export const getStaticPaths = async () => {
@@ -51,14 +51,16 @@ export default function Contact({
 }) {
   const renderedBlocks = BlockRenderer({ blocks: contact.blocks });
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr";
-
   return (
     <>
       <NextSeo
-        title={contact.seo?.metaTitle || "Contact"}
-        description={contact.seo?.metaDescription || ""}
-        canonical={`${siteUrl}${getLocalizedPath("contact", lang)}`}
+        {...buildSeo({
+          seo: contact.seo,
+          lang,
+          basePath: "contact",
+          fallbackTitle: "Contact",
+          fallbackDescription: contact.description,
+        })}
       />
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>

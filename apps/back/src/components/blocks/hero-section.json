@@ -13,6 +13,13 @@
       "type": "media",
       "multiple": false
     },
+    "poster": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    },
     "heading": {
       "type": "string"
     }

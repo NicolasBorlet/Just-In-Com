@@ -23,10 +23,10 @@ export function getLocalizedPath(path: string, locale: string): string {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
 
   if (locale === 'fr') {
-    return `/${cleanPath}`;
+    return cleanPath ? `/${cleanPath}` : '/';
   }
 
-  return `/${locale}/${cleanPath}`;
+  return cleanPath ? `/${locale}/${cleanPath}` : `/${locale}`;
 }
 
 export function getPathWithLocale(path: string, newLocale: string): string {

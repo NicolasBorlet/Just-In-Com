@@ -2,12 +2,13 @@ import BlockRenderer from "@/components/blocks/BlockRenderer";
 import { WeddingSectionBlock } from "@/components/blocks/WeddingSection/WeddingSection.type";
 import PageContent from "@/components/layout/PageContent";
 import { supportedLanguages } from "@/config/language";
-import { getLocalizedPath } from "@/lib/i18n";
 import { fetchAvailableLocales, fetchGlobal } from "@/services/globals/globalsServices";
 import { fetchHome } from "@/services/home/homeService";
 import { fetchWeddings } from "@/services/weddings/weddingService";
 import { StrapiGlobal, StrapiPageData } from "@/types";
 import { LocalBusinessJsonLd, NextSeo } from "next-seo";
+import { buildSeo, SITE_URL } from "@/lib/seo";
+import { getFullUrl } from "@/utils/get-strapi-url";
 
 export const getStaticPaths = async () => {
   return {
@@ -57,26 +58,53 @@ export default function Home({
   availableLocales: string[];
   weddingBlocks: WeddingSectionBlock[];
 }) {
-  const renderedBlocks = BlockRenderer({ blocks: home.blocks });
+  const renderedBlocks = BlockRenderer({ blocks: home.blocks, isHome: true });
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr";
+  const businessName = global?.siteName || "Just in Com";
+  const description =
+    home.seo?.metaDescription ||
+    "Organisation de mariages et d'événements professionnels";
+  const logoUrl = global?.logo_extensed?.image?.url
+    ? getFullUrl(global.logo_extensed.image.url)
+    : global?.logo?.image?.url
+    ? getFullUrl(global.logo.image.url)
+    : undefined;
+  const sameAs = (global?.social_links ?? [])
+    .map((link) => link.href)
+    .filter((href): href is string => Boolean(href && href.startsWith("http")));
+  const h1Title = home.seo?.metaTitle || home.title || businessName;
 
   return (
     <>
       <NextSeo
-        title={home.seo?.metaTitle || "Accueil"}
-        description={home.seo?.metaDescription || ""}
-        canonical={`${siteUrl}${getLocalizedPath("", lang)}`}
+        {...buildSeo({
+          seo: home.seo,
+          lang,
+          basePath: "",
+          fallbackTitle: "Accueil",
+          fallbackDescription: description,
+        })}
       />
-      <LocalBusinessJsonLd
-        type="EventPlanner"
-        id={siteUrl}
-        name="Just in Com"
-        description={home.seo?.metaDescription || "Organisation de mariages et d'événements professionnels"}
-        url={siteUrl}
-        images={[]}
-        address={{ streetAddress: "", addressLocality: "", addressRegion: "", postalCode: "", addressCountry: "FR" }}
-      />
+      {global?.streetAddress && (
+        <LocalBusinessJsonLd
+          type="EventPlanner"
+          id={SITE_URL}
+          name={businessName}
+          description={description}
+          url={SITE_URL}
+          telephone={global?.phone || undefined}
+          images={logoUrl ? [logoUrl] : []}
+          sameAs={sameAs.length ? sameAs : undefined}
+          address={{
+            streetAddress: global.streetAddress,
+            addressLocality: global?.addressLocality || "",
+            addressRegion: global?.addressRegion || "",
+            postalCode: global?.postalCode || "",
+            addressCountry: global?.addressCountry || "FR",
+          }}
+        />
+      )}
+      <h1 className="sr-only">{h1Title}</h1>
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
         {renderedBlocks.otherBlocks}

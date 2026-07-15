@@ -42,6 +42,7 @@ export type Block =
 
 export interface BlockRendererProps {
   blocks: Block[];
+  isHome?: boolean;
 }
 
 export interface Media {
@@ -73,20 +74,44 @@ export interface StrapiLogo {
   logoText?: string;
 }
 
+export interface StrapiSocialLink {
+  text?: string;
+  href?: string;
+  isExternal?: boolean;
+}
+
 export interface StrapiGlobal {
   logo: StrapiLogo;
   logo_extensed: StrapiLogo;
   menu: Menu[];
+  social_links?: StrapiSocialLink[];
+  seo?: StrapiSeo;
+  siteName?: string;
+  email?: string;
+  phone?: string;
+  streetAddress?: string;
+  addressLocality?: string;
+  postalCode?: string;
+  addressRegion?: string;
+  addressCountry?: string;
 }
 
 export interface StrapiSeo {
   metaTitle?: string;
   metaDescription?: string;
+  metaImage?: StrapiImage;
+  keywords?: string;
+  metaRobots?: string;
+  canonicalURL?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  structuredData?: Record<string, unknown>;
 }
 
 export interface StrapiPageData {
   blocks: Block[];
   seo?: StrapiSeo;
+  title?: string;
   description?: string;
 }
 
@@ -96,6 +121,7 @@ export interface StrapiArticle {
   description?: string;
   slug: string;
   cover?: StrapiImage;
+  author?: string;
   publishedAt?: string;
   createdAt: string;
   updatedAt?: string;

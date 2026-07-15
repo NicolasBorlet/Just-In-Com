@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { getPathWithLocale } from "@/lib/i18n";
+import { getPathWithLocale, getLocalizedPath } from "@/lib/i18n";
 import { StrapiGlobal, Menu, MenuItem } from "@/types";
 
 export default function Header({ global, lang, availableLocales }: { global?: StrapiGlobal; lang?: string; availableLocales: string[] }) {
@@ -48,7 +48,7 @@ export default function Header({ global, lang, availableLocales }: { global?: St
     <header className={`left-0 right-0 z-50 transition-colors duration-300 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-20 md:top-10' : 'top-0'} ${hasScrolled && !isHomePage ? 'bg-white shadow-lg' : ''}`}>
       <div className="container mx-auto px-4 py-4 relative">
         <div className={`flex items-center gap-8 ${isHomePage ? 'flex-col' : 'flex-row'} ${isHomePage ? 'justify-center' : 'justify-between'}`}>
-          <Link href="/" className="flex items-center">
+          <Link href={getLocalizedPath('', currentLocale)} className="flex items-center">
             <div className={`${isHomePage ? "h-60 w-auto" : "h-12 w-auto"} relative`}>
               <Image
                 src={`${logoUrl}`}
@@ -80,7 +80,7 @@ export default function Header({ global, lang, availableLocales }: { global?: St
             {global?.menu.find((menu: Menu) => menu.name === "main")?.item.map((item: MenuItem) => (
               <Link
                 key={item.id}
-                href={item.href.startsWith('/') ? item.href : `/${item.href}`}
+                href={item.isExternal ? item.href : getLocalizedPath(item.href, currentLocale)}
                 className={`text-xl uppercase transition-colors duration-300 ${hasScrolled && !isHomePage ? 'text-black' : 'text-white'}`}
               >
                 {item.text}
@@ -105,13 +105,13 @@ export default function Header({ global, lang, availableLocales }: { global?: St
               }`}
           >
             <nav className="flex flex-col items-center justify-center h-full space-y-8">
-              <Link href={lang === 'fr' ? '/' : `/${lang}`} className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
+              <Link href={getLocalizedPath('', currentLocale)} className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
                 {lang === 'de' ? 'Startseite' : lang === 'en' ? 'Home' : 'Accueil'}
               </Link>
               {global?.menu.find((menu: Menu) => menu.name === "main")?.item.map((item: MenuItem) => (
                 <Link
                   key={item.id}
-                  href={item.href.startsWith('/') ? item.href : `/${item.href}`}
+                  href={item.isExternal ? item.href : getLocalizedPath(item.href, currentLocale)}
                   onClick={toggleMenu}
                   className="text-white text-2xl uppercase hover:text-gray-300 transition-colors"
                 >

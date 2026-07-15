@@ -1,7 +1,7 @@
 import { getStrapiURL } from '../../utils/get-strapi-url';
 
 export async function fetchArticles({ locale }: { locale: string }) {
-    const url = `${getStrapiURL()}/articles?populate=*&locale=${locale}`;
+    const url = `${getStrapiURL()}/articles?populate[cover]=true&populate[category]=true&populate[seo][populate]=metaImage&locale=${locale}`;
     const res = await fetch(url);
     if (!res.ok) {
         throw new Error('Failed to fetch article data');
@@ -10,7 +10,7 @@ export async function fetchArticles({ locale }: { locale: string }) {
 }
 
 export async function fetchArticle({ slug, locale }: { slug: string, locale: string }) {
-    const url = `${getStrapiURL()}/articles?populate=*&locale=${locale}&filters[slug][$eq]=${slug}`;
+    const url = `${getStrapiURL()}/articles?populate[cover]=true&populate[category]=true&populate[seo][populate]=metaImage&locale=${locale}&filters[slug][$eq]=${slug}`;
     const res = await fetch(url);
     if (!res.ok) {
         throw new Error('Failed to fetch article data');

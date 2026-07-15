@@ -114,7 +114,35 @@ Le fichier `.env` est ignoré par git : il ne sera jamais poussé.
 > construction* (pages en `getStaticProps`). Il faut donc démarrer Strapi
 > **d'abord**, saisir un minimum de contenu, puis builder le front.
 
-### 4.1 — Démarrer Strapi + Caddy
+### 4.0 — Pas encore de DNS ? Admin via tunnel SSH
+
+Tant que `api.…` ne pointe pas vers le VPS, Caddy/HTTPS ne peut pas
+fonctionner. Utilise la stack admin (Strapi seul, port local uniquement) :
+
+```bash
+# Sur le VPS — coupe la prod si elle tourne, puis lance l'admin
+docker compose -f docker-compose.prod.yml down
+docker compose -f docker-compose.admin.yml --env-file .env up -d --build
+```
+
+Depuis ton Mac (laisse ce terminal ouvert) :
+
+```bash
+ssh -L 1337:localhost:1337 root@IP_DU_VPS
+```
+
+Puis ouvre **http://localhost:1337/admin** (crée le compte admin, saisis le
+contenu). Les données sont dans les mêmes volumes Docker que la prod : rien n'est
+perdu au passage.
+
+Quand le DNS sera prêt, repasse en prod :
+
+```bash
+docker compose -f docker-compose.admin.yml down
+docker compose -f docker-compose.prod.yml --env-file .env up -d --build
+```
+
+### 4.1 — Démarrer Strapi + Caddy (DNS déjà en place)
 
 ```bash
 docker compose -f docker-compose.prod.yml --env-file .env up -d --build backend caddy

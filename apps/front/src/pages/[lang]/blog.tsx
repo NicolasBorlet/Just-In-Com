@@ -9,6 +9,7 @@ import Image from "next/image";
 import { getFullUrl } from "@/utils/get-strapi-url";
 import { getLocalizedPath } from "@/lib/i18n";
 import { NextSeo } from "next-seo";
+import { buildSeo } from "@/lib/seo";
 import { StrapiPageData, StrapiGlobal, StrapiArticle } from "@/types";
 
 export const getStaticPaths = async () => {
@@ -58,14 +59,16 @@ export default function Blog({
 }) {
   const renderedBlocks = BlockRenderer({ blocks: blog.blocks });
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr";
-
   return (
     <>
       <NextSeo
-        title={blog.seo?.metaTitle || "Blog"}
-        description={blog.seo?.metaDescription || ""}
-        canonical={`${siteUrl}${getLocalizedPath("blog", lang)}`}
+        {...buildSeo({
+          seo: blog.seo,
+          lang,
+          basePath: "blog",
+          fallbackTitle: "Blog",
+          fallbackDescription: blog.description,
+        })}
       />
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>

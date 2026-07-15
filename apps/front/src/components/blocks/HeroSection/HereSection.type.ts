@@ -7,7 +7,14 @@ export interface HeroSectionBlock {
     documentId: string;
     url: string;
   };
+  poster?: {
+    id: number;
+    documentId: string;
+    url: string;
+    alternativeText?: string;
+  };
 }
 export interface HeroSectionProps {
   block: HeroSectionBlock;
+  isHome?: boolean;
 }

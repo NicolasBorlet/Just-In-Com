@@ -5,7 +5,7 @@ import PageContent from '@/components/layout/PageContent';
 import { fetchWeddings } from '@/services/weddings/weddingService';
 import { fetchAvailableLocales, fetchGlobal } from '@/services/globals/globalsServices';
 import { NextSeo } from 'next-seo';
-import { getLocalizedPath } from '@/lib/i18n';
+import { buildSeo } from '@/lib/seo';
 import { StrapiGlobal } from '@/types';
 
 export const getStaticPaths = async () => {
@@ -50,16 +50,17 @@ export default function Mariage({
   availableLocales: string[];
 }) {
   const renderedBlocks = BlockRenderer({ blocks: wedding.blocks });
-  const weddingData = wedding as Wedding & { seo?: { metaTitle?: string; metaDescription?: string } };
-
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr";
+  const weddingData = wedding as Wedding & { seo?: import("@/types").StrapiSeo };
 
   return (
     <>
       <NextSeo
-        title={weddingData.seo?.metaTitle || "Mariage"}
-        description={weddingData.seo?.metaDescription || ""}
-        canonical={`${siteUrl}${getLocalizedPath("mariage", lang)}`}
+        {...buildSeo({
+          seo: weddingData.seo,
+          lang,
+          basePath: "mariage",
+          fallbackTitle: "Mariage",
+        })}
       />
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>

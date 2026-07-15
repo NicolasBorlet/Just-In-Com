@@ -4,7 +4,7 @@ import PageContent from "@/components/layout/PageContent";
 import { fetchAbout } from "@/services/about/aboutService";
 import { fetchAvailableLocales, fetchGlobal } from "@/services/globals/globalsServices";
 import { NextSeo } from "next-seo";
-import { getLocalizedPath } from "@/lib/i18n";
+import { buildSeo } from "@/lib/seo";
 import { StrapiPageData, StrapiGlobal } from "@/types";
 
 export const getStaticPaths = async () => {
@@ -50,14 +50,16 @@ export default function About({
 }) {
   const renderedBlocks = BlockRenderer({ blocks: about.blocks });
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr";
-
   return (
     <>
       <NextSeo
-        title={about.seo?.metaTitle || "A propos"}
-        description={about.seo?.metaDescription || ""}
-        canonical={`${siteUrl}${getLocalizedPath("a-propos", lang)}`}
+        {...buildSeo({
+          seo: about.seo,
+          lang,
+          basePath: "a-propos",
+          fallbackTitle: "À propos",
+          fallbackDescription: about.description,
+        })}
       />
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>

@@ -5,6 +5,7 @@ import { fetchAvailableLocales, fetchGlobal } from '@/services/globals/globalsSe
 import ArticleHeroSection from '@/components/elements/ArticleHeroSection/ArticleHeroSection';
 import { NextSeo, ArticleJsonLd } from 'next-seo';
 import { getLocalizedPath } from '@/lib/i18n';
+import { buildSeo } from '@/lib/seo';
 import { getFullUrl } from '@/utils/get-strapi-url';
 import { StrapiGlobal, StrapiArticle } from '@/types';
 
@@ -55,33 +56,32 @@ export default function Article({
 }) {
   const articleData = Array.isArray(article) ? article[0] : article;
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr";
-  const canonicalUrl = `${siteUrl}${getLocalizedPath(`blog/${articleData.slug}`, lang)}`;
+  const basePath = `blog/${articleData.slug}`;
   const coverUrl = articleData.cover ? getFullUrl(articleData.cover.url) : undefined;
+  const articleUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr"}${getLocalizedPath(basePath, lang)}`;
 
   return (
     <>
       <NextSeo
-        title={articleData.seo?.metaTitle || articleData.title}
-        description={articleData.seo?.metaDescription || articleData.description || ""}
-        canonical={canonicalUrl}
-        openGraph={{
+        {...buildSeo({
+          seo: articleData.seo,
+          lang,
+          basePath,
+          fallbackTitle: articleData.title,
+          fallbackDescription: articleData.description,
           type: "article",
-          url: canonicalUrl,
-          title: articleData.title,
-          description: articleData.description,
-          ...(coverUrl ? { images: [{ url: coverUrl, alt: articleData.title }] } : {}),
-        }}
+          imageUrl: coverUrl,
+        })}
       />
       <ArticleJsonLd
         type="BlogPosting"
-        url={canonicalUrl}
-        title={articleData.title}
+        url={articleUrl}
+        title={articleData.seo?.metaTitle || articleData.title}
         images={coverUrl ? [coverUrl] : []}
         datePublished={articleData.publishedAt || articleData.createdAt}
         dateModified={articleData.updatedAt || articleData.publishedAt}
-        authorName="Just in Com"
-        description={articleData.description || ""}
+        authorName={articleData.author || "Just in Com"}
+        description={articleData.seo?.metaDescription || articleData.description || ""}
       />
       {articleData.cover && <ArticleHeroSection cover={articleData.cover as unknown as import("@/types").Media} />}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
