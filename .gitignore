@@ -2,3 +2,9 @@ node_modules/
 .agents/
 .claude/
 skills-lock.json
+
+# Secrets / environnement de prod — ne jamais committer
+.env
+.env.*
+!.env.example
+!.env.prod.example

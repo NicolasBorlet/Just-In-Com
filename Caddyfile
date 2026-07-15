@@ -1,0 +1,23 @@
+# Reverse proxy + HTTPS automatique (Let's Encrypt).
+# Les domaines sont injectés depuis le fichier .env via docker-compose.prod.yml.
+
+# ---- Site vitrine (Next.js) ----
+{$SITE_DOMAIN} {
+	encode gzip zstd
+	reverse_proxy frontend:3000
+}
+
+# Redirection www -> apex
+www.{$SITE_DOMAIN} {
+	redir https://{$SITE_DOMAIN}{uri} permanent
+}
+
+# ---- API + admin Strapi ----
+{$API_DOMAIN} {
+	encode gzip zstd
+	# Autorise l'upload de médias volumineux dans l'admin Strapi
+	request_body {
+		max_size 256MB
+	}
+	reverse_proxy backend:1337
+}

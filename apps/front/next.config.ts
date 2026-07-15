@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
+// Hôte du Strapi self-hosté (ex: api.justincom.fr) pour autoriser next/image
+const strapiHostname = process.env.NEXT_PUBLIC_STRAPI_URL
+  ? new URL(process.env.NEXT_PUBLIC_STRAPI_URL).hostname
+  : undefined;
+
 const nextConfig: NextConfig = {
+  // Build autonome: image Docker légère qui tourne avec `node server.js`
+  output: 'standalone',
   reactStrictMode: true,
   images: {
     remotePatterns: [
@@ -8,6 +15,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'precious-cats-888e8b9726.media.strapiapp.com' },
       { protocol: 'https', hostname: 'picsum.photos' },
       ...(process.env.DOMAIN ? [{ protocol: 'https' as const, hostname: process.env.DOMAIN }] : []),
+      ...(strapiHostname ? [{ protocol: 'https' as const, hostname: strapiHostname }] : []),
     ],
   },
   async rewrites() {
