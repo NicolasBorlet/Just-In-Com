@@ -25,10 +25,12 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/config ./config
-COPY --from=builder /app/public ./public
+COPY --from=builder /app/database ./database
+COPY --from=builder --chown=node:node /app/public ./public
 
-# Create .tmp directory and set permissions
-RUN mkdir -p .tmp && chown -R node:node .tmp
+# Prépare les points de montage des volumes (DB SQLite + médias uploadés)
+# et les rend accessibles à l'utilisateur non-root `node`.
+RUN mkdir -p .tmp public/uploads && chown -R node:node .tmp public/uploads
 
 ENV NODE_ENV=production
 

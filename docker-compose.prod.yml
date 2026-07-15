@@ -1,16 +1,80 @@
-version: '3.9'
+# Stack de production pour VPS (Hostinger KVM 2).
+# Usage :  docker compose -f docker-compose.prod.yml --env-file .env up -d --build
+#
+# 3 services :
+#   - backend  : Strapi (API + admin)   -> exposé en interne sur 1337
+#   - frontend : Next.js (site)          -> exposé en interne sur 3000
+#   - caddy    : reverse proxy + HTTPS   -> seul service publié sur 80/443
 services:
   backend:
-    image: nicolasborlet2/strapi-backend:latest
-    ports:
-      - "1337:1337"
+    build:
+      context: ./apps/back
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: unless-stopped
+    env_file: .env
     environment:
       - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=1337
       - DATABASE_CLIENT=sqlite
       - DATABASE_FILENAME=.tmp/data.db
+      - IS_PROXIED=true
     volumes:
       - strapi-data:/app/.tmp
+      - strapi-uploads:/app/public/uploads
+    expose:
+      - "1337"
+    networks:
+      - web
+
+  frontend:
+    build:
+      context: ./apps/front
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_STRAPI_URL: ${NEXT_PUBLIC_STRAPI_URL}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+        DOMAIN: ${DOMAIN}
+    container_name: frontend
     restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_STRAPI_URL=${NEXT_PUBLIC_STRAPI_URL}
+      - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
+    depends_on:
+      - backend
+    expose:
+      - "3000"
+    networks:
+      - web
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - SITE_DOMAIN=${DOMAIN}
+      - API_DOMAIN=${API_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge
 
 volumes:
   strapi-data:
+  strapi-uploads:
+  caddy-data:
+  caddy-config:
