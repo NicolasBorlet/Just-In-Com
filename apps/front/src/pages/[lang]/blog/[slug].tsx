@@ -1,4 +1,4 @@
-import { supportedLanguages } from '@/config/language';
+import { getBuildLocales } from '@/config/language';
 import PageContent from '@/components/layout/PageContent';
 import { fetchArticle, fetchArticles } from '@/services/blog/articleService';
 import { fetchAvailableLocales, fetchGlobal } from '@/services/globals/globalsServices';
@@ -11,9 +11,10 @@ import { StrapiGlobal, StrapiArticle } from '@/types';
 
 export const getStaticPaths = async () => {
   const paths = [];
-  for (const lang of supportedLanguages) {
+  const langs = await getBuildLocales();
+  for (const lang of langs) {
     const articlesRes = await fetchArticles({ locale: lang });
-    for (const article of articlesRes.data) {
+    for (const article of articlesRes.data ?? []) {
       paths.push({ params: { lang, slug: (article as unknown as StrapiArticle).slug } });
     }
   }

@@ -1,5 +1,5 @@
 import BlockRenderer from "@/components/blocks/BlockRenderer";
-import { supportedLanguages } from "@/config/language";
+import { getBuildLocales } from "@/config/language";
 import PageContent from "@/components/layout/PageContent";
 import { fetchAbout } from "@/services/about/aboutService";
 import { fetchAvailableLocales, fetchGlobal } from "@/services/globals/globalsServices";
@@ -8,8 +8,9 @@ import { buildSeo } from "@/lib/seo";
 import { StrapiPageData, StrapiGlobal } from "@/types";
 
 export const getStaticPaths = async () => {
+  const langs = await getBuildLocales();
   return {
-    paths: supportedLanguages.map((lang) => ({ params: { lang } })),
+    paths: langs.map((lang) => ({ params: { lang } })),
     fallback: 'blocking',
   };
 };
