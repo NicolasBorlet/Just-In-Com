@@ -16,8 +16,6 @@ interface MediaBlockProps {
 }
 
 export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false, enableHoverEffects = false, noRadius = false, smallHeight = false, onClick }: MediaBlockProps) {
-    const strapiUrl = getFullUrl();
-
     // Handle both direct media blocks and gallery media items
     const mediaData = block.media || (block as unknown as { media?: MediaBlockType["media"] }).media;
     if (!mediaData) {
@@ -32,7 +30,7 @@ export default function MediaBlock({ block, alt, width = 600, height = 600, prio
         return null;
     }
 
-    const mediaUrl = `${strapiUrl}${media.url}`;
+    const mediaUrl = getFullUrl(media.url);
 
     // Validate URL
     try {

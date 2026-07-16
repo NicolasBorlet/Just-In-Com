@@ -44,7 +44,7 @@ export default function ContactForm() {
                 action: 'submit_contact_form'
             });
 
-            const response = await fetch(`${getStrapiURL()}/api/contacts`, {
+            const response = await fetch(`${getStrapiURL()}/contacts`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

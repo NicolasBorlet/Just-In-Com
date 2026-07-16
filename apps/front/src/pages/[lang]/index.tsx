@@ -26,7 +26,7 @@ export const getStaticProps = async ({ params }: { params: { lang: string } }) =
     fetchAvailableLocales(),
     fetchWeddings({ locale }),
   ]);
-  if (!homeRes.data || !globalRes.data || !globalRes.data.logo_extensed) {
+  if (!homeRes.data || !globalRes.data) {
     return { notFound: true };
   }
 
