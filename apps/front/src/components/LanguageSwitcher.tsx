@@ -9,7 +9,6 @@ const LanguageSwitcher = () => {
   const languages = [
     { code: 'fr', name: 'Français' },
     { code: 'en', name: 'English' },
-    { code: 'es', name: 'Español' },
   ];
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -18,7 +17,6 @@ const LanguageSwitcher = () => {
     window.location.href = newPath;
   };
 
-  // Get current language from pathname
   const currentLanguage = pathname.split('/')[1] || 'fr';
 
   return (

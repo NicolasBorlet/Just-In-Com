@@ -6,7 +6,10 @@ import { useState, useCallback, useEffect } from "react";
 import { WeddingSectionBlockProps } from "./WeddingSection.type";
 import { getFullUrl } from "@/utils/get-strapi-url";
 
-export default function WeddingSection({ block }: WeddingSectionBlockProps) {
+export default function WeddingSection({
+  block,
+  compact = false,
+}: WeddingSectionBlockProps & { compact?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const marriedNames = block.married.map((p) => p.name);
@@ -34,17 +37,17 @@ export default function WeddingSection({ block }: WeddingSectionBlockProps) {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="group relative w-full overflow-hidden rounded-2xl cursor-pointer"
+        className={`group relative w-full overflow-hidden rounded-2xl cursor-pointer ${compact ? "max-w-md mx-auto" : ""}`}
       >
         <Image
           src={getFullUrl(block.miniature.url)}
           alt={marriedNames.join(" ")}
-          className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-          width={1200}
-          height={600}
+          className={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${compact ? "h-auto max-h-[320px]" : "h-auto"}`}
+          width={compact ? 800 : 1200}
+          height={compact ? 450 : 600}
         />
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 flex items-center justify-center">
-          <span className="text-white text-2xl md:text-4xl font-special opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-4 group-hover:translate-y-0 flex flex-col items-center gap-1">
+          <span className={`text-white font-special opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-4 group-hover:translate-y-0 flex flex-col items-center gap-1 ${compact ? "text-xl md:text-2xl" : "text-2xl md:text-4xl"}`}>
             {marriedNames.map((name, i) => (
               <span key={i}>{name}</span>
             ))}
@@ -52,7 +55,6 @@ export default function WeddingSection({ block }: WeddingSectionBlockProps) {
         </div>
       </button>
 
-      {/* Modal overlay */}
       <div
         className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-300 ${
           isOpen
@@ -60,13 +62,11 @@ export default function WeddingSection({ block }: WeddingSectionBlockProps) {
             : "opacity-0 pointer-events-none"
         }`}
       >
-        {/* Backdrop */}
         <div
           className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           onClick={close}
         />
 
-        {/* Modal content */}
         <div
           className={`relative bg-white rounded-2xl max-w-lg w-[90%] overflow-hidden shadow-2xl transition-all duration-300 ${
             isOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-8"

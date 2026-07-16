@@ -1,4 +1,5 @@
 import BlockRenderer from '@/components/blocks/BlockRenderer';
+import ContactCTA from '@/components/atoms/ContactCTA';
 import { getBuildLocales } from '@/config/language';
 import PageContent from '@/components/layout/PageContent';
 import { fetchProfessionnels } from '@/services/professionnels/professionnelService';
@@ -49,7 +50,11 @@ export default function Professionnels({
   lang: string;
   availableLocales: string[];
 }) {
-  const renderedBlocks = BlockRenderer({ blocks: professionnels.blocks });
+  const renderedBlocks = BlockRenderer({
+    blocks: professionnels.blocks,
+    compactMedia: true,
+    autoplayVideos: true,
+  });
 
   return (
     <>
@@ -65,6 +70,9 @@ export default function Professionnels({
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
         {renderedBlocks.otherBlocks}
+        {!professionnels.blocks.some((b) => b.__component === "elements.link") && (
+          <ContactCTA lang={lang} />
+        )}
       </PageContent>
     </>
   );

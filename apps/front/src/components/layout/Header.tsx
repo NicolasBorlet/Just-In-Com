@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { getPathWithLocale, getLocalizedPath } from "@/lib/i18n";
+import { supportedLanguages } from "@/config/language";
 import { StrapiGlobal, Menu, MenuItem } from "@/types";
 
 export default function Header({ global, lang, availableLocales }: { global?: StrapiGlobal; lang?: string; availableLocales: string[] }) {
@@ -18,6 +19,7 @@ export default function Header({ global, lang, availableLocales }: { global?: St
   }, [isMenuOpen]);
 
   const currentLocale = lang || 'fr';
+  const locales = availableLocales.filter((l) => supportedLanguages.includes(l));
 
   const handleLanguageChange = useCallback((locale: string) => {
     if (!pathname) return;
@@ -38,28 +40,32 @@ export default function Header({ global, lang, availableLocales }: { global?: St
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // safe fallbacks when `global` isn't passed
   const logoExtImage = global?.logo_extensed?.image;
   const logoImage = global?.logo?.image;
-  const logoUrl = (isHomePage ? logoExtImage?.url : logoImage?.url) || logoImage?.url || '/favicon.ico';
-  const logoAlt = (isHomePage ? logoExtImage?.alternativeText : logoImage?.alternativeText) || global?.logo_extensed?.logoText || global?.logo?.logoText || 'Logo';
+  const useCompactLogo = !isHomePage || hasScrolled;
+  const logoUrl = (useCompactLogo ? logoImage?.url : logoExtImage?.url) || logoImage?.url || logoExtImage?.url || '/favicon.ico';
+  const logoAlt = (useCompactLogo ? logoImage?.alternativeText : logoExtImage?.alternativeText) || global?.logo_extensed?.logoText || global?.logo?.logoText || 'Logo';
+
+  const solidNav = hasScrolled;
+  const navTextClass = solidNav ? 'text-black' : 'text-white';
+  const burgerClass = solidNav && !isMenuOpen ? 'bg-black' : 'bg-white';
 
   return (
-    <header className={`left-0 right-0 z-50 transition-colors duration-300 ${isHomePage ? 'absolute' : 'fixed'} ${isHomePage ? 'top-20 md:top-10' : 'top-0'} ${hasScrolled && !isHomePage ? 'bg-white shadow-lg' : ''}`}>
+    <header className={`left-0 right-0 z-50 transition-all duration-300 ${isHomePage && !hasScrolled ? 'absolute' : 'fixed'} ${isHomePage && !hasScrolled ? 'top-20 md:top-10' : 'top-0'} ${solidNav ? 'bg-white shadow-lg' : ''}`}>
       <div className="container mx-auto px-4 py-4 relative">
-        <div className={`flex items-center gap-8 ${isHomePage ? 'flex-col' : 'flex-row'} ${isHomePage ? 'justify-center' : 'justify-between'}`}>
+        <div className={`flex items-center gap-8 ${isHomePage && !hasScrolled ? 'flex-col' : 'flex-row'} ${isHomePage && !hasScrolled ? 'justify-center' : 'justify-between'}`}>
           <Link href={getLocalizedPath('', currentLocale)} className="flex items-center">
-            <div className={`${isHomePage ? "h-60 w-auto" : "h-12 w-auto"} relative`}>
+            <div className={`${isHomePage && !hasScrolled ? "h-40 md:h-44 w-auto" : "h-12 w-auto"} relative`}>
               <Image
                 src={`${logoUrl}`}
                 alt={logoAlt}
-                width={isHomePage ? 300 : 100}
-                height={isHomePage ? 300 : 100}
-                className={isHomePage ? "h-60 w-auto" : `h-12 w-auto ${hasScrolled ? 'invert' : ''}`}
+                width={isHomePage && !hasScrolled ? 220 : 100}
+                height={isHomePage && !hasScrolled ? 220 : 100}
+                className={isHomePage && !hasScrolled ? "h-40 md:h-44 w-auto" : `h-12 w-auto ${solidNav ? 'invert' : ''}`}
                 priority={isHomePage}
                 placeholder="blur"
                 blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                sizes={isHomePage ? "300px" : "100px"}
+                sizes={isHomePage && !hasScrolled ? "220px" : "100px"}
               />
             </div>
           </Link>
@@ -70,9 +76,9 @@ export default function Header({ global, lang, availableLocales }: { global?: St
             aria-label="Toggle menu"
           >
             <div className="w-6 h-5 relative flex flex-col justify-between">
-              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen && !isHomePage ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? 'rotate-45 translate-y-[9px]' : ''}`} />
-              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen && !isHomePage ? 'bg-black' : 'bg-white'} transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
-              <span className={`w-full h-0.5 ${hasScrolled && !isMenuOpen && !isHomePage ? 'bg-black' : 'bg-white'} transform transition-all duration-300 origin-center ${isMenuOpen ? '-rotate-45 -translate-y-[9px]' : ''}`} />
+              <span className={`w-full h-0.5 ${burgerClass} transform transition-all duration-300 origin-center ${isMenuOpen ? 'rotate-45 translate-y-[9px]' : ''}`} />
+              <span className={`w-full h-0.5 ${burgerClass} transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-full h-0.5 ${burgerClass} transform transition-all duration-300 origin-center ${isMenuOpen ? '-rotate-45 -translate-y-[9px]' : ''}`} />
             </div>
           </button>
 
@@ -81,19 +87,19 @@ export default function Header({ global, lang, availableLocales }: { global?: St
               <Link
                 key={item.id}
                 href={item.isExternal ? item.href : getLocalizedPath(item.href, currentLocale)}
-                className={`text-xl uppercase transition-colors duration-300 ${hasScrolled && !isHomePage ? 'text-black' : 'text-white'}`}
+                className={`text-xl uppercase transition-colors duration-300 ${navTextClass}`}
               >
                 {item.text}
               </Link>
             ))}
           </nav>
 
-          <div className={`hidden md:flex items-center space-x-2 ${isHomePage ? 'absolute right-0 top-0' : ''}`}>
-            {availableLocales.map((locale) => (
+          <div className={`hidden md:flex items-center space-x-2 ${isHomePage && !hasScrolled ? 'absolute right-0 top-0' : ''}`}>
+            {locales.map((locale) => (
               <button
                 key={locale}
                 onClick={() => handleLanguageChange(locale)}
-                className={`px-3 py-1 rounded transition-colors duration-300 ${currentLocale === locale ? 'bg-black text-white' : hasScrolled ? 'text-black' : 'text-white'} cursor-pointer`}
+                className={`px-3 py-1 rounded transition-colors duration-300 ${currentLocale === locale ? 'bg-black text-white' : solidNav ? 'text-black' : 'text-white'} cursor-pointer`}
               >
                 {locale.toUpperCase()}
               </button>
@@ -106,7 +112,7 @@ export default function Header({ global, lang, availableLocales }: { global?: St
           >
             <nav className="flex flex-col items-center justify-center h-full space-y-8">
               <Link href={getLocalizedPath('', currentLocale)} className="text-white text-2xl uppercase hover:text-gray-300 transition-colors" onClick={toggleMenu}>
-                {lang === 'de' ? 'Startseite' : lang === 'en' ? 'Home' : 'Accueil'}
+                {lang === 'en' ? 'Home' : 'Accueil'}
               </Link>
               {global?.menu.find((menu: Menu) => menu.name === "main")?.item.map((item: MenuItem) => (
                 <Link
@@ -119,7 +125,7 @@ export default function Header({ global, lang, availableLocales }: { global?: St
                 </Link>
               ))}
               <div className="flex items-center space-x-2 mt-4 md:mt-0">
-                {availableLocales.map((locale) => (
+                {locales.map((locale) => (
                   <Link
                     key={locale}
                     href={getPathWithLocale(pathname, locale)}

@@ -1,4 +1,5 @@
 import BlockRenderer from "@/components/blocks/BlockRenderer";
+import ContactCTA from "@/components/atoms/ContactCTA";
 import { getBuildLocales } from "@/config/language";
 import PageContent from "@/components/layout/PageContent";
 import { fetchAbout } from "@/services/about/aboutService";
@@ -49,7 +50,10 @@ export default function About({
   lang: string;
   availableLocales: string[];
 }) {
-  const renderedBlocks = BlockRenderer({ blocks: about.blocks });
+  const renderedBlocks = BlockRenderer({
+    blocks: about.blocks,
+    compactMedia: true,
+  });
 
   return (
     <>
@@ -65,6 +69,9 @@ export default function About({
       {renderedBlocks.heroSection}
       <PageContent global={global} lang={lang} availableLocales={availableLocales}>
         {renderedBlocks.otherBlocks}
+        {!about.blocks.some((b) => b.__component === "elements.link") && (
+          <ContactCTA lang={lang} />
+        )}
       </PageContent>
     </>
   );

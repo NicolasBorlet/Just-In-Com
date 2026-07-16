@@ -1,6 +1,6 @@
-type Locale = 'fr' | 'en' | 'de';
+type Locale = 'fr' | 'en';
 const defaultLocale: Locale = 'fr';
-const locales: Locale[] = ['fr', 'en', 'de'];
+const locales: Locale[] = ['fr', 'en'];
 
 export function getLocaleFromParams(params: { lang?: string }): Locale {
   const lang = params?.lang || defaultLocale;

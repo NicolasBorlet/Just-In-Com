@@ -8,7 +8,15 @@ import MediaBlock from "../MediaBlock/MediaBlock";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { Media } from "@/types";
 
-function HorizontalGallery({ images }: { images?: Media[] | null }) {
+function HorizontalGallery({
+  images,
+  autoplayWithSound = false,
+  parallax = false,
+}: {
+  images?: Media[] | null;
+  autoplayWithSound?: boolean;
+  parallax?: boolean;
+}) {
   const safeImages = Array.isArray(images) ? images : [];
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -54,19 +62,20 @@ function HorizontalGallery({ images }: { images?: Media[] | null }) {
         style={{ scrollbarWidth: "none" }}
       >
         {safeImages.map((image) => (
-          <div key={image.id} className="shrink-0 w-[85vw] md:w-[420px] snap-start">
+          <div key={image.id} className="shrink-0 w-[85vw] md:w-[360px] snap-start">
             <MediaBlock
               block={{ media: image, __component: "elements.media", id: 0 }}
               alt={image.alternativeText || ""}
               enableHoverEffects={false}
               noRadius
               smallHeight
+              autoplayWithSound={autoplayWithSound}
+              parallax={parallax}
             />
           </div>
         ))}
       </div>
 
-      {/* Arrows */}
       {canScrollLeft && (
         <button
           type="button"
@@ -95,7 +104,11 @@ function HorizontalGallery({ images }: { images?: Media[] | null }) {
   );
 }
 
-export default function ContentSection({ block }: ContentSectionProps) {
+export default function ContentSection({
+  block,
+  autoplayWithSound = false,
+  parallax = false,
+}: ContentSectionProps & { autoplayWithSound?: boolean; parallax?: boolean }) {
   return <div className="flex flex-col gap-8" key={block.id}>
     <div className="flex flex-col gap-4">
     <AnimatedHeading className="text-6xl md:text-8xl/tight text-center font-special" level={2} options={{
@@ -112,7 +125,11 @@ export default function ContentSection({ block }: ContentSectionProps) {
     }}>{block.description}</AnimatedParagraph>}
     </div>
     {block.horizontal ? (
-      <HorizontalGallery images={Array.isArray(block.gallerie) ? block.gallerie : null} />
+      <HorizontalGallery
+        images={Array.isArray(block.gallerie) ? block.gallerie : null}
+        autoplayWithSound={autoplayWithSound}
+        parallax={parallax}
+      />
     ) : (
       <div className={`grid gap-10 ${block.grid ? "grid-cols-2" : "grid-cols-1"}`}>
         {Array.isArray(block.gallerie) && block.gallerie.length > 0 && block.gallerie.map((image) => (
@@ -121,10 +138,15 @@ export default function ContentSection({ block }: ContentSectionProps) {
             block={{ media: image, __component: "elements.media", id: 0 }}
             alt={image.alternativeText || ""}
             enableHoverEffects={false}
+            autoplayWithSound={autoplayWithSound}
+            parallax={parallax}
+            smallHeight={autoplayWithSound}
           />
         ))}
       </div>
     )}
-    <AnimatedButton href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT} alignment={ButtonAlignment.CENTER} ariaLabel={block.cta.text}>{block.cta.text}</AnimatedButton>
+    {block.cta && (
+      <AnimatedButton href={block.cta.href} isExternal={block.cta.isExternal} width={ButtonWidth.FIT} alignment={ButtonAlignment.CENTER} ariaLabel={block.cta.text}>{block.cta.text}</AnimatedButton>
+    )}
   </div>;
 }

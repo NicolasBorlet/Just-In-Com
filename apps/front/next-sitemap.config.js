@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://justincom.fr';
-const LOCALES = ['fr', 'en', 'de'];
+const LOCALES = ['fr', 'en'];
 
 /** Remove a leading locale segment ("/en/mariage" -> "/mariage", "/fr" -> "/"). */
 function stripLocale(path) {

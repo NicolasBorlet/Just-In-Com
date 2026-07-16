@@ -9,18 +9,15 @@ interface InstagramPost {
   permalink: string;
 }
 
-// Placeholder posts until Instagram API is connected
 const placeholderPosts: InstagramPost[] = Array.from({ length: 10 }, (_, i) => ({
   id: `placeholder-${i}`,
-  media_url: `https://picsum.photos/seed/insta${i}/360/360`,
+  media_url: `https://picsum.photos/seed/insta${i}/240/240`,
   permalink: "https://www.instagram.com/justinfilm_/",
 }));
 
 export default function InstagramFeed() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const posts = placeholderPosts;
-
-  // Duplicate posts for infinite scroll illusion
   const duplicatedPosts = [...posts, ...posts];
 
   useEffect(() => {
@@ -33,7 +30,6 @@ export default function InstagramFeed() {
 
     const animate = () => {
       scrollPos += speed;
-      // Reset when first set is fully scrolled
       const halfWidth = container.scrollWidth / 2;
       if (scrollPos >= halfWidth) {
         scrollPos = 0;
@@ -60,11 +56,10 @@ export default function InstagramFeed() {
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden">
-      {/* Scrolling feed */}
+    <div className="relative w-full overflow-hidden py-2">
       <div
         ref={scrollRef}
-        className="flex gap-8 overflow-hidden"
+        className="flex gap-4 overflow-hidden"
         style={{ scrollbarWidth: "none" }}
       >
         {duplicatedPosts.map((post, i) => (
@@ -78,21 +73,20 @@ export default function InstagramFeed() {
             <Image
               src={post.media_url}
               alt="Instagram post"
-              width={360}
-              height={360}
-              className="w-[360px] h-[360px] object-cover"
+              width={200}
+              height={200}
+              className="w-[160px] h-[160px] md:w-[200px] md:h-[200px] object-cover"
             />
           </a>
         ))}
       </div>
 
-      {/* Centered handle overlay */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <a
           href="https://www.instagram.com/justinfilm_/"
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-white px-4 py-2 md:px-8 md:py-4 text-[24px] md:text-[48px] font-normal pointer-events-auto hover:opacity-90 transition-opacity text-[#A33E5E] rounded-[12px]"
+          className="bg-white px-3 py-1.5 md:px-5 md:py-2 text-sm md:text-lg font-normal pointer-events-auto hover:opacity-90 transition-opacity text-[#A33E5E] rounded-lg"
           style={{ fontFamily: "var(--font-baloo)" }}
         >
           @justinfilm_

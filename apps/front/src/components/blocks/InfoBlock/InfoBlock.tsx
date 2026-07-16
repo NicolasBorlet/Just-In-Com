@@ -5,8 +5,12 @@ import { ButtonAlignment, ButtonWidth } from "@/components/atoms/Button";
 import { AnimatedHeading, AnimatedImage } from "@/animations";
 import { AnimatedButton } from "@/animations/AnimatedButton";
 
-export default function InfoBlock({ block }: InfoBlockProps) {
+export default function InfoBlock({
+  block,
+  compact = false,
+}: InfoBlockProps & { compact?: boolean }) {
   const imageUrl = getFullUrl(block.image.url);
+  const imgH = compact ? "h-[220px] md:h-[340px]" : "h-[300px] md:h-[500px]";
 
   return (
     <div className={`px-2 md:px-4 lg:px-5 xl:px-6 flex flex-col md:flex-row gap-8 lg:gap-20 items-center ${block.reversed ? "md:flex-row-reverse" : "md:flex-row"}`}>
@@ -30,7 +34,13 @@ export default function InfoBlock({ block }: InfoBlockProps) {
           </AnimatedButton>
         )}
       </div>
-      <AnimatedImage src={imageUrl} alt={block.image.alternativeText || ""} width={340} height={500} containerClassName="object-cover w-3/5 md:w-2/5 self-center rounded-[999px] h-[300px] md:h-[500px]" />
+      <AnimatedImage
+        src={imageUrl}
+        alt={block.image.alternativeText || ""}
+        width={compact ? 260 : 340}
+        height={compact ? 340 : 500}
+        containerClassName={`object-cover w-3/5 md:w-2/5 self-center rounded-[999px] ${imgH}`}
+      />
     </div>
   );
 }

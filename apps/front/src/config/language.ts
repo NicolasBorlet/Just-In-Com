@@ -1,7 +1,7 @@
 import { getStrapiURL } from '@/utils/get-strapi-url';
 
 // Locales que le site sait afficher (routes, switcher de langue, etc.)
-export const supportedLanguages = ['fr', 'en', 'de'];
+export const supportedLanguages = ['fr', 'en'];
 
 // Locale utilisée en dernier recours si Strapi ne répond pas / n'expose aucune locale.
 export const defaultLanguage = 'fr';

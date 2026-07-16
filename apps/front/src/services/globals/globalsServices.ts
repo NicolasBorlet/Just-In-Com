@@ -1,4 +1,5 @@
 import { getStrapiURL } from '../../utils/get-strapi-url';
+import { supportedLanguages } from '../../config/language';
 
 export async function fetchGlobal({ locale = 'en' }: { locale?: string } = { locale: 'en' }) {
 	// populate images and related fields explicitly so we get media URLs for logo fields
@@ -17,10 +18,11 @@ export async function fetchAvailableLocales() {
       throw new Error('Failed to fetch available locales');
     }
     const data = await response.json();
-    return data.map((locale: { code: string }) => locale.code);
+    const codes: string[] = data.map((locale: { code: string }) => locale.code);
+    const filtered = codes.filter((code) => supportedLanguages.includes(code));
+    return filtered.length ? filtered : ['fr', 'en'];
   } catch (error) {
     console.error('Error fetching locales:', error);
-    // Retourne les locales par défaut en cas d'erreur
-    return ['fr', 'en', 'de'];
+    return ['fr', 'en'];
   }
 }

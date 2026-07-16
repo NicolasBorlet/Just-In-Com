@@ -4,36 +4,24 @@ import { getFullUrl } from "@/utils/get-strapi-url";
 import ImageTextType from "./ImageText.type";
 import Image from "next/image";
 import { AnimatedParagraph, AnimatedText } from "@/animations";
-import { useEffect, useRef } from "react";
+import VideoWithSound from "@/components/atoms/VideoWithSound";
 
 const isVideo = (url: string): boolean => {
     const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv'];
     return videoExtensions.some(ext => url.toLowerCase().endsWith(ext));
 };
 
-export default function ImageText({ block }: { block: ImageTextType }) {
+export default function ImageText({
+  block,
+  parallax = false,
+  compactMedia = false,
+}: {
+  block: ImageTextType;
+  parallax?: boolean;
+  compactMedia?: boolean;
+}) {
     const mediaUrl = block.Media ? getFullUrl(block.Media.url) : null;
     const isVideoMedia = block.Media ? isVideo(block.Media.url) : false;
-    const videoRef = useRef<HTMLVideoElement>(null);
-
-    useEffect(() => {
-        const video = videoRef.current;
-        if (!video) return;
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    video.play();
-                } else {
-                    video.pause();
-                }
-            },
-            { threshold: 0.3 }
-        );
-
-        observer.observe(video);
-        return () => observer.disconnect();
-    }, []);
 
     const textBlock = (
         <div className="flex flex-col gap-8">
@@ -44,16 +32,14 @@ export default function ImageText({ block }: { block: ImageTextType }) {
 
     if (isVideoMedia && mediaUrl) {
         return (
-            <div className={`flex flex-col ${block.reversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8`}>
+            <div className={`flex flex-col ${block.reversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 items-center`}>
                 {textBlock}
-                <div className="lg:w-[60%] lg:shrink-0">
-                    <video
-                        ref={videoRef}
-                        src={mediaUrl}
-                        className="w-full rounded-none lg:rounded-lg"
-                        muted
-                        loop
-                        playsInline
+                <div className={`${compactMedia ? 'lg:w-[45%]' : 'lg:w-[55%]'} lg:shrink-0 w-full`}>
+                    <VideoWithSound
+                      src={mediaUrl}
+                      compact={compactMedia}
+                      parallax={parallax ? 1.2 : 0}
+                      className="rounded-none lg:rounded-lg w-full"
                     />
                 </div>
             </div>
@@ -61,14 +47,14 @@ export default function ImageText({ block }: { block: ImageTextType }) {
     }
 
     return (
-        <div className={`flex ${block.reversed ? 'flex-col lg:flex-row-reverse' : 'flex-col lg:flex-row'} gap-8`}>
+        <div className={`flex ${block.reversed ? 'flex-col lg:flex-row-reverse' : 'flex-col lg:flex-row'} gap-8 items-center`}>
             {mediaUrl && (
                 <Image
                     src={mediaUrl}
                     alt={block.Texte.title}
-                    className="max-w-[450px] rounded-lg"
-                    width={450}
-                    height={300}
+                    className={`${compactMedia ? 'max-w-[280px] md:max-w-[320px]' : 'max-w-[380px]'} rounded-lg w-full h-auto`}
+                    width={compactMedia ? 320 : 380}
+                    height={compactMedia ? 220 : 260}
                 />
             )}
             {textBlock}

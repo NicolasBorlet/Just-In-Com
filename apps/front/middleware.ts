@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export const locales = ['fr', 'en', 'de'] as const;
+export const locales = ['fr', 'en'] as const;
 
 const defaultLocale = 'fr';
 

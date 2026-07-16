@@ -1,6 +1,7 @@
 import { AnimatedImage } from "@/animations";
 import { getFullUrl } from "@/utils/get-strapi-url";
 import { MediaBlock as MediaBlockType } from "./MediaBlock.type";
+import VideoWithSound from "@/components/atoms/VideoWithSound";
 
 interface MediaBlockProps {
     block: MediaBlockType;
@@ -13,17 +14,30 @@ interface MediaBlockProps {
     smallHeight?: boolean;
     onClick?: () => void;
     style?: React.CSSProperties;
+    /** Autoplay + hover unmute for gallery videos */
+    autoplayWithSound?: boolean;
+    parallax?: boolean;
 }
 
-export default function MediaBlock({ block, alt, width = 600, height = 600, priority = false, enableHoverEffects = false, noRadius = false, smallHeight = false, onClick }: MediaBlockProps) {
-    // Handle both direct media blocks and gallery media items
+export default function MediaBlock({
+  block,
+  alt,
+  width = 600,
+  height = 600,
+  priority = false,
+  enableHoverEffects = false,
+  noRadius = false,
+  smallHeight = false,
+  onClick,
+  autoplayWithSound = false,
+  parallax = false,
+}: MediaBlockProps) {
     const mediaData = block.media || (block as unknown as { media?: MediaBlockType["media"] }).media;
     if (!mediaData) {
         console.error('No media data found in block:', block);
         return null;
     }
 
-    // If we're dealing with a gallery item, extract the media object
     const media = mediaData.url ? mediaData : (mediaData as unknown as { media?: { url: string; alternativeText?: string; mime?: string } }).media;
     if (!media || !media.url) {
         console.error('Invalid media structure:', mediaData);
@@ -32,10 +46,8 @@ export default function MediaBlock({ block, alt, width = 600, height = 600, prio
 
     const mediaUrl = getFullUrl(media.url);
 
-    // Validate URL
     try {
         const url = new URL(mediaUrl);
-        // Check if the URL has a valid media extension
         const validImageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
         const validVideoExtensions = ['.mp4', '.webm', '.ogg'];
         const hasValidExtension = [...validImageExtensions, ...validVideoExtensions].some(ext => url.pathname.toLowerCase().endsWith(ext));
@@ -52,18 +64,33 @@ export default function MediaBlock({ block, alt, width = 600, height = 600, prio
     const isVideo = media.mime?.startsWith('video/') ||
         ['.mp4', '.webm', '.ogg'].some(ext => mediaUrl.toLowerCase().endsWith(ext));
 
+    const heightClass = smallHeight
+      ? 'md:h-[420px] h-[70vw]'
+      : autoplayWithSound
+        ? 'md:h-[480px] h-[220px]'
+        : 'md:h-[600px] h-[250px]';
+
     return (
         <div
-            className={`w-full ${smallHeight ? 'md:h-[560px] h-[110vw]' : 'md:h-[600px] h-[250px]'} relative overflow-hidden ${noRadius ? '' : 'rounded-lg'} group ${enableHoverEffects ? 'cursor-pointer' : ''}`}
+            className={`w-full ${heightClass} relative overflow-hidden ${noRadius ? '' : 'rounded-lg'} group ${enableHoverEffects ? 'cursor-pointer' : ''}`}
             onClick={onClick}
         >
             {isVideo ? (
-                <video
+                autoplayWithSound ? (
+                  <VideoWithSound
                     src={mediaUrl}
-                    controls
-                    className={`w-full h-full object-cover object-center transition-transform duration-500 ${enableHoverEffects ? 'group-hover:scale-110' : ''}`}
-                    preload="metadata"
-                />
+                    className="absolute inset-0 h-full w-full"
+                    parallax={parallax ? 1 : 0}
+                    compact
+                  />
+                ) : (
+                  <video
+                      src={mediaUrl}
+                      controls
+                      className={`w-full h-full object-cover object-center transition-transform duration-500 ${enableHoverEffects ? 'group-hover:scale-110' : ''}`}
+                      preload="metadata"
+                  />
+                )
             ) : (
                 <AnimatedImage
                     src={mediaUrl}

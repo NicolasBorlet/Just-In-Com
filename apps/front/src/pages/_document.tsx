@@ -2,7 +2,7 @@ import { Html, Head, Main, NextScript } from "next/document";
 import type { DocumentContext, DocumentInitialProps } from "next/document";
 import Document from "next/document";
 
-const LOCALES = ["fr", "en", "de"] as const;
+const LOCALES = ["fr", "en"] as const;
 
 type Props = DocumentInitialProps & { lang: string };
 

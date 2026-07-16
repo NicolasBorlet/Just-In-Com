@@ -6,7 +6,7 @@ import type { StrapiSeo } from "@/types";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://justincom.fr";
 
-export const SUPPORTED_LOCALES = ["fr", "en", "de"] as const;
+export const SUPPORTED_LOCALES = ["fr", "en"] as const;
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 
 const OG_LOCALE: Record<string, string> = {

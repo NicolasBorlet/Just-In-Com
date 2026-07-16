@@ -6,13 +6,10 @@ export default function HeroSection({ block, isHome = false }: HeroSectionProps)
   const webmUrl = videoUrl ? videoUrl.replace(/\.mp4(\?.*)?$/i, v => v.replace('.mp4', '.webm')) : "";
   const posterUrl = block.poster?.url ? getFullUrl(block.poster.url) : undefined;
 
-  // The heading is rendered as the page H1 (server-side) on inner pages.
-  // The home page keeps a clean visual (logo only) and provides its own
-  // visually-hidden H1, so we don't render a heading here in that case.
   const showHeading = !!block?.heading && !isHome;
 
   return (
-    <div className="relative h-screen w-full mb-24">
+    <div className={`relative w-full ${isHome ? "h-[78vh] md:h-[82vh] mb-8" : "h-screen mb-24"}`}>
       <video
         src={videoUrl}
         autoPlay
@@ -34,6 +31,14 @@ export default function HeroSection({ block, isHome = false }: HeroSectionProps)
         </div>
       )}
       <div className="absolute inset-0 bg-black/20" />
+      {isHome && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/90 animate-bounce pointer-events-none">
+          <span className="text-xs uppercase tracking-[0.2em]">Scroll</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      )}
     </div>
   );
 }
