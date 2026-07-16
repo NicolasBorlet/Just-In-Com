@@ -1,0 +1,63 @@
+# Stack "Strapi seul, exposé publiquement en HTTPS" (sans le front).
+# À utiliser quand SEUL l'enregistrement DNS `api` est configuré.
+#
+#   docker compose -f docker-compose.strapi.yml --env-file .env up -d --build
+#
+# Prérequis :
+#   - DNS : un enregistrement A `api` -> IP du VPS (fait)
+#   - Pare-feu : ports 80 et 443 ouverts (Caddy en a besoin pour le certificat)
+#   - .env : API_DOMAIN et PUBLIC_URL renseignés (ex: api.mondomaine.fr)
+#
+# Les volumes portent le même nom que les autres composes -> le contenu saisi
+# précédemment (mode admin) est conservé.
+services:
+  backend:
+    build:
+      context: ./apps/back
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=1337
+      - DATABASE_CLIENT=sqlite
+      - DATABASE_FILENAME=.tmp/data.db
+      # Derrière Caddy maintenant : URLs générées en https via le domaine.
+      - IS_PROXIED=true
+    volumes:
+      - strapi-data:/app/.tmp
+      - strapi-uploads:/app/public/uploads
+    expose:
+      - "1337"
+    networks:
+      - web
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - API_DOMAIN=${API_DOMAIN}
+    volumes:
+      - ./Caddyfile.strapi:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - backend
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge
+
+volumes:
+  strapi-data:
+  strapi-uploads:
+  caddy-data:
+  caddy-config:
