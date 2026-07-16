@@ -1,0 +1,10 @@
+# Reverse proxy HTTPS pour Strapi UNIQUEMENT (pas de front).
+# Le domaine est injecté depuis .env (API_DOMAIN) via docker-compose.strapi.yml.
+{$API_DOMAIN} {
+	encode gzip zstd
+	# Autorise l'upload de médias volumineux dans l'admin Strapi
+	request_body {
+		max_size 256MB
+	}
+	reverse_proxy backend:1337
+}

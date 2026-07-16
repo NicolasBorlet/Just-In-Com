@@ -114,38 +114,38 @@ Le fichier `.env` est ignoré par git : il ne sera jamais poussé.
 > construction* (pages en `getStaticProps`). Il faut donc démarrer Strapi
 > **d'abord**, saisir un minimum de contenu, puis builder le front.
 
-### 4.0 — Pas encore de DNS ? Admin via tunnel SSH
+### 4.0 — Déployer Strapi seul (uniquement le DNS `api` en place)
 
-Tant que `api.…` ne pointe pas vers le VPS, Caddy/HTTPS ne peut pas
-fonctionner. Utilise la stack admin (Strapi seul, port local uniquement) :
+Si seul l'enregistrement DNS `api` pointe vers le VPS (le site n'est pas encore
+prêt), lance la stack **Strapi + Caddy uniquement**, sans builder le front :
 
 ```bash
-# Sur le VPS — coupe la prod si elle tourne, puis lance l'admin
-docker compose -f docker-compose.prod.yml down
-docker compose -f docker-compose.admin.yml --env-file .env up -d --build
+# Ouvre le pare-feu pour Caddy (certificat HTTPS)
+ufw allow 80/tcp && ufw allow 443/tcp
+
+docker compose -f docker-compose.strapi.yml --env-file .env up -d --build
 ```
 
-Depuis ton Mac (laisse ce terminal ouvert) :
+Caddy récupère le certificat pour `api.…` et Strapi est accessible en HTTPS.
+Crée ton compte admin puis saisis le contenu :
 
-```bash
-ssh -L 1337:localhost:1337 root@IP_DU_VPS
+```
+https://api.mondomaine.fr/admin
 ```
 
-Puis ouvre **http://localhost:1337/admin** (crée le compte admin, saisis le
-contenu). Les données sont dans les mêmes volumes Docker que la prod : rien n'est
-perdu au passage.
-
-Quand le DNS sera prêt, repasse en prod :
+Les données vivent dans les mêmes volumes Docker que la prod : rien n'est perdu
+au passage à la stack complète. Quand le site sera prêt (DNS `@`/`www` en place),
+passe à la stack complète :
 
 ```bash
-docker compose -f docker-compose.admin.yml down
+docker compose -f docker-compose.strapi.yml down
 docker compose -f docker-compose.prod.yml --env-file .env up -d --build
 ```
 
-### 4.1 — Démarrer Strapi + Caddy (DNS déjà en place)
+### 4.1 — Démarrer la stack complète (DNS `@`, `www` et `api` en place)
 
 ```bash
-docker compose -f docker-compose.prod.yml --env-file .env up -d --build backend caddy
+docker compose -f docker-compose.prod.yml --env-file .env up -d --build
 ```
 
 Caddy obtient automatiquement les certificats HTTPS pour les 3 domaines.
